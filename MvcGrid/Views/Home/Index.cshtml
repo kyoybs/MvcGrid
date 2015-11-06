@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@model MvcGrid.Models.GridModel
+
+@{ 
+    Model.JsSortFunction = "sortTest";
+}
+<div id="grdTest">
+    @Html.Partial("_Grid", Model)
+</div>
+
+<script>
+    function sortTest(orderField, isAsc){ 
+        $.get("@Url.Content("~/Home/GetGrid")", {OrderField:orderField, IsAsc:isAsc, t:new Date().getTime()},function(data){
+            $("#grdTest").html(data);
+        });
+    }
+</script>

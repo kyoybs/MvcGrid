@@ -1,0 +1,95 @@
+﻿@using MvcGrid.Models;
+@using System.Data;
+@using System.Collections.Generic;
+
+@model GridModel
+
+<style>
+    .grid {
+        margin: 8px;
+    }
+
+        .grid, .grid td {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            padding: 2px 4px;
+            text-align: center;
+            font-size: 12px;
+            color: #333;
+            cursor: default;
+        }
+
+            .grid thead {
+                background-color: #e2ebf5;
+            }
+
+                .grid thead td {
+                    padding-right: 8px;
+                }
+
+            .grid tbody tr:hover {
+                background-color: #e7ebd4;
+            }
+
+    .grid .order {
+        color: #1e79f8 !important;
+        cursor: pointer !important;
+    }
+
+    .grid .order-icon {
+        color: #b10702;
+        display: block;
+        width: 8px;
+        text-align: right;
+        position: relative;
+        top: -2px;
+        float: right;
+        font-weight: bold;
+    }
+</style>
+
+<table class="grid">
+    <thead>
+        <tr>
+            @foreach (var item in Model.Fields)
+            { 
+                <td @Html.Raw(item.GetHeaderAttrs(Model))>
+                    @item.FieldTitle <span class="order-icon">@Html.Raw(item.GetOrderChar(Model))</span>
+                </td>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (DataRow row in Model.Data.Rows)
+        {
+            <tr>
+                @foreach (var item in Model.Fields)
+                {
+                    <td>@item.Format(row[item.FieldName])</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    function _Grid_OrderBy(td){
+
+        var field = $(td).attr("data-field");
+        var asc = $(td).attr("data-asc")!="1";
+        var fnOrderBy = "@Model.JsSortFunction";
+
+        if(fnOrderBy == ""){
+            alert("Please set JsOrderFunction for GridModel.");
+            return;
+        }
+
+        if(typeof(fnOrderBy) == "undefined"){
+            alert("Undefined function: " +fnOrderBy);
+            return;
+        }
+
+        @(Model.JsSortFunction)( field, asc ) ;
+    }
+</script>
+
