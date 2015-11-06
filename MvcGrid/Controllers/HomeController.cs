@@ -12,13 +12,17 @@ namespace MvcGrid.Controllers
     {
         public ActionResult Index()
         {
-            var model = TestBusiness.GetGridModel("",true);
+            var model = TestBusiness.GetGridModel(null,true);
+            model.Id = "Test";
+            //model.JsSortFunction = "sortGrid"
             return View(model);
         }
 
         public ActionResult GetGrid(string orderField , bool isAsc)
         {
             var model = TestBusiness.GetGridModel(orderField, isAsc);
+            model.Id = "Test";
+            //model.JsSortFunction = "sortGrid"
             return PartialView("_Grid", model);
         }
 

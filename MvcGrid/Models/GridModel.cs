@@ -8,6 +8,22 @@ namespace MvcGrid.Models
 {
     public class GridModel
     {
+        private string p_Id;
+
+        public string Id
+        {
+            get
+            {
+                if (p_Id == null)
+                    p_Id = Guid.NewGuid().ToString();
+                return p_Id;
+            }
+            set
+            {
+                p_Id = value;
+            }
+        }
+         
         public DataTable Data { get; set; }
 
         public List<GridField> Fields { get; set; } = new List<GridField>();
@@ -54,7 +70,21 @@ namespace MvcGrid.Models
         /// a js function name , like: function sortGrid(string sortByField, bool sortByAsc);
         /// If there are more than 1 grid on a page, please assign different sort function for each grid.
         /// </summary>
-        public string JsSortFunction { get; set; } = "sortGrid";
+        public string JsSortFunction
+        {
+            get
+            {
+                if (p_JsSortFunction == null)
+                    p_JsSortFunction = "sortGrid";// + this.Id;
+                return p_JsSortFunction;
+            }
+            set
+            {
+                p_JsSortFunction = value;
+            }
+        }
+
+        private string p_JsSortFunction;
     }
 
     public class GridField

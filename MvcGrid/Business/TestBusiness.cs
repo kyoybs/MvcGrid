@@ -37,13 +37,12 @@ namespace MvcGrid.Business
 
             gm.Data = dt;
 
-            gm.Fields.Add(new GridField { FieldName = "TestId", Index = 0, FieldTitle = "Test ID" });
-            gm.Fields.Add(new GridField { FieldName = "TestName", Index = 0, FieldTitle = "Test Name"  });
+            gm.Fields.Add(new GridField { FieldName = "TestId", Index = 0, FieldTitle = "Test ID" , Sortable=true });
+            gm.Fields.Add(new GridField { FieldName = "TestName", Index = 0, FieldTitle = "Test Name", Sortable = true });
             gm.Fields.Add(new GridField { FieldName = "TestPrice", Index = 0, FieldTitle = "Test Price"  });
 
-            gm.SortField = "";
-            gm.IsAsc = isAsc;
-            gm.JsSortFunction = "sortTest";
+            gm.SortField = sortField;
+            gm.IsAsc = isAsc; 
 
             return gm;
         }
