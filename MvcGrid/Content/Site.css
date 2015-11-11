@@ -17,8 +17,45 @@
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+.textbox {
+    border:solid 1px #a2afb7;
+    border-radius:3px;
+    padding:2px;
+    background:-webkit-linear-gradient(top,#fffef7,#fff);
+    background:-moz-linear-gradient(top,#fffef7,#fff);
+    margin:0 2px;
 }
+.textbox:hover{
+     background:-webkit-linear-gradient(top,#fcfaeb,#fff);
+    background:-moz-linear-gradient(top,#fcfaeb,#fff);
+}
+
+.button{
+    border:solid 1px #b1c4d1;
+    border-radius:3px;
+    padding:2px 5px;
+    background:-webkit-linear-gradient(top,#edf6fe,#fff);
+    background:-moz-linear-gradient(top,#edf6fe,#fff);
+    margin:0 5px;
+}
+.button:hover{
+    background:-webkit-linear-gradient(top,#c5ebfa,#fff);
+    background:-moz-linear-gradient(top,#c5ebfa,#fff);
+}
+
+.row{display:block; overflow:hidden;}
+.row::after{ content:" "; clear:both;}
+.span12{width:99.5%; float:left; display:block;} 
+.span11{width:88.9%; float:left; display:inline-block;}
+.span10{width:80.8%; float:left; display:inline-block;}
+.span9{width:72.72%; float:left; display:inline-block;}
+.span8{width:64.64%; float:left; display:inline-block;}
+.span7{width:56.56%; float:left; display:inline-block;}
+.span6{width:48.48%; float:left; display:inline-block;}
+.span5{width:40.40%; float:left; display:inline-block;}
+.span4{width:32.32%; float:left; display:inline-block;}
+.span3{width:24.24%; float:left; display:inline-block;}
+.span2{width:16.16%; float:left; display:inline-block;}
+.span1{width:8.08%; float:left; display:inline-block;}
+
+.label{text-align:right;}

@@ -1,0 +1,38 @@
+﻿@using MvcGrid.Models
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@model ViewBuilderIndexModel
+
+<h2>Index</h2>
+<form id="formFields">
+    <div class="row">
+        <span class="span2 label">Category Name:</span>
+        <input type="text" name="CategoryName" class="span1 textbox" />
+        <span class="span1 label">Field Name:</span>
+        <input type="text" name="FieldName" class="span1 textbox" />
+        <input id="btnSearchField" type="button" class="button" value="Search Fields" onclick="" />
+    </div>
+    <div id="divFields">
+        @Html.Action("SearchFields")
+    </div>
+</form>
+
+<script>
+    $(function () {
+        $.ajaxSetup({
+            cache: false
+        });
+
+        //Search Fields
+        $("#btnSearchField").click(function () {
+            var url = "@Url.Content("~/ViewBuilder/SearchFields")"; 
+            var args = $("#formFields").serialize();
+            $.post(url, args, function (data) {
+                $("#divFields").html(data);
+            })
+        })
+    })
+</script>
