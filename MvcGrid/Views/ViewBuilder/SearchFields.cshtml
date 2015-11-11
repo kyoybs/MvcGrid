@@ -7,5 +7,12 @@
     Layout = null;
 }
 
-Search Fields Result @DateTime.Now  Category Name: @Model.CategoryName
+@if (Model != null && Model.GridModel.Data != null)
+{
+    @Html.Partial("_Grid", Model.GridModel)
+}
+else
+{
+    <div>Please enter filter.</div>
+}
 

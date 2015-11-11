@@ -1,4 +1,5 @@
-﻿using MvcGrid.Models;
+﻿using MvcGrid.Business;
+using MvcGrid.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,16 @@ namespace MvcGrid.Controllers
             return View(model);
         }
 
+        public ActionResult SearchFields()
+        {
+            SearchFieldsModel model = new SearchFieldsModel();
+            return View(model);
+        }
+
+        [HttpPost]
         public ActionResult SearchFields(SearchFieldsModel model)
         {
+            DevBiz.SearchFields(model);
             return View(model);
         }
     }

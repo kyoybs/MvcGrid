@@ -13,6 +13,6 @@ namespace MvcGrid.Models
 
         public string FieldName { get; set; }
 
-        public GridModel GridModel { get; set; }
+        public GridModel GridModel { get; set; } = new GridModel();
     }
 }

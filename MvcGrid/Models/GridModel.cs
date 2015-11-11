@@ -85,6 +85,14 @@ namespace MvcGrid.Models
         }
 
         private string p_JsSortFunction;
+
+        public void AutoSetFields()
+        {
+            foreach (DataColumn col in Data.Columns)
+            {
+                this.Fields.Add(new GridField { FieldName = col.ColumnName, FieldTitle = col.ColumnName });
+            }
+        }
     }
 
     public class GridField
