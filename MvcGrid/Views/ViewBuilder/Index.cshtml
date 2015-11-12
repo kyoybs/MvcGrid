@@ -1,7 +1,7 @@
 ﻿@using MvcGrid.Models
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Code Generator";
 }
 
 @model ViewBuilderIndexModel
@@ -9,14 +9,23 @@
 <h2>Index</h2>
 <form id="formFields">
     <div class="row">
-        <span class="span2 label">Category Name:</span>
-        <input type="text" name="CategoryName" class="span1 textbox" />
-        <span class="span1 label">Field Name:</span>
-        <input type="text" name="FieldName" class="span1 textbox" />
-        <input id="btnSearchField" type="button" class="button" value="Search Fields" onclick="" />
+        <span class="col1h label">Category Name:</span>
+        <input type="text" name="CategoryName" class="col1 textbox" />
+        <span class="col1 label">Field Name:</span>
+        <input type="text" name="FieldName" class="col1 textbox" />
+        <input id="btnSearchField" type="button" class="button" value="Search Fields" />
+
+        <input id="btnGenerateCode" type="button" class="button" value="Generate View" />
     </div>
     <div id="divFields">
         @Html.Action("SearchFields", "ViewBuilder")
+    </div>
+
+    <div id="divCodes">
+        <div>Codes:</div>
+        <pre>
+<textarea id="txtCodes" style="width:1100px; height:220px;"></textarea>
+        </pre>
     </div>
 </form>
 
@@ -28,10 +37,19 @@
 
         //Search Fields
         $("#btnSearchField").click(function () {
-            var url = "@Url.Content("~/ViewBuilder/SearchFields")"; 
+            var url = "@Url.Content("~/ViewBuilder/SearchFields")";
             var args = $("#formFields").serialize();
             $.post(url, args, function (data) {
                 $("#divFields").html(data);
+            })
+        })
+
+        //Generate Codes
+        $("#btnGenerateCode").click(function () {
+            var url = "@Url.Content("~/ViewBuilder/Generate")";
+            var args = $("#formFields").serialize();
+            $.post(url, args, function (data) {
+                $("#txtCodes").html(data);
             })
         })
     })

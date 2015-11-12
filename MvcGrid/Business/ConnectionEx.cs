@@ -8,6 +8,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Web;
 
 namespace System.Data
@@ -20,36 +21,13 @@ namespace System.Data
             return new SqlConnection(strConn);
         }
 
-        public static DataTable QueryDataTable(this SqlConnection connection , string sql, object param = null , CommandType commandType=CommandType.Text)
-        {
-            Dictionary<string, object> parms = new Dictionary<string, object>();
-            if(param != null)
-            {
-                
-                var props = param.GetType().GetProperties();
-                foreach (var prop in props)
-                {
-                    var type = prop.PropertyType;
-                    if (!type.IsValueType && !type.Equals(typeof(string)))
-                        continue;
-                    string parmName = "@" + prop.Name;
-                    if(sql.IndexOf(parmName, StringComparison.CurrentCultureIgnoreCase ) >=0)
-                    { 
-                        parms.Add(parmName, prop.GetValue(param));
-                    }
-                }
-            }
-
+        public static DataTable QueryDataTable(this SqlConnection connection , SqlBuilder sqlBuilder )
+        { 
             if (connection.State != ConnectionState.Open)
                 connection.Open();
 
             var comm = connection.CreateCommand();
-            comm.CommandText = sql;
-            comm.CommandType = commandType;
-            foreach (var parm in parms)
-            {
-                comm.Parameters.AddWithValue(parm.Key, parm.Value??DBNull.Value);
-            }
+            sqlBuilder.InitCommand(comm);
             DbDataAdapter da = new SqlDataAdapter();
             da.SelectCommand = comm;
             DataTable dt = new DataTable();
@@ -61,15 +39,36 @@ namespace System.Data
         {
             return SqlBuilder.Create();
         }
-
-        public static String WrapForLike(string value)
-        {
-            return value==null? null : "%" + value + "%";
+         
+        public static void SaveThreadSql(string sql)
+        { 
+            LocalDataStoreSlot sqlSlot = Thread.GetNamedDataSlot("SqlLog");
+            List<string> sqls = Thread.GetData(sqlSlot) as List<string>;
+            if (sqls == null)
+                sqls = new List<string>();
+            sqls.Add(sql);
+            Thread.SetData(sqlSlot, sqls);
         }
+
+        public static string GetThreadSqls( )
+        {
+            LocalDataStoreSlot sqlSlot = Thread.GetNamedDataSlot("SqlLog");
+            List<string> sqls = Thread.GetData(sqlSlot) as List<string>;
+            if (sqls == null)
+                return "";
+            Thread.FreeNamedDataSlot("SqlLog");
+            return Thread.CurrentThread.ManagedThreadId +" --- " + string.Join("\r\n", sqls).Replace("\r\n","<br/>");
+        }
+
     }
 
     public class SqlBuilder
     {
+        public string Wrap(string value, string wrapBy = "%")
+        {
+            return string.IsNullOrEmpty(value) ? value : wrapBy + value + wrapBy;
+        }
+
         private SqlBuilder()
         {
 
@@ -91,26 +90,41 @@ namespace System.Data
         /// <param name="fieldName">tb.FieldName or FieldName</param>
         /// <param name="sqlFilterBy"></param>
         /// <returns></returns>
-        public SqlBuilder AddFilterField(string fieldName, string sqlFilterBy = "=")
+        public SqlBuilder AddFilter(string filterSql, string parmName=null,  object value=null)
         {
-            _FilterSqls.Add($"(@{fieldName} is null OR {fieldName} {sqlFilterBy} @{fieldName})");
-            return this;
-        }
+            if (!string.IsNullOrEmpty(parmName) && (value == null || value.ToString() == ""))
+                return this;
 
-        public SqlBuilder AddFilterSql(string filterSql)
-        {
             _FilterSqls.Add(filterSql);
+
+            if (string.IsNullOrEmpty(parmName))
+                return this;
+
+            if (!parmName.StartsWith("@"))
+                parmName = "@" + parmName;
+
+            _Params.Add(parmName, value);
             return this;
         }
 
-        public string BuildSql()
+        private Dictionary<string, object> _Params = new Dictionary<string, object>();
+         
+        public void InitCommand(SqlCommand command)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(this.SelectSql);
             if (_FilterSqls.Count > 0)
                 sb.Append(" WHERE ");
             sb.AppendLine(string.Join(" AND ", _FilterSqls));
-            return sb.ToString();
+            command.CommandText = sb.ToString();
+            sb.AppendLine();
+            foreach (var parm in this._Params)
+            {
+                command.Parameters.AddWithValue(parm.Key, parm.Value??DBNull.Value);
+                sb.AppendLine($"{parm.Key}: {parm.Value}");
+            }
+            
+            DbHelper.SaveThreadSql(sb.ToString());
         }
     }
  

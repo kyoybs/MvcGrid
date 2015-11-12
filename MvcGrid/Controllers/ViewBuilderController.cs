@@ -29,5 +29,12 @@ namespace MvcGrid.Controllers
             DevBiz.SearchFields(model);
             return View(model);
         }
+
+        [HttpPost]
+        public string Generate(SearchFieldsModel model)
+        {
+            string code = DevBiz.Generate(model);
+            return code;
+        }
     }
 }

@@ -1,4 +1,8 @@
-﻿var jq = {};
+﻿$(function () {
+    $.ajaxSetup({cache:false})
+})
+
+var jq = {};
 
 jq.get = function(selector){
     var $ctl = $(selector);
