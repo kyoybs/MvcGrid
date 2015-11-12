@@ -20,7 +20,7 @@ namespace MvcGrid.Business
                 sqlb.AddFilter("f.FieldName LIKE @FieldName", "@FieldName", sqlb.Wrap(searchFieldsModel.FieldName));
                 sqlb.AddFilter("f.CategoryName LIKE @CategoryName", "@CategoryName", sqlb.Wrap(searchFieldsModel.CategoryName));
                 sqlb.OrderBy = " ORDER BY ControlIndex ASC ";
-
+                searchFieldsModel.GridModel.SortField = "ControlIndex";
                 searchFieldsModel.GridModel.Data = sqlb.QueryDataTable();
                 searchFieldsModel.GridModel.AutoSetFields();
             } 
@@ -65,7 +65,9 @@ namespace MvcGrid.Business
                     string str = row["EntityPattern"]?.ToString()?.Replace("[PropertyName]", row["EntityProperty"]?.ToString());
                     string type = GetCsTypeName(row["DataType"].ToString());
                     str = str?.Replace("[Type]", type);
+                    str = str?.Replace("[FieldLabel]", row["FieldLabel"].ToString());
                     sb.AppendLine(str);
+                    sb.AppendLine();
                 }
                 return sb.ToString();
             } 
@@ -90,7 +92,7 @@ namespace MvcGrid.Business
         {
             using (var sql = DbHelper.CreateSql())
             {
-                sql.SelectSql = "SELECT DISTINCT CategoryName FROM  dbo.DevFieldInfo WHERE CategoryName IS NOT NULL";
+                sql.SelectSql = "SELECT DISTINCT CategoryName FROM  dbo.DevFieldInfo WHERE CategoryName IS NOT NULL ORDER BY CategoryName ";
                 var list = sql.QueryDataTable().AsEnumerable().Select(r => r.Field<string>("CategoryName")).ToList();
                 return list;
             }

@@ -12,7 +12,7 @@
         <span class="col1h label">Category Name:</span>
         <span class="col2" style="width:310px; position:relative; ">
             <input id="txtCategoryName" type="text" name="CategoryName" class="textbox" style="width:280px;" /><span id="iconShowCtgs" class="icon">&there4;</span>
-            <div id="divCtgs" class="list" >
+            <div id="divCtgs" class="list" style="display:none;" >
                 @foreach (string ctg in Model.Categories)
                 {
                     <div>@ctg</div>

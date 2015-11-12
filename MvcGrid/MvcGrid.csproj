@@ -273,6 +273,7 @@
     <Content Include="Views\Shared\_Grid.cshtml" />
     <Content Include="Views\ViewBuilder\Index.cshtml" />
     <Content Include="Views\ViewBuilder\SearchFields.cshtml" />
+    <Content Include="Views\Shared\_Partial.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

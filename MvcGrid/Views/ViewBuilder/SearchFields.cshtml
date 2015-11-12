@@ -5,17 +5,13 @@
 @{
     ViewBag.Title = "SearchFields";
 
-    Layout = null;
+    Layout = "~/Views/Shared/_Partial.cshtml";
 }
 
 <div style="width:1350px; height:320px; overflow:auto; ">
     @if (Model != null && Model.GridModel.Data != null)
     {
-        @Html.Partial("_Grid", Model.GridModel)
-
-        <div class="debug">
-            @Html.Raw(DbHelper.GetThreadSqls())
-        </div>
+        @Html.Partial("_Grid", Model.GridModel) 
     }
     else
     {
