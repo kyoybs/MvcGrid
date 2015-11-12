@@ -8,20 +8,31 @@
 
 <h2>Index</h2>
 <form id="formFields">
-    <div class="row">
+    <div class="row" style="overflow:visible;">
         <span class="col1h label">Category Name:</span>
-        <input type="text" name="CategoryName" class="col1 textbox" />
+        <span class="col2" style="width:310px; position:relative; ">
+            <input id="txtCategoryName" type="text" name="CategoryName" class="textbox" style="width:280px;" /><span id="iconShowCtgs" class="icon">&there4;</span>
+            <div id="divCtgs" class="list" >
+                @foreach (string ctg in Model.Categories)
+                {
+                    <div>@ctg</div>
+                }
+            </div>
+        </span>
+
         <span class="col1 label">Field Name:</span>
         <input type="text" name="FieldName" class="col1 textbox" />
         <input id="btnSearchField" type="button" class="button" value="Search Fields" />
 
         <input id="btnGenerateCode" type="button" class="button" value="Generate View" />
+
+        <input id="btnGenerateEntity" type="button" class="button" value="Generate Entity" />
     </div>
     <div id="divFields">
         @Html.Action("SearchFields", "ViewBuilder")
     </div>
 
-    <div id="divCodes">
+    <div id="divCodes" style="padding-top:10px;">
         <div>Codes:</div>
         <pre>
 <textarea id="txtCodes" style="width:1100px; height:220px;"></textarea>
@@ -44,13 +55,31 @@
             })
         })
 
-        //Generate Codes
+        //Generate View
         $("#btnGenerateCode").click(function () {
             var url = "@Url.Content("~/ViewBuilder/Generate")";
             var args = $("#formFields").serialize();
             $.post(url, args, function (data) {
                 $("#txtCodes").html(data);
             })
+        })
+
+        //Generate Entity
+        $("#btnGenerateEntity").click(function () {
+            var url = "@Url.Content("~/ViewBuilder/GenerateEntity")";
+            var args = $("#formFields").serialize();
+            $.post(url, args, function (data) {
+                $("#txtCodes").html(data);
+            })
+        })
+
+        $("#divCtgs div").click(function () {
+            $("#txtCategoryName").val($(this).html());
+            $("#divCtgs").toggle();
+        });
+
+        $("#iconShowCtgs").click(function () {
+            $("#divCtgs").toggle();
         })
     })
 </script>

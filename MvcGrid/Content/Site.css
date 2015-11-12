@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-color:#eee;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -68,3 +69,10 @@
 
 .menu a{font-size:12px; text-decoration:none; color:#112bff;}
 .menu a:hover{color:#818efa;}
+
+.icon{border:solid 1px #c5ebfa; background-color:#daf2fb; cursor:pointer; text-align:center; color:#ba5858;
+       display:inline-block; width:18px; height:18px; position:relative;  line-height:18px;}
+
+.list{ display:block; background-color:antiquewhite; border:solid 1px #ccc;  width:320px; cursor:default; color:#444; position:absolute;}
+.list div{padding:2px 5px;}
+.list div:hover{color:#4357fa;}

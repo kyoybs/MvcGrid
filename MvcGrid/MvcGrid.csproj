@@ -183,7 +183,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Business\ConnectionEx.cs" />
+    <Compile Include="Business\DbHelper.cs" />
     <Compile Include="Business\DevBiz.cs" />
     <Compile Include="Business\DevControlType.cs" />
     <Compile Include="Business\DevDb.cs" />

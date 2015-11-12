@@ -14,6 +14,7 @@ namespace MvcGrid.Controllers
         public ActionResult Index()
         {
             ViewBuilderIndexModel model = new ViewBuilderIndexModel();
+            model.Categories = DevBiz.GetCategories();
             return View(model);
         }
 
@@ -34,6 +35,13 @@ namespace MvcGrid.Controllers
         public string Generate(SearchFieldsModel model)
         {
             string code = DevBiz.Generate(model);
+            return code;
+        }
+
+        [HttpPost]
+        public string GenerateEntity(SearchFieldsModel model)
+        {
+            string code = DevBiz.GenerateEntity(model);
             return code;
         }
     }

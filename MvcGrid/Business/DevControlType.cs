@@ -22,6 +22,9 @@ namespace MvcGrid.Business
         public string Pattern { get; set; }
 
         [StringLength(500)]
+        public string EntityPattern { get; set; }
+
+        [StringLength(500)]
         public string Notes { get; set; }
     }
 }

@@ -10,6 +10,8 @@ namespace MvcGrid.Models
     {
         public string CategoryName { get; set; }
 
+        public List<string> Categories { get; set; }
+
         public DataTable FieldsData { get; set; }
     }
 }

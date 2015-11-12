@@ -15,27 +15,14 @@ namespace System.Data
 {
     public static class DbHelper
     { 
-        public static SqlConnection Create()
+        public static SqlConnection CreatConnect()
         {
             string strConn = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             return new SqlConnection(strConn);
         }
 
-        public static DataTable QueryDataTable(this SqlConnection connection , SqlBuilder sqlBuilder )
-        { 
-            if (connection.State != ConnectionState.Open)
-                connection.Open();
-
-            var comm = connection.CreateCommand();
-            sqlBuilder.InitCommand(comm);
-            DbDataAdapter da = new SqlDataAdapter();
-            da.SelectCommand = comm;
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            return dt;
-        }
         
-        public static SqlBuilder GetSqlBuilder()
+        public static SqlBuilder CreateSql()
         {
             return SqlBuilder.Create();
         }
@@ -62,8 +49,10 @@ namespace System.Data
 
     }
 
-    public class SqlBuilder
+    public class SqlBuilder:IDisposable
     {
+        private SqlConnection _Connection { get; set; }
+
         public string Wrap(string value, string wrapBy = "%")
         {
             return string.IsNullOrEmpty(value) ? value : wrapBy + value + wrapBy;
@@ -76,10 +65,16 @@ namespace System.Data
 
         public static SqlBuilder Create()
         {
-            return new SqlBuilder();
+            var sb = new SqlBuilder();
+            sb._Connection = DbHelper.CreatConnect();
+            return sb;
         }
 
+
+
         public string SelectSql { get; set; }
+
+        public string OrderBy { get; set; }
 
         private List<string> _FilterSqls = new List<string>();
 
@@ -116,6 +111,8 @@ namespace System.Data
             if (_FilterSqls.Count > 0)
                 sb.Append(" WHERE ");
             sb.AppendLine(string.Join(" AND ", _FilterSqls));
+            sb.AppendLine(this.OrderBy);
+
             command.CommandText = sb.ToString();
             sb.AppendLine();
             foreach (var parm in this._Params)
@@ -125,6 +122,27 @@ namespace System.Data
             }
             
             DbHelper.SaveThreadSql(sb.ToString());
+        }
+
+
+        public DataTable QueryDataTable(  )
+        {
+            if (_Connection.State != ConnectionState.Open)
+                _Connection.Open();
+
+            var comm = _Connection.CreateCommand();
+            this.InitCommand(comm);
+            DbDataAdapter da = new SqlDataAdapter();
+            da.SelectCommand = comm;
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            return dt;
+        }
+
+        public void Dispose()
+        {
+            if (_Connection != null && _Connection.State != ConnectionState.Closed)
+                _Connection.Close();
         }
     }
  
