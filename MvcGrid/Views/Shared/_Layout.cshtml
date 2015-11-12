@@ -15,21 +15,16 @@
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            <div class="apptitle"> 
+                @Html.ActionLink("Code Generator", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("View Builder", "Index", "ViewBuilder")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
+                <div class="row menu">
+                    <span >@Html.ActionLink("Home", "Index", "Home")</span>
+                    <span >@Html.ActionLink("View Builder", "Index", "ViewBuilder")</span>
+                    <span >@Html.ActionLink("Contact", "Contact", "Home")</span>
+                </div>
+                @*@Html.Partial("_LoginPartial")*@
             </div>
         </div>
     </div>

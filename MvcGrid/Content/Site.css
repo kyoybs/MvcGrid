@@ -63,3 +63,8 @@
 .label{text-align:right;}
 
 .debug{font-size:11px; color:#ad6969;}
+
+.apptitle a{font-size:16px; text-decoration:none; color:#112bff;}
+
+.menu a{font-size:12px; text-decoration:none; color:#112bff;}
+.menu a:hover{color:#818efa;}
