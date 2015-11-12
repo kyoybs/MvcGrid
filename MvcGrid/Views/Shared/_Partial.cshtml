@@ -1,0 +1,11 @@
+﻿@using System.Data
+
+@{
+    Layout = null;
+}
+
+@RenderBody()
+
+<div class="debug">
+    @Html.Raw(DbHelper.GetThreadSqls())
+</div>
