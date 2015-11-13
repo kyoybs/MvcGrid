@@ -8,7 +8,7 @@
     Layout = "~/Views/Shared/_Partial.cshtml";
 }
 
-<div style="width:1350px; height:320px; overflow:auto; ">
+<div style="width:1350px; height:320px; overflow:auto; border:solid 1px #aaa; ">
     @if (Model != null && Model.GridModel.Data != null)
     {
         @Html.Partial("_Grid", Model.GridModel) 

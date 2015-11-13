@@ -27,8 +27,18 @@ namespace MvcGrid.Controllers
         [HttpPost]
         public ActionResult SearchFields(SearchFieldsModel model)
         {
+            model.GridModel.Editable = true;
+            model.GridModel.Addable = true;
+            model.GridModel.UrlUpdateField = Url.Content("~/ViewBuilder/UpdateField");
             DevBiz.SearchFields(model);
+             
             return View(model);
+        }
+
+        [HttpPost]
+        public string UpdateField(string fieldName, string fieldValue, int dataId)
+        {
+            return fieldName + " -- " + fieldValue + " -- " + dataId;
         }
 
         [HttpPost]

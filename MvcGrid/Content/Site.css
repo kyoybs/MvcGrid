@@ -1,6 +1,7 @@
 ﻿body {
     padding-bottom: 20px;
     background-color:#eee;
+    font-size:12px;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -44,6 +45,8 @@
     background:-moz-linear-gradient(top,#c5ebfa,#fff);
 }
 
+span.button{ height:23px; line-height:23px; padding:0 8px; display:inline-block; cursor:default; }
+
 .row{display:block; padding:2px 0; margin:3px; clear:both;}
 .row::after{ content:" "; clear:both; }
 .col{ float:left; display:inline-block; }
@@ -79,3 +82,7 @@
 .list div:hover{color:#4357fa;}
 
 .nowrap{white-space:nowrap;}
+
+.mask{position:fixed; top:0; left:0; right:0; bottom:0; opacity:0.85; background-color:#ccc; z-index:9990; display:none; font-size:16px; color:#666;font-weight:bold; }
+.mask .title{background:background:-webkit-linear-gradient(top,#edf6fe,#c4bdbd); background:-moz-linear-gradient(top,#edf6fe,#c4bdbd); text-align:center; height:30px; cursor:pointer;}
+.popmsg{position:fixed; top:0; left:0; right:0; bottom:0;  z-index:9999; margin:30px; display:none;}

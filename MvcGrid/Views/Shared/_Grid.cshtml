@@ -3,62 +3,110 @@
 @using System.Collections.Generic;
 
 @model GridModel
- 
-<link href="~/Content/grid.css" rel="stylesheet" /> 
+
+<link href="~/Content/grid.css?@DateTime.Now.Ticks" rel="stylesheet" />
 
 <table id="@Model.Id" class="grid">
     <thead>
-        <tr>
+        <tr style="height:26px;">
             @foreach (var item in Model.Fields)
-            { 
+            {
                 <td @Html.Raw(item.GetHeaderAttrs(Model))>
                     @item.FieldTitle <span class="order-icon">@Html.Raw(item.GetOrderChar(Model))</span>
                 </td>
+            }
+            @if (Model.Addable || Model.Deletable)
+            {
+                <td></td>
             }
         </tr>
     </thead>
     <tbody>
         @foreach (DataRow row in Model.Data.Rows)
         {
-            <tr>
+            <tr data-id="@row[Model.KeyField]">
                 @foreach (var item in Model.Fields)
                 {
-                    <td>@item.Format(row[item.FieldName])</td>
+                    <td data-field="@item.FieldName" contenteditable="@item.Editable.ToString().ToLower()" data-value="@item.Format(row[item.FieldName])">@item.Format(row[item.FieldName])</td>
+                }
+                @if (Model.Addable || Model.Deletable)
+                {
+                    <td>
+                        @if (Model.Editable)
+                        {
+                            <button>Delete</button>   
+                        }
+                    </td>
                 }
             </tr>
         }
     </tbody>
+    @if (Model.Addable)
+    {
+        <tfoot>
+            <tr>
+                @foreach (var item in Model.Fields)
+                {
+                    <td data-field="@item.FieldName" contenteditable="true"></td>
+                }
+                <td>
+                    <button>Add</button> 
+                </td>
+            </tr>
+            <tr>
+                <td colspan="@Model.Fields.Count" style="text-align:center; padding:3px;">
+                    <span class="button">Save New Data</span>
+                </td>
+            </tr>
+        </tfoot>
+    }
+
 </table>
 
- <script>
-     jq.log("[GRID] Rendor OK,  Sort Field: "+"@Model.SortField");
+<script>
+    jq.log("[GRID] Rendor OK,  Sort Field: " + "@Model.SortField");
 
-     function _Grid_OrderBy(td){
+    function _Grid_OrderBy(td) {
         jq.log("-------------EVENT STARTING----------------------");
 
         var field = $(td).attr("data-field");
-        var asc = $(td).attr("data-asc")!="1";
+        var asc = $(td).attr("data-asc") != "1";
         var fnOrderBy = "@Model.JsSortFunction";
 
-        if(fnOrderBy == ""){
+        if (fnOrderBy == "") {
             alert("Please set JsOrderFunction for GridModel.");
             return;
         }
 
-        if(typeof(fnOrderBy) == "undefined"){
-            alert("Undefined function: " +fnOrderBy);
+        if (typeof (fnOrderBy) == "undefined") {
+            alert("Undefined function: " + fnOrderBy);
             return;
         }
 
-        jq.log("[GRID] Sort Callback: " +"@Model.JsSortFunction - " + field + " - " +asc);
+        jq.log("[GRID] Sort Callback: " + "@Model.JsSortFunction - " + field + " - " + asc);
 
-        @(Model.JsSortFunction)( field, asc ) ;
+        @(Model.JsSortFunction)(field, asc);
     }
+     
+    $(function () {
+        $("Table#@Model.Id").parent().attr("data-grid", "@Model.Id"); 
+    })
 
-     $(function(){
-        $("Table#@Model.Id").parent().attr("data-grid" , "@Model.Id");
-     })
+    jq.log("-------------EVENT END----------------------");
+</script>
 
-     jq.log("-------------EVENT END----------------------");
- </script>
-
+@if (Model.Editable)
+{
+    <script>
+        $(function () {
+            $("Table#@Model.Id tbody td").blur(function () { 
+                var value = $.trim($(this).html().replace(/<br>/,'\r\n'));
+                var oldValue = $(this).attr("data-value");
+               
+                if (value == oldValue)
+                    return;
+                jq.updateGridField("@Model.UrlUpdateField", $(this));
+            });
+        })
+    </script>
+}

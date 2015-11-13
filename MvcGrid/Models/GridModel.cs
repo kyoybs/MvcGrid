@@ -86,11 +86,21 @@ namespace MvcGrid.Models
 
         private string p_JsSortFunction;
 
+        public string UrlUpdateField { get; set; }
+        public string UrlDeleteRow { get; set; }
+        public string UrlAddRow { get; set; }
+
+        public bool Editable { get; set; }
+
+        public bool Addable { get; set; }
+
+        public bool Deletable { get; set; }
+
         public void AutoSetFields()
         {
             foreach (DataColumn col in Data.Columns)
             {
-                this.Fields.Add(new GridField { FieldName = col.ColumnName, FieldTitle = col.ColumnName });
+                this.Fields.Add(new GridField { FieldName = col.ColumnName, FieldTitle = col.ColumnName, Editable=this.Editable });
             }
         }
     }
@@ -111,6 +121,9 @@ namespace MvcGrid.Models
         public string FormatString { get; set; } = "";
 
         public bool Sortable { get; set; }
+
+        public bool Editable { get; set; }
+
           
         #endregion Serialization properties
 
