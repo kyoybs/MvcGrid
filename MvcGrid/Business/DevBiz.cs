@@ -18,6 +18,7 @@ namespace MvcGrid.Business
                 sqlb.SelectSql = @"SELECT TOP 100 f.*, t.ControlTypeName FROM DevFieldInfo f LEFT JOIN dbo.DevControlType t ON f.ControlTypeId=t.ControlTypeId ";
                 sqlb.AddFilter("f.TableName LIKE @TableName", "@TableName", sqlb.Wrap(searchFieldsModel.TableName));
                 sqlb.AddFilter("f.FieldName LIKE @FieldName", "@FieldName", sqlb.Wrap(searchFieldsModel.FieldName));
+                sqlb.AddFilter("f.FieldLabel LIKE @FieldLabel", "@FieldLabel", sqlb.Wrap(searchFieldsModel.FieldLabel));
                 sqlb.AddFilter("f.CategoryName LIKE @CategoryName", "@CategoryName", sqlb.Wrap(searchFieldsModel.CategoryName));
                 sqlb.OrderBy = " ORDER BY ControlIndex ASC ";
                 searchFieldsModel.GridModel.SortField = "ControlIndex";
@@ -26,35 +27,16 @@ namespace MvcGrid.Business
             } 
         }
 
-        public static string Generate(SearchFieldsModel searchFieldsModel)
+
+        public static string Generate(SearchFieldsModel searchFieldsModel, string generateType="")
         {
             using (var sqlb = DbHelper.CreateSql())
             {
-                sqlb.SelectSql = @"SELECT TOP 100 f.*, t.ControlTypeName,t.Pattern FROM DevFieldInfo f JOIN dbo.DevControlType t ON f.ControlTypeId=t.ControlTypeId ";
+                sqlb.SelectSql = @"SELECT TOP 100 f.*, t.ControlTypeName,t.Pattern,t.EntityPattern,t.KimlPattern, t.HtmlPattern, t.MvcPattern FROM DevFieldInfo f JOIN dbo.DevControlType t ON f.ControlTypeId=t.ControlTypeId ";
                 sqlb.AddFilter("f.TableName LIKE @TableName", "@TableName", sqlb.Wrap(searchFieldsModel.TableName));
                 sqlb.AddFilter("f.FieldName LIKE @FieldName", "@FieldName", sqlb.Wrap(searchFieldsModel.FieldName));
                 sqlb.AddFilter("f.CategoryName LIKE @CategoryName", "@CategoryName", sqlb.Wrap(searchFieldsModel.CategoryName));
-                sqlb.OrderBy = " ORDER BY ControlIndex ASC ";
-
-                StringBuilder sb = new StringBuilder();
-
-                var dtFields = sqlb.QueryDataTable();
-                foreach (DataRow row in dtFields.Rows)
-                {
-                    sb.AppendLine(row["Pattern"]?.ToString()?.Replace("[PropertyName]", row["EntityProperty"]?.ToString()));
-                }
-                return sb.ToString();
-            } 
-        }
-
-        public static string GenerateEntity(SearchFieldsModel searchFieldsModel)
-        {
-            using (var sqlb = DbHelper.CreateSql())
-            {
-                sqlb.SelectSql = @"SELECT TOP 100 f.*, t.ControlTypeName,t.Pattern,t.EntityPattern FROM DevFieldInfo f JOIN dbo.DevControlType t ON f.ControlTypeId=t.ControlTypeId ";
-                sqlb.AddFilter("f.TableName LIKE @TableName", "@TableName", sqlb.Wrap(searchFieldsModel.TableName));
-                sqlb.AddFilter("f.FieldName LIKE @FieldName", "@FieldName", sqlb.Wrap(searchFieldsModel.FieldName));
-                sqlb.AddFilter("f.CategoryName LIKE @CategoryName", "@CategoryName", sqlb.Wrap(searchFieldsModel.CategoryName));
+                sqlb.AddFilter("f.FieldLabel LIKE @FieldLabel", "@FieldLabel", sqlb.Wrap(searchFieldsModel.FieldLabel));
                 sqlb.OrderBy = " ORDER BY ControlIndex ASC "; 
 
                 StringBuilder sb = new StringBuilder();
@@ -62,7 +44,7 @@ namespace MvcGrid.Business
                 var dtFields = sqlb.QueryDataTable();
                 foreach (DataRow row in dtFields.Rows)
                 {
-                    string str = row["EntityPattern"]?.ToString()?.Replace("[PropertyName]", row["EntityProperty"]?.ToString());
+                    string str = row[generateType+"Pattern"]?.ToString()?.Replace("[PropertyName]", row["EntityProperty"]?.ToString());
                     string type = GetCsTypeName(row["DataType"].ToString());
                     str = str?.Replace("[Type]", type);
                     str = str?.Replace("[FieldLabel]", row["FieldLabel"].ToString());

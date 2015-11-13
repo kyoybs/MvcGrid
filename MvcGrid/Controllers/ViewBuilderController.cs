@@ -34,15 +34,10 @@ namespace MvcGrid.Controllers
         [HttpPost]
         public string Generate(SearchFieldsModel model)
         {
-            string code = DevBiz.Generate(model);
+            string type = Request.QueryString["type"];
+            string code = DevBiz.Generate(model, type);
             return code;
         }
 
-        [HttpPost]
-        public string GenerateEntity(SearchFieldsModel model)
-        {
-            string code = DevBiz.GenerateEntity(model);
-            return code;
-        }
     }
 }

@@ -4,30 +4,67 @@
     ViewBag.Title = "Code Generator";
 }
 
+
 @model ViewBuilderIndexModel
+
+<style>
+    .gen-buttons input{width:130px;}
+</style>
 
 <h2>Index</h2>
 <form id="formFields">
     <div class="row" style="overflow:visible;">
-        <span class="col1h label">Category Name:</span>
-        <span class="col2" style="width:310px; position:relative; ">
-            <input id="txtCategoryName" type="text" name="CategoryName" class="textbox" style="width:280px;" /><span id="iconShowCtgs" class="icon">&there4;</span>
-            <div id="divCtgs" class="list" style="display:none;" >
-                @foreach (string ctg in Model.Categories)
-                {
-                    <div>@ctg</div>
-                }
+        <div class="col">
+            <div class="row">
+                <div class="col ">
+                    <span class="label" style="width:120px;">Category Name:</span>
+                    <div class="" style="width:310px; position:relative; display:inline-block ">
+                        <input id="txtCategoryName" type="text" name="CategoryName" class="textbox" style="width:280px;" /><span id="iconShowCtgs" class="icon">&there4;</span>
+                        <div id="divCtgs" class="list" style="display:none;">
+                            @foreach (string ctg in Model.Categories)
+                            {
+                                <div>@ctg</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col ">
+                    <span class="label" style="width:60px;">Label:</span>
+                    <input id="txtFieldLabel" type="text" name="FieldLabel" class="textbox" style="width:100px;" />
+                </div>
             </div>
-        </span>
+            <div class="row">
+                <div class="col">
+                    <span class="label" style="width:120px;">Table Name:</span>
+                    <input type="text" name="TableName" class="textbox" style="width:100px;" />
+                </div>
 
-        <span class="col1 label">Field Name:</span>
-        <input type="text" name="FieldName" class="col1 textbox" />
-        <input id="btnSearchField" type="button" class="button" value="Search Fields" />
+                <div class="col">
+                    <span class="col label" style="width:90px;">Field Name:</span>
+                    <input type="text" name="FieldName" class="col textbox" style="width:100px;" />
+                </div>
+            </div>
 
-        <input id="btnGenerateCode" type="button" class="button" value="Generate View" />
+        </div>
 
-        <input id="btnGenerateEntity" type="button" class="button" value="Generate Entity" />
+        <div class="col gen-buttons">
+            <div class="row">
+                <input id="btnSearchField" type="button" class="button" value="Search Fields" />
+                <input id="btnGenerateCode" type="button" class="button" value="Generate View" />
+                <input id="btnGenerateEntity" type="button" class="button" value="Generate Entity" />
+                
+            </div>
+
+            <div class="row">
+                <input id="btnGenerateKIML" type="button" class="button" value="Generate KIML" />
+                <input id="btnGenerateHTML" type="button" class="button" value="Generate HTML" />
+                <input id="btnGenerateMVC" type="button" class="button" value="Generate MVC View" />
+            </div>
+
+        </div>
     </div>
+    <div style="clear:both;"></div>
     <div id="divFields">
         @Html.Action("SearchFields", "ViewBuilder")
     </div>
@@ -48,6 +85,7 @@
 
         //Search Fields
         $("#btnSearchField").click(function () {
+            $("#divFields").html("Searching...");
             var url = "@Url.Content("~/ViewBuilder/SearchFields")";
             var args = $("#formFields").serialize();
             $.post(url, args, function (data) {
@@ -58,19 +96,31 @@
         //Generate View
         $("#btnGenerateCode").click(function () {
             var url = "@Url.Content("~/ViewBuilder/Generate")";
-            var args = $("#formFields").serialize();
-            $.post(url, args, function (data) {
-                $("#txtCodes").html(data);
-            })
+            generate(url);
         })
 
         //Generate Entity
         $("#btnGenerateEntity").click(function () {
-            var url = "@Url.Content("~/ViewBuilder/GenerateEntity")";
-            var args = $("#formFields").serialize();
-            $.post(url, args, function (data) {
-                $("#txtCodes").html(data);
-            })
+            var url = "@Url.Content("~/ViewBuilder/Generate")" + "?type=Entity";
+            generate(url);
+        })
+
+        //Generate KIML
+        $("#btnGenerateKIML").click(function () {
+            var url = "@Url.Content("~/ViewBuilder/Generate?type=Kiml")";
+            generate(url);
+        })
+
+        //Generate Html
+        $("#btnGenerateHTML").click(function () { 
+            var url = "@Url.Content("~/ViewBuilder/Generate?type=Html")";
+            generate(url);
+        })
+
+        //Generate Mvc
+        $("#btnGenerateMVC").click(function () {
+            var url = "@Url.Content("~/ViewBuilder/Generate?type=Mvc")";
+            generate(url);
         })
 
         $("#divCtgs div").click(function () {
@@ -82,4 +132,14 @@
             $("#divCtgs").toggle();
         })
     })
+
+    function generate(url) {
+        $("#txtCodes").html("Generating...");
+        var args = $("#formFields").serialize();
+        $.post(url, args, function (data) {
+            if (data == "")
+                data = "No matched fields, maybe fields's control type ID is empty.";
+            $("#txtCodes").html(data);
+        })
+    }
 </script>

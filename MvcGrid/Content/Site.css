@@ -1,5 +1,4 @@
 ﻿body {
-    padding-top: 50px;
     padding-bottom: 20px;
     background-color:#eee;
 }
@@ -45,29 +44,31 @@
     background:-moz-linear-gradient(top,#c5ebfa,#fff);
 }
 
-.row{display:block; overflow:hidden; padding:2px 0;}
-.row::after{ content:" "; clear:both;}
-.col12{width:99.5%; float:left; display:block;} 
-.col11{width:88.9%; float:left; display:inline-block;}
-.col10{width:80.8%; float:left; display:inline-block;}
-.col9{width:72.72%; float:left; display:inline-block;}
-.col8{width:64.64%; float:left; display:inline-block;}
-.col7{width:56.56%; float:left; display:inline-block;}
-.col6{width:48.48%; float:left; display:inline-block;}
-.col5{width:40.40%; float:left; display:inline-block;}
-.col4{width:32.32%; float:left; display:inline-block;}
-.col3{width:24.24%; float:left; display:inline-block;}
-.col2{width:16.16%; float:left; display:inline-block;}
-.col1{width:8.08%; float:left; display:inline-block;}
-.col1h{width:12.12%; float:left; display:inline-block;}
+.row{display:block; padding:2px 0; margin:3px; clear:both;}
+.row::after{ content:" "; clear:both; }
+.col{ float:left; display:inline-block; }
+.col12{width:99.5%; float:left; display:block; } 
+.col11{width:88.9%; float:left; display:inline-block;  }
+.col10{width:80.8%; float:left; display:inline-block; }
+.col9{width:72.72%; float:left; display:inline-block; }
+.col8{width:64.64%; float:left; display:inline-block; }
+.col7{width:56.56%; float:left; display:inline-block; }
+.col6{width:48.48%; float:left; display:inline-block; }
+.col5{width:40.40%; float:left; display:inline-block; }
+.col4{width:32.32%; float:left; display:inline-block; }
+.col3{width:24.24%; float:left; display:inline-block; }
+.col2{width:16.16%; float:left; display:inline-block; }
+.col1{width:8.08%; float:left; display:inline-block; }
+.col1h{width:12.12%; float:left; display:inline-block; }
 
-.label{text-align:right;}
+.label{text-align:right; width:120px; display:inline-block;}
 
 .debug{font-size:11px; color:#ad6969;}
 
-.apptitle a{font-size:16px; text-decoration:none; color:#112bff;}
+.apptitle{font-size:16px; text-decoration:none; color:#4a4630; height:30px; line-height:30px; padding:10px; font-weight:bold;}
 
-.menu a{font-size:12px; text-decoration:none; color:#112bff;}
+.menu{background-color:#b1c4d1; border-radius:3px; padding:5px; font-size:14px;}
+.menu a{font-size:12px; text-decoration:none; color:#112bff; display:inline-block; padding:3px;}
 .menu a:hover{color:#818efa;}
 
 .icon{border:solid 1px #c5ebfa; background-color:#daf2fb; cursor:pointer; text-align:center; color:#ba5858;
@@ -76,3 +77,5 @@
 .list{ display:block; background-color:antiquewhite; border:solid 1px #ccc;  width:320px; cursor:default; color:#444; position:absolute;}
 .list div{padding:2px 5px;}
 .list div:hover{color:#4357fa;}
+
+.nowrap{white-space:nowrap;}
