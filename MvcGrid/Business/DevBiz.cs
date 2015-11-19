@@ -39,22 +39,44 @@ namespace MvcGrid.Business
                 sqlb.AddFilter("f.FieldLabel LIKE @FieldLabel", "@FieldLabel", sqlb.Wrap(searchFieldsModel.FieldLabel));
                 sqlb.OrderBy = " ORDER BY ControlIndex ASC "; 
 
-                StringBuilder sb = new StringBuilder();
+               
 
                 var dtFields = sqlb.QueryDataTable();
+                if(generateType == "sql")
+                {
+                    return GenerateSql(  dtFields);
+                }
+
+                StringBuilder sb = new StringBuilder();
                 foreach (DataRow row in dtFields.Rows)
                 {
                     string str = row[generateType+"Pattern"]?.ToString()?.Replace("[PropertyName]", row["EntityProperty"]?.ToString());
                     string type = GetCsTypeName(row["DataType"].ToString());
                     str = str?.Replace("[Type]", type);
                     str = str?.Replace("[FieldLabel]", row["FieldLabel"].ToString());
+                    string nullable = "";
+                    if (Convert.ToBoolean(row["CanNull"]) && !"string".Equals(type, StringComparison.CurrentCultureIgnoreCase))
+                        nullable = "?";
+                    str = str?.Replace("[Nullable]",nullable);
+                    str = str?.Replace("[FieldName]", row["FieldName"].ToString());
                     sb.AppendLine(str);
                     sb.AppendLine();
                 }
                 return sb.ToString();
             } 
         }
-         
+
+        private static string GenerateSql( DataTable dtFields)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("SELECT ");
+            sb.AppendLine(string.Join(",", dtFields.AsEnumerable().Select(r => (string)r["FieldName"]).ToList().Where(f => !string.IsNullOrEmpty(f))));
+            sb.Append("FROM ");
+            sb.AppendLine(string.Join(",", dtFields.AsEnumerable().Select(r => (string)r["TableName"]).Distinct().ToList().Where(f => !string.IsNullOrEmpty(f))));
+            return sb.ToString();
+        }
+
         public static string GetCsTypeName(string sqlTypeName)
         {
             if (sqlTypeName.IndexOf("char") >= 0)
@@ -77,6 +99,28 @@ namespace MvcGrid.Business
                 sql.SelectSql = "SELECT DISTINCT CategoryName FROM  dbo.DevFieldInfo WHERE CategoryName IS NOT NULL ORDER BY CategoryName ";
                 var list = sql.QueryDataTable().AsEnumerable().Select(r => r.Field<string>("CategoryName")).ToList();
                 return list;
+            }
+        }
+
+        public static void DuplicateField( int fieldId)
+        {
+            String sql = @"INSERT  INTO DevFieldInfo ( [TableName], [FieldName],
+                            [FieldLabel], [EntityProperty],
+                            [FieldIndex], [IsPK], [CanNull],
+                            [DataType], [Length],
+                            [CategoryName], [ControlTypeId],
+                            [ControlIndex], [Notes],
+                            [Deleted] )
+        SELECT  [TableName], [FieldName], [FieldLabel],
+                [EntityProperty], [FieldIndex], [IsPK],
+                [CanNull], [DataType], [Length],
+                [CategoryName], [ControlTypeId],
+                [ControlIndex], [Notes], [Deleted]
+        FROM    dbo.DevFieldInfo
+        WHERE   FieldId = @FieldId";
+            using (var db = DbHelper.CreatConnect())
+            {
+                db.Execute(sql, new { FieldId = fieldId  });
             }
         }
     }

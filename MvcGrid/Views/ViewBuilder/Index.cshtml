@@ -54,7 +54,7 @@
                 <input id="btnSearchField" type="button" class="button" value="Search Fields" />
                 <input id="btnGenerateCode" type="button" class="button" value="Generate View" />
                 <input id="btnGenerateEntity" type="button" class="button" value="Generate Entity" />
-                
+                <input id="btnGenerateSql" type="button" class="button" value="Generate SQL" />
             </div>
 
             <div class="row">
@@ -113,7 +113,7 @@
         })
 
         //Generate Html
-        $("#btnGenerateHTML").click(function () { 
+        $("#btnGenerateHTML").click(function () {
             var url = "@Url.Content("~/ViewBuilder/Generate?type=Html")";
             generate(url);
         })
@@ -124,14 +124,33 @@
             generate(url);
         })
 
-        $("#divCtgs div").click(function () {
+        //Generate SQL
+        $("#btnGenerateSql").click(function () {
+            var url = "@Url.Content("~/ViewBuilder/Generate?type=sql")";
+            generate(url);
+        })
+
+        $("#divCtgs div").click(function (event) {
             $("#txtCategoryName").val($(this).html());
             $("#divCtgs").toggle();
         });
 
         $("#iconShowCtgs").click(function () {
             $("#divCtgs").toggle();
+
+            window.CategoryHandled = true;
+            event.stopPropagation();
+            return false;
         })
+
+        $("body").click(function () {
+            if (window.CategoryHandled == true) {
+                window.CategoryHandled = false;
+                return;
+            }
+            $("#divCtgs").hide();
+        });
+
     })
 
     function generate(url) {
@@ -142,5 +161,17 @@
                 data = "No matched fields, maybe fields's control type ID is empty.";
             $("#txtCodes").html(data);
         })
+    }
+
+    function duplicateField(fieldId) {
+        var url = "@Url.Content("~/ViewBuilder/DuplicateField")";
+        $.post(url, { fieldId: fieldId }, function (data) {
+            if(data != "")
+                alert(data)
+            else {
+                $("#btnSearchField").click();
+            }
+        })
+        return false;
     }
 </script>

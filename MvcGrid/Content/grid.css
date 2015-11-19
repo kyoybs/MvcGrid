@@ -41,4 +41,4 @@
         font-weight: bold;
     }
 
-    .grid td{ max-width:200px;}
+    .grid td{ max-width:200px; overflow:hidden; }

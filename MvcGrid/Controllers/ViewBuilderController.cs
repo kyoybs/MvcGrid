@@ -2,9 +2,11 @@
 using MvcGrid.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Dapper;
 
 namespace MvcGrid.Controllers
 {
@@ -29,6 +31,8 @@ namespace MvcGrid.Controllers
         {
             model.GridModel.Editable = true;
             model.GridModel.Addable = true;
+            model.GridModel.Duplicatable = true;
+            model.GridModel.JsDuplicateFunction = "duplicateField";
             model.GridModel.UrlUpdateField = Url.Content("~/ViewBuilder/UpdateField");
             DevBiz.SearchFields(model);
              
@@ -38,7 +42,20 @@ namespace MvcGrid.Controllers
         [HttpPost]
         public string UpdateField(string fieldName, string fieldValue, int dataId)
         {
-            return fieldName + " -- " + fieldValue + " -- " + dataId;
+            //return fieldName + " -- " + fieldValue + " -- " + dataId;
+            string sql = $"UPDATE DevFieldInfo SET {fieldName}=@FieldValue WHERE FieldId=@FieldId";
+            using (var db = DbHelper.CreatConnect())
+            {
+                db.Execute(sql, new { FieldValue = fieldValue, FieldId=dataId });
+            }
+            return "";
+        }
+
+        [HttpPost]
+        public string DuplicateField(int fieldId)
+        {
+            DevBiz.DuplicateField(fieldId);
+            return "";
         }
 
         [HttpPost]

@@ -6,7 +6,7 @@
 
 <link href="~/Content/grid.css?@DateTime.Now.Ticks" rel="stylesheet" />
 
-<table id="@Model.Id" class="grid">
+<table id="@Model.Id" class="grid" data-table="@Model.UrlUpdateField">
     <thead>
         <tr style="height:26px;">
             @foreach (var item in Model.Fields)
@@ -34,7 +34,8 @@
                     <td>
                         @if (Model.Editable)
                         {
-                            <button>Delete</button>   
+                            @*<button>Delete</button>*@
+                            <button onclick="@Html.Raw(Model.JsDuplicateFunction) ('@row[Model.KeyField]'); return false;"  >Duplicate</button>
                         }
                     </td>
                 }
@@ -55,7 +56,7 @@
             </tr>
             <tr>
                 <td colspan="@Model.Fields.Count" style="text-align:center; padding:3px;">
-                    <span class="button">Save New Data</span>
+                   
                 </td>
             </tr>
         </tfoot>

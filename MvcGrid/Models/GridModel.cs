@@ -85,6 +85,7 @@ namespace MvcGrid.Models
         }
 
         private string p_JsSortFunction;
+         
 
         public string UrlUpdateField { get; set; }
         public string UrlDeleteRow { get; set; }
@@ -95,6 +96,10 @@ namespace MvcGrid.Models
         public bool Addable { get; set; }
 
         public bool Deletable { get; set; }
+
+        public bool Duplicatable { get; set; }
+
+        public string JsDuplicateFunction { get; set; }
 
         public void AutoSetFields()
         {
