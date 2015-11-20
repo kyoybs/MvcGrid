@@ -1,5 +1,10 @@
 ﻿$(function () {
-    $.ajaxSetup({cache:false})
+    $.ajaxSetup({
+        cache: false,
+        beforeSend: function () {
+            alert("Ajax Start!");
+        }
+    })
 })
 
 $(document).ajaxError(function (event, xhr, options, exc) {
@@ -24,7 +29,7 @@ jq.log = function(msg, len){
 jq.left = function(str, len, autoEllipsis){
     if(str == null || str == "" || str.length <= len)
         return str;
-    return str.substring(0,len) + (autoEllipsis?"...":"");
+    return str.toString().substring(0,len) + (autoEllipsis?"...":"");
 }
 
 jq.showMsg = function (msg) {
@@ -38,19 +43,61 @@ jq.showMsg = function (msg) {
 }
 
 
-jq.updateGridField = function (url, $td) {
-    var fieldName = $td.attr("data-field");
-    var id = $td.closest("tr").attr("data-id");
-    var val = $.trim($td.html().replace(/<br>/, '\r\n'));
+jq.updateField = function (url, dataId , fieldName, fieldValue) { 
     jq.log("------UPDATE FIELD -------------");
     jq.log(url);
     jq.log(fieldName);
-    jq.log(id);
-    jq.log(val);
+    jq.log(dataId);
+    jq.log(fieldValue);
     jq.log("------UPDATE FIELD END-------------");
     $.post(url, { fieldName: fieldName, fieldValue:val, dataId: id }, function (data) {
         if (data != "") {
             alert(data); 
         } 
     });
+}
+
+jq.popWindow = function (title, url, id) { 
+    jq.log("------SHOW ROW DETAIL  -------------");
+    jq.log(url); 
+    jq.log(id); 
+    jq.log("------SHOW ROW DETAIL END-------------");
+    $.post(url, { dataId: id }, function (data) {
+        var windowIndex = $("_window_mask").size();
+        var maskId = '_window_mask_' + windowIndex;
+        var windowId = '_window_' + windowIndex;
+        var mask = $("<div id='" + maskId + "' class='mask'></div>");
+        $("body").append(mask);
+        var pop = $("<div id='" + windowId + "'  class='window'></div>");
+        $("body").append(pop);
+        var poptitle = $("<div id='_grid_title'  class='title'></div>");
+        var popclose = $("<div class='close'>&Chi;</div>");
+        popclose.click(function () {
+            mask.remove();
+            pop.remove();
+        });
+        pop.append(poptitle);
+        poptitle.html(title);
+        poptitle.append(popclose);
+
+        var popbody = $("<div class='body'></div>"); 
+        pop.append(popbody);
+        popbody.html(data);
+        mask.show();
+        pop.show();
+    });
+}
+
+jq.loading = function () {
+    if(typeof(jq.$loading) == "undefined"){
+        jq.$loading = $("<div class='loading'>Loading...</div>");
+        $("body").append(jq.$loading);
+    }
+    jq.$loading.show();
+}
+
+jq.closeLoading = function () {
+    if (typeof (jq.$loading) != "undefined") {
+        jq.$loading.hide();
+    }
 }

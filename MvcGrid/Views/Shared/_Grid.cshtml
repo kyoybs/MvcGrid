@@ -32,10 +32,15 @@
                 @if (Model.Addable || Model.Deletable)
                 {
                     <td>
-                        @if (Model.Editable)
+                        @if (Model.Duplicatable)
                         {
                             @*<button>Delete</button>*@
                             <button onclick="@Html.Raw(Model.JsDuplicateFunction) ('@row[Model.KeyField]'); return false;"  >Duplicate</button>
+                        }
+
+                        @if (Model.HasRowDetail)
+                        {
+                            <button onclick="jq.popWindow('@Model.Title','@Html.Raw(Model.UrlRowDetail)','@row[Model.KeyField]')  ; return false;">Detail</button>
                         }
                     </td>
                 }
@@ -101,12 +106,14 @@
     <script>
         $(function () {
             $("Table#@Model.Id tbody td").blur(function () { 
-                var value = $.trim($(this).html().replace(/<br>/,'\r\n'));
-                var oldValue = $(this).attr("data-value");
-               
-                if (value == oldValue)
+                var $td = $(this);
+                var fieldValue = $.trim($td.html().replace(/<br>/, '\r\n'));
+                var oldValue = $td.attr("data-value");
+                var fieldName = $td.attr("data-field");
+                var dataId = $td.closest("tr").attr("data-id"); 
+                if (fieldValue == oldValue)
                     return;
-                jq.updateGridField("@Model.UrlUpdateField", $(this));
+                jq.updateField("@Model.UrlUpdateField", dataId , fieldName , fieldValue);
             });
         })
     </script>

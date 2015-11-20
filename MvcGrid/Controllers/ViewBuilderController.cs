@@ -34,6 +34,9 @@ namespace MvcGrid.Controllers
             model.GridModel.Duplicatable = true;
             model.GridModel.JsDuplicateFunction = "duplicateField";
             model.GridModel.UrlUpdateField = Url.Content("~/ViewBuilder/UpdateField");
+            model.GridModel.HasRowDetail = true;
+            model.GridModel.UrlRowDetail = Url.Content("~/ViewBuilder/FieldDetail");
+            model.GridModel.Title = "Development Field Information";
             DevBiz.SearchFields(model);
              
             return View(model);
@@ -64,6 +67,12 @@ namespace MvcGrid.Controllers
             string type = Request.QueryString["type"];
             string code = DevBiz.Generate(model, type);
             return code;
+        }
+
+        public ActionResult FieldDetail(int dataId)
+        {
+            GridModel model = DevBiz.GetField(dataId); 
+            return PartialView("_GridRowDetail", model); 
         }
 
     }

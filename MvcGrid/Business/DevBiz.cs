@@ -26,8 +26,7 @@ namespace MvcGrid.Business
                 searchFieldsModel.GridModel.AutoSetFields();
             } 
         }
-
-
+         
         public static string Generate(SearchFieldsModel searchFieldsModel, string generateType="")
         {
             using (var sqlb = DbHelper.CreateSql())
@@ -122,6 +121,20 @@ namespace MvcGrid.Business
             {
                 db.Execute(sql, new { FieldId = fieldId  });
             }
+        }
+
+        public static GridModel GetField(int fieldId)
+        {
+            GridModel model = new GridModel();
+
+            using (var sqlb = DbHelper.CreateSql())
+            {
+                sqlb.SelectSql = @"SELECT f.*, t.ControlTypeName FROM DevFieldInfo f LEFT JOIN dbo.DevControlType t ON f.ControlTypeId=t.ControlTypeId ";
+                sqlb.AddFilter("f.FieldId = @FieldId", "@FieldId",  fieldId);
+                model.Data = sqlb.QueryDataTable() ;
+                model.AutoSetFields();
+            }
+            return model;
         }
     }
 }

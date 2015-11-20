@@ -85,8 +85,11 @@ namespace MvcGrid.Models
         }
 
         private string p_JsSortFunction;
-         
 
+
+        /// <summary>
+        /// post data: fieldName , fieldValue , dataId 
+        /// </summary>
         public string UrlUpdateField { get; set; }
         public string UrlDeleteRow { get; set; }
         public string UrlAddRow { get; set; }
@@ -100,6 +103,18 @@ namespace MvcGrid.Models
         public bool Duplicatable { get; set; }
 
         public string JsDuplicateFunction { get; set; }
+
+        public bool HasRowDetail { get; set; }
+
+        /// <summary>
+        /// post data: dataId
+        /// </summary>
+        public string UrlRowDetail { get; set; }
+
+        public string JsReloadFunction { get; set; }
+
+        public string Title { get; set; }
+
 
         public void AutoSetFields()
         {

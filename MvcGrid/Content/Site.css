@@ -86,3 +86,9 @@ span.button{ height:23px; line-height:23px; padding:0 8px; display:inline-block;
 .mask{position:fixed; top:0; left:0; right:0; bottom:0; opacity:0.85; background-color:#ccc; z-index:9990; display:none; font-size:16px; color:#666;font-weight:bold; }
 .mask .title{background:background:-webkit-linear-gradient(top,#edf6fe,#c4bdbd); background:-moz-linear-gradient(top,#edf6fe,#c4bdbd); text-align:center; height:30px; cursor:pointer;}
 .popmsg{position:fixed; top:0; left:0; right:0; bottom:0;  z-index:9999; margin:30px; display:none;}
+.window{position:fixed; top:0; left:0; right:0; bottom:0;  z-index:9999; margin:30px; display:none; border:solid 1px #aaa;border-radius:5px; background-color:#ededed;}
+.window .title{background:background:-webkit-linear-gradient(top,#edf6fe,#c4bdbd); background:-moz-linear-gradient(top,#edf6fe,#c4bdbd); text-align:center;  font-size:14px; padding:5px; color:#495862; position:relative; cursor:default; }
+.window .title .close{position:absolute; top:5px; right:8px;cursor:pointer; color:#ad3939;}
+.window .body{overflow:auto; padding:5px;}
+
+.loading{position:fixed; width:50px; height:30px; margin-left:-25px; margin-top:-15px; top:50%; left:50%; background-color:#c5ebfa; border:solid 1px #bbb; }

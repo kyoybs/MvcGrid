@@ -274,6 +274,7 @@
     <Content Include="Views\ViewBuilder\Index.cshtml" />
     <Content Include="Views\ViewBuilder\SearchFields.cshtml" />
     <Content Include="Views\Shared\_Partial.cshtml" />
+    <Content Include="Views\Shared\_GridRowDetail.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
