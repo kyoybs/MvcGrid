@@ -1,0 +1,59 @@
+﻿
+.page-header {
+    background: -webkit-linear-gradient(left,#edf6fe,#fff) !important;
+    background: -moz-linear-gradient(left,#edf6fe,#fff);
+    background: -ms-linear-gradient(left,#edf6fe,#fff) !important;
+    font-size: 18px;
+    line-height: 58px;
+    font-weight: bold;
+    color: #555;
+    padding: 0 10px;
+}
+
+.page-left {
+    background: -webkit-linear-gradient(top,#edf6fe,#fff);
+    background: -moz-linear-gradient(top,#edf6fe,#fff);
+    overflow:visible;
+}
+
+.page-bottom {
+    background: -webkit-linear-gradient(top,#fff,#edf6fe);
+    background: -moz-linear-gradient(top,#fff,#edf6fe);
+}
+
+
+.panel-body {
+    background: #f0f0f0;
+}
+ 
+
+.panel-tool-collapse {
+    background: url('images/accordion_arrows.png') no-repeat 0 0;
+}
+
+.panel-tool-expand {
+    background: url('images/accordion_arrows.png') no-repeat -16px 0;
+}
+
+.panel-header {
+    border-bottom: none;
+    background: linear-gradient(top,#8b9fd0,#f0f0f0); 
+    background-color:transparent;
+    border:none;
+}
+.panle-title{ 
+    background: linear-gradient(top,#8b9fd0,#f0f0f0); 
+    background-color:transparent;
+}
+.panel{
+    border:solid 1px #95B8E7;
+}
+.panel-body{
+    border:none;
+}
+
+.page-left .panel{
+    border:solid 1px #bdd1eb;
+}
+
+a{text-decoration:none;}

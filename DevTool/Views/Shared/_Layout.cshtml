@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @*@Styles.Render("~/Content/css")*@
+    @*@Scripts.Render("~/bundles/modernizr")*@
+    <link href="~/Content/themes/default/easyui.css" rel="stylesheet" /> 
+    <link href="~/Content/themes/default/Main.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/jquery.easyui-1.4.3.min.js"></script>
+</head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<body class="easyui-layout">
+    <div class="page-header" data-options="region:'north'" style="height:60px;">Synvata Development Toolkit</div> 
+    <div class="page-left" data-options="region:'west'" style="width:200px;">
+        <div style="height:auto;padding:5px;">
+            <div class="easyui-panel" title="Picture Tasks" collapsible="true" style="line-height:23px; padding:0px 10px;">
+                <a href="javascript:void(0);" onclick="openPage('@Url.Content("~/FieldList/Index")');">Field List</a>
+                <br />
+                Order prints online<br />
+                Print pictures
+            </div>
+            <br />
+            <div class="easyui-panel" title="File and Folder Tasks" collapsible="true" style="height:auto;padding:10px;">
+                Make a new folder<br />
+                Publish this folder to the Web<br />
+                Share this folder
+            </div>
+            <br />
+            <div class="easyui-panel" title="Other Places" collapsible="true" collapsed="true" style="height:auto;padding:10px;">
+                New York<br />
+                My Pictures<br />
+                My Computer<br />
+                My Network Places
+            </div>
+            <br />
+            <div class="easyui-panel" title="Details" collapsible="true" style="height:auto;padding:10px;">
+                My documents<br />
+                File folder<br /><br />
+                Date modified: Oct.3rd 2010
+            </div>
+        </div>
+    </div>
+    <div data-options="region:'center',title:''" style="padding:5px;background:#eee;">
+        @RenderBody() 
+    </div>
+    <div class="page-bottom" data-options="region:'south'" style="height:60px;"></div>
+    @RenderSection("scripts", required: false)
+</body>   
+
+</html>
