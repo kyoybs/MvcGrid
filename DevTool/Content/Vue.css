@@ -14,8 +14,8 @@
 ul {
     padding-left: 1em;
     line-height: 1.5em;
-    list-style-type: dot;
     margin-left: 10px;
+    margin-top:0; 
 }
 
 .area {
@@ -24,7 +24,7 @@ ul {
     margin: 8px;
     background-color: #e0e8f1;
     border-radius: 3px;
-    width: 360px;
+    width: 490px;
     float: left;
 }
 
@@ -33,6 +33,7 @@ ul {
         color: #555;
         border-bottom: dashed 1px #c3d5e9;
         padding: 3px;
+        margin-bottom:8px;
     }
 
 .button {
@@ -40,6 +41,7 @@ ul {
     margin-top: -1px;
     border: solid 1px #b1c4d1;
     border-radius: 3px;
+    min-width:50px;
     padding: 1px 5px 2px 5px;
     background: -webkit-linear-gradient(top,#fff,#edf6fe);
     background: -moz-linear-gradient(top ,#fff,#edf6fe);
@@ -72,3 +74,7 @@ span.button {
      background:-webkit-linear-gradient(top,#fcfaeb,#fff);
     background:-moz-linear-gradient(top,#fcfaeb,#fff);
 }
+
+.row{ height:26px;}
+
+.row .label{display:inline-block; width:160px; text-align:right;}

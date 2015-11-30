@@ -8,7 +8,7 @@ Vue.component('treenode', {
     },
     data: function () {
         return {
-            open: this.model.open|true
+            open: true
         }
     },
     computed: {
@@ -19,7 +19,7 @@ Vue.component('treenode', {
     },
     methods: {
         click: function () { 
-            CurrentCategory.Name = this.model.Name; 
+            CategoryEditorData.CurrentCategoryName = this.model.Name;
         },
         toggle: function () { 
             if (this.isFolder) {
@@ -36,20 +36,19 @@ Vue.component('treenode', {
 })
  
 
-$(function () {
+$(function () { 
     // boot up the demo
     var categories = new Vue({
-        el: '#categories',
+        el: '#CategoriesTree',
         data: {
-            treeData: categoryData
+            treeData: CategoryTreeData
         }
     })
 
     new Vue({
         el: '#Category',
-        data: CurrentCategory
+        data: CategoryEditorData
     })
-
-    CurrentCategory.Name = "abc";
+     
 })
 

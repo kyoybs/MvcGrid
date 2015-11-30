@@ -8,3 +8,13 @@ D:\Git\MvcGrid\DevTool.Business\bin\Debug\Dapper.pdb
 D:\Git\MvcGrid\DevTool.Business\bin\Debug\Dapper.xml
 D:\Git\MvcGrid\DevTool.Business\obj\Debug\DevTool.Business.dll
 D:\Git\MvcGrid\DevTool.Business\obj\Debug\DevTool.Business.pdb
+E:\项目\MvcGrid\DevTool.Business\bin\Debug\DevTool.Business.dll
+E:\项目\MvcGrid\DevTool.Business\bin\Debug\DevTool.Business.pdb
+E:\项目\MvcGrid\DevTool.Business\bin\Debug\Synvata.ORM.dll
+E:\项目\MvcGrid\DevTool.Business\bin\Debug\Dapper.dll
+E:\项目\MvcGrid\DevTool.Business\bin\Debug\Synvata.ORM.pdb
+E:\项目\MvcGrid\DevTool.Business\bin\Debug\Dapper.pdb
+E:\项目\MvcGrid\DevTool.Business\bin\Debug\Dapper.xml
+E:\项目\MvcGrid\DevTool.Business\obj\Debug\DevTool.Business.csprojResolveAssemblyReference.cache
+E:\项目\MvcGrid\DevTool.Business\obj\Debug\DevTool.Business.dll
+E:\项目\MvcGrid\DevTool.Business\obj\Debug\DevTool.Business.pdb

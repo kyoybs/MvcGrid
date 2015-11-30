@@ -205,3 +205,10 @@ D:\Git\MvcGrid\DevTool\bin\DevTool.Business.pdb
 D:\Git\MvcGrid\DevTool\bin\Synvata.ORM.pdb
 D:\Git\MvcGrid\DevTool\bin\Dapper.pdb
 D:\Git\MvcGrid\DevTool\bin\Dapper.xml
+E:\项目\MvcGrid\DevTool\bin\DevTool.Business.dll
+E:\项目\MvcGrid\DevTool\bin\Synvata.ORM.dll
+E:\项目\MvcGrid\DevTool\bin\Dapper.dll
+E:\项目\MvcGrid\DevTool\bin\DevTool.Business.pdb
+E:\项目\MvcGrid\DevTool\bin\Synvata.ORM.pdb
+E:\项目\MvcGrid\DevTool\bin\Dapper.pdb
+E:\项目\MvcGrid\DevTool\bin\Dapper.xml
