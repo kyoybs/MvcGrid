@@ -40,12 +40,12 @@
         <div class="row">
             <label class="label">Current Category Name:</label>
             <input class="textbox" type="text" v-model="CurrentCategoryName" style="width:150px;" placeholder="Selected Category" />
-            <button v-on:click="saveName" class="button">Save</button>
+            <button v-on:click="saveName" class="button" title="Save Selected Category Name">Save</button>
         </div>
         <div class="row">
             <label class="label"> Add Child Category:</label>
             <input class="textbox" type="text" v-model="ChildCategoryName" placeholder="New Category Name" style="width:150px;" />
-            <button v-on:click="saveName" class="button">Add</button>
+            <button v-on:click="saveName" class="button" title="Add New Child Category to Selected Category">Add</button>
         </div>
 
         <div class="title">Fields Info</div>
