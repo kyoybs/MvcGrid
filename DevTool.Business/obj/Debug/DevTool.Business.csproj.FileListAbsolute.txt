@@ -1,0 +1,10 @@
+D:\Git\MvcGrid\DevTool.Business\obj\Debug\DevTool.Business.csprojResolveAssemblyReference.cache
+D:\Git\MvcGrid\DevTool.Business\bin\Debug\DevTool.Business.dll
+D:\Git\MvcGrid\DevTool.Business\bin\Debug\DevTool.Business.pdb
+D:\Git\MvcGrid\DevTool.Business\bin\Debug\Synvata.ORM.dll
+D:\Git\MvcGrid\DevTool.Business\bin\Debug\Dapper.dll
+D:\Git\MvcGrid\DevTool.Business\bin\Debug\Synvata.ORM.pdb
+D:\Git\MvcGrid\DevTool.Business\bin\Debug\Dapper.pdb
+D:\Git\MvcGrid\DevTool.Business\bin\Debug\Dapper.xml
+D:\Git\MvcGrid\DevTool.Business\obj\Debug\DevTool.Business.dll
+D:\Git\MvcGrid\DevTool.Business\obj\Debug\DevTool.Business.pdb

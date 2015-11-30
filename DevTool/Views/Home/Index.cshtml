@@ -1,3 +1,56 @@
-﻿ 
+﻿@using DevTool.Common; 
 
-TEST HOME
+<script src="~/Views/Home/Index.js"></script>
+<style>
+    #categories div:hover{
+        color:#ba5911;
+    }
+</style>
+
+<!-- item template -->
+<script type="text/x-template" id="treeNode-template">
+    <li>
+        <div :class="{bold: isFolder}"
+             v-on:click="click" >
+            {{model.Name}}
+            <span v-if="isFolder" v-on:click.stop="toggle">[{{Open ? '-' : '+'}}]</span>
+        </div>
+        <ul v-show="open" v-if="isFolder">
+            <treeNode class="item"
+                  v-for="model in model.Children"
+                  :model="model">
+            </treeNode> 
+        </ul>
+    </li>
+</script>
+ 
+
+<!-- the demo root element -->
+<div class="area"  >
+    <div class="title">Category Tee <div></div></div>
+    <ul id="categories">
+        <treeNode class="item" :model="treeData">
+        </treeNode>  
+    </ul> 
+</div>
+ 
+
+<div id="Category"  class="area" style="width:400px;" >
+    <div class="row">
+        Current Category:
+        <input class="textbox" type="text" v-model="Name" style="width:150px;" />
+        <button v-on:click="saveName" class="button">Save Name</button>
+    </div>
+    <div class="row">
+        New Category:
+        <input class="textbox" type="text" v-model="Name" style="width:150px;" />
+        <button v-on:click="saveName" class="button">Add Children</button>
+    </div>
+</div>
+
+<script id="treeData">
+      
+    var categoryData =  $.parseJSON('@Html.Raw(UiHelper.ToJsonString(UiHelper.CategoryTree()))');
+    var CurrentCategory = { Name: "TestCategory" };
+</script>
+ 

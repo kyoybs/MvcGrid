@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcGrid", "MvcGrid\MvcGrid.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevTool", "DevTool\DevTool.csproj", "{44F4EA55-8B2A-4588-B994-40842563DEF4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synvata.ORM", "Synvata.ORM\Synvata.ORM.csproj", "{4C6A02E9-1D1E-4A6F-8506-30C2C600BB0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevTool.Business", "DevTool.Business\DevTool.Business.csproj", "{AFCE8CFF-EA26-4E17-A91D-828EA7AD0AE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{44F4EA55-8B2A-4588-B994-40842563DEF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44F4EA55-8B2A-4588-B994-40842563DEF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44F4EA55-8B2A-4588-B994-40842563DEF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C6A02E9-1D1E-4A6F-8506-30C2C600BB0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C6A02E9-1D1E-4A6F-8506-30C2C600BB0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C6A02E9-1D1E-4A6F-8506-30C2C600BB0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C6A02E9-1D1E-4A6F-8506-30C2C600BB0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFCE8CFF-EA26-4E17-A91D-828EA7AD0AE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFCE8CFF-EA26-4E17-A91D-828EA7AD0AE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFCE8CFF-EA26-4E17-A91D-828EA7AD0AE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFCE8CFF-EA26-4E17-A91D-828EA7AD0AE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

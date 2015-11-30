@@ -1,0 +1,8 @@
+D:\Git\MvcGrid\Synvata.ORM\obj\Debug\Synvata.ORM.csprojResolveAssemblyReference.cache
+D:\Git\MvcGrid\Synvata.ORM\bin\Debug\Synvata.ORM.dll
+D:\Git\MvcGrid\Synvata.ORM\bin\Debug\Synvata.ORM.pdb
+D:\Git\MvcGrid\Synvata.ORM\bin\Debug\Dapper.dll
+D:\Git\MvcGrid\Synvata.ORM\bin\Debug\Dapper.pdb
+D:\Git\MvcGrid\Synvata.ORM\bin\Debug\Dapper.xml
+D:\Git\MvcGrid\Synvata.ORM\obj\Debug\Synvata.ORM.dll
+D:\Git\MvcGrid\Synvata.ORM\obj\Debug\Synvata.ORM.pdb
