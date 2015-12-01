@@ -19,9 +19,14 @@ namespace DevTool.Controllers
         }
         
         [HttpPost]
-        public void SaveCategory(DevCategory category)
+        public JsonResult InsertCategory(DevCategory category)
         { 
-            DevCategoryBusiness.UpdateCategory(category); 
+            DevCategoryBusiness.InsertCategory(category);
+            TreeModel<DevCategory> tm = new TreeModel<DevCategory>();
+            tm.Id = category.CategoryId;
+            tm.Name = category.CategoryName;
+            tm.Entity = category;
+            return Json(tm);
         }
 
         [HttpPost]

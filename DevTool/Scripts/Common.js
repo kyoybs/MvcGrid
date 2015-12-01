@@ -1,4 +1,8 @@
-﻿$(function () {
+﻿window.onerror = function (data, url, line) {
+    alert(data + "\r\n Error File: " + url + " -- Line: " + line);
+}
+ 
+$(function () {
     $.ajaxSetup({
         cache: false,
         beforeSend: function () {
@@ -161,4 +165,6 @@ $(function () {
     $("body").click(function () {
         $(".error-message").hide();
     });
+
+   
 });

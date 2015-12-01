@@ -14,8 +14,8 @@
     <li>
         <div v-bind:class="{bold: isFolder}"
              v-on:click="click">
-            {{model.Name}}
-            <span v-if="isFolder" v-on:click.stop="toggle">[{{Open ? '-' : '+'}}]</span>
+            #{{model.Id}} {{model.Name}} 
+            <span v-if="isFolder" v-on:click.stop="toggle">[{{open ? '-' : '+'}}]</span>
         </div>
         <ul v-show="open" v-if="isFolder">
             <treeNode v-bind:class="item"
@@ -35,7 +35,7 @@
         </ul>
     </div>
 
-    <div id="Category" class="area" style="width:410px;" data-url-update="@Url.Content("~/Home/UpdateCategoryName")"  > 
+    <div id="Category" class="area" style="width:410px;" data-url-update="@Url.Content("~/Home/UpdateCategoryName")"  data-url-add="@Url.Content("~/Home/InsertCategory")" > 
         <div class="title">Category Info </div>
         <div class="row" >
             <label class="label">Current Category Name:</label>
@@ -64,9 +64,5 @@
 
 <script>
 
-    var CategoryTreeData =@Html.Raw(UiHelper.ToJsonString(UiHelper.CategoryTree()));
-
-    var CategoryEditorData = { CurrentCategoryName: "", CurrentCategoryId: 0, ChildCategoryName: "", Category:{} };
-
-
+    window.CategoryTreeData =@Html.Raw(UiHelper.ToJsonString(UiHelper.CategoryTree())); 
 </script>

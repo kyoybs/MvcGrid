@@ -26,6 +26,14 @@ namespace DevTool.Business
             }
         }
 
+        public static void InsertCategory(DevCategory category)
+        {
+            using (var db = DbHelper.Create())
+            {
+                db.InsertEntity(category);
+            }
+        }
+
         public static void UpdateCategoryName(DevCategory category)
         {
             string sql = @"UPDATE [dbo].[DevCategory] SET CategoryName=@CategoryName WHERE CategoryId=@CategoryId";

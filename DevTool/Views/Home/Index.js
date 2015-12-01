@@ -19,9 +19,9 @@ Vue.component('treenode', {
     },
     methods: {
         click: function () { 
-            CategoryEditorData.CurrentCategoryName = this.model.Name;
-            CategoryEditorData.CurrentCategoryId = this.model.Id;
-            CategoryEditorData.Category = this.model;
+            CategoryEditData.CurrentCategoryName = this.model.Name;
+            CategoryEditData.CurrentCategoryId = this.model.Id;
+            CategoryEditData.Category = this.model;
         },
         toggle: function () { 
             if (this.isFolder) {
@@ -36,8 +36,8 @@ Vue.component('treenode', {
         }
     }
 })
- 
-var VueCategory;
+  
+var CategoryEditData = { CurrentCategoryName: "", CurrentCategoryId: 0, ChildCategoryName: "", Category: {} };
 
 $(function () { 
     // boot up the demo
@@ -48,14 +48,17 @@ $(function () {
         }
     })
 
-    VueCategory = new Vue({
+    new Vue({
         el: '#Category',
-        data: CategoryEditorData,
+        data: window.CategoryEditData,
         methods: {            
             saveCtgName: function () {
                 var pel = $(this.$el).getVueEl("CurrentCategoryName").parent();
                 if (this.CurrentCategoryId == 0) { 
                     pel.showError("Please selected a category.");
+                    return;
+                } else if (this.CurrentCategoryName == "") {
+                    pel.showError("Required.");
                     return;
                 } else {
                     pel.hideError();
@@ -66,8 +69,32 @@ $(function () {
                         jq.showMsg("Save successfully.");
                     })
                 }
+            },
+            addChildCtg: function () {
+                //check current category
+                var pel = $(this.$el).getVueEl("CurrentCategoryName").parent();
+                if (this.CurrentCategoryId == 0) {
+                    pel.showError("Please selected a category.");
+                    return;
+                }
+
+                //check child  category and save.
+                pel = $(this.$el).getVueEl("ChildCategoryName").parent(); 
+                if (this.ChildCategoryName == "") {
+                    pel.showError("Required.");
+                    return;
+                } else {
+                    pel.hideError();
+                    var url = $(this.$el).attr("data-url-add");
+                    var model = this;
+                    $.post(url, { ParentId: this.CurrentCategoryId, CategoryName: this.ChildCategoryName }, function (newTreeNode) {
+                        model.Category.Children.push(newTreeNode);
+                        jq.showMsg("Save successfully.");
+                    })
+                }
             }
-        }
+
+        }// end methods
     })
      
 })

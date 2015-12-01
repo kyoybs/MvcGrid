@@ -79,6 +79,11 @@ namespace Synvata.ORM
             _Connection.Execute(sql, param, commandTimeout: timeout, commandType: commandType);
         }
 
+        public T ExecuteScalar<T>(string sql, object param = null, int? timeout = null, CommandType? commandType = null)
+        {
+            return _Connection.ExecuteScalar<T>(sql, param, commandTimeout: timeout, commandType: commandType) ;
+        }
+         
         public async Task UpdateEntityAsync(object entity, int? timeout = null)
         {
             UpdateSql sql = UpdateSql.ParseEntity(entity);
@@ -90,19 +95,13 @@ namespace Synvata.ORM
             UpdateSql sql = UpdateSql.ParseEntity(entity);
             Execute(sql.GetUpdateSql(), entity, timeout: timeout);
         }
-
-        public async Task InsertEntityAsync(object entity, int? timeout = null)
-        {
-            InsertSql sql = InsertSql.ParseEntity(entity);
-            await ExecuteAsync(sql.GetInsertSql(), entity, timeout: timeout);
-            sql.RetrieveID();
-        }
+         
 
         public void InsertEntity(object entity, int? timeout = null)
         {
             InsertSql sql = InsertSql.ParseEntity(entity);
-            Execute(sql.GetInsertSql(), entity, timeout: timeout);
-            sql.RetrieveID();
+            int id = ExecuteScalar<int>(sql.GetInsertSql(), entity, timeout: timeout);
+            sql.SetId(id);
         }
     }
 }

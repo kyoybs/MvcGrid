@@ -29,7 +29,7 @@ namespace Synvata.ORM
             sql.AppendLine(") VALUES ( ");
             sql.AppendLine(string.Join(", ", InsertingFields.Select(field => $"@{field.FieldName}")));
             sql.AppendLine(")  ; ");
-            sql.AppendLine($" SELECT @{PkField.FieldName}=IDENT_CURRENT('{TableName}'); ");
+            sql.AppendLine($" SELECT IDENT_CURRENT('{TableName}'); ");
             return sql.ToString();
         }
 
@@ -60,18 +60,17 @@ namespace Synvata.ORM
                 {
                     isql.PkField = FieldInfo.Parse(prop);
                     isql._PkPropertyInfo = prop;  
-                    isql.Parameters.Add($"@{prop.Name}", prop.GetValue(entity), direction: ParameterDirection.Output);
+                    //isql.Parameters.Add($"@{prop.Name}", prop.GetValue(entity), direction: ParameterDirection.Output);
                 }
             }
 
             return isql;
         }
 
-        public int RetrieveID()
+        public int SetId(int id)
         {
             if (_PkPropertyInfo == null)
-                return 0;
-            int id = Parameters.Get<int>($"@{_PkPropertyInfo.Name}");
+                return 0; 
             _PkPropertyInfo.SetValue(_Entity, id);
             return id;
         }
