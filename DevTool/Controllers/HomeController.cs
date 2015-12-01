@@ -34,5 +34,12 @@ namespace DevTool.Controllers
         {
             DevCategoryBusiness.UpdateCategoryName(category);
         }
+
+        [HttpPost]
+        public void DeleteCategory(DevCategory category)
+        {
+            category.Deleted = true;
+            DevCategoryBusiness.DeleteCategory(category);
+        }
     }
 }

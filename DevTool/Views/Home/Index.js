@@ -18,8 +18,8 @@ Vue.component('treenode', {
         }
     },
     methods: {
-        click: function () { 
-            CategoryEditData.CurrentCategoryName = this.model.Name;
+        click: function () {
+            CategoryEditData.OriginCategoryName = "#"+this.model.Id + " " + this.model.Name;
             CategoryEditData.CurrentCategoryId = this.model.Id;
             CategoryEditData.Category = this.model;
         },
@@ -37,7 +37,7 @@ Vue.component('treenode', {
     }
 })
   
-var CategoryEditData = { CurrentCategoryName: "", CurrentCategoryId: 0, ChildCategoryName: "", Category: {} };
+var CategoryEditData = { CurrentCategoryName: "", CurrentCategoryId: 0, ChildCategoryName: "", OriginCategoryName: "Unselected", Category: {} };
 
 $(function () { 
     // boot up the demo
@@ -50,7 +50,10 @@ $(function () {
 
     new Vue({
         el: '#Category',
-        data: window.CategoryEditData,
+        data: CategoryEditData,
+        computed:{
+            Disabled: function () { return this.CurrentCategoryId == 0; }
+        },
         methods: {            
             saveCtgName: function () {
                 var pel = $(this.$el).getVueEl("CurrentCategoryName").parent();
@@ -66,6 +69,7 @@ $(function () {
                     var model = this;
                     $.post(url, { CategoryId: this.CurrentCategoryId, CategoryName: this.CurrentCategoryName }, function () {
                         model.Category.Name = model.CurrentCategoryName;
+                        model.OriginCategoryName = "#" + model.Category.Id + " " + model.Category.Name;;
                         jq.showMsg("Save successfully.");
                     })
                 }
@@ -92,10 +96,45 @@ $(function () {
                         jq.showMsg("Save successfully.");
                     })
                 }
+            },
+            deleteCtg: function () {
+                if (CategoryTreeData == this.Category) {
+                    jq.showMsg("Cannot delete root category.");
+                    return;
+                }
+                if (this.Category.Children.length >0) {
+                    jq.showMsg("Cannot delete a category with subcategories.");
+                    return;
+                }
+                if (!confirm("Confirm to Delete Category "  + this.OriginCategoryName + "?"))
+                    return ;
+                var url = $(this.$el).attr("data-url-delete");
+                $.post(url, { CategoryId: this.CurrentCategoryId }, function () {
+                    removeCategory(CategoryEditData.Category);
+                    CategoryEditData.CurrentCategoryId = 0;
+                    CategoryEditData.CurrentCategoryName = "";
+                    CategoryEditData.OriginCategoryName = "Unselected"; 
+                    jq.showMsg("Delete successfully.");
+                })
+            },
+            removeTreeModel: function () {
+                alert("Remove Tree");
             }
 
         }// end methods
     })
      
 })
+
+function removeCategory(parentCategory, category) {
+    $.each(parentCategory.Children, function (index, item) {
+        if (category == item) {
+            category.Children.pop(item);
+            return true;
+        }
+        if(removeCategory(item, category))
+            return true; 
+    })
+    return false;
+}
 

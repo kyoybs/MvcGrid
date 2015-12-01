@@ -122,13 +122,15 @@ jq.closeLoading = function () {
 
 jq.showMsg = function (msg) { 
     if (typeof (jq.$msg) == "undefined") {
-        jq.$msg = $("<div class='message'>" + msg + "</div>");
+        jq.$msg = $("<table class='message'><tr><td>" + msg + "</td></tr></table>");
         $("body").click(function () {
             jq.$msg.hide();
         }).append(jq.$msg);
     }
-    jq.$msg.html(msg);
-    jq.$msg.show(); 
+    jq.$msg.find("td").html(msg);
+    window.setTimeout(function () {
+        jq.$msg.show();
+    }, 50); 
 }
 
 $.fn.showError = function (errorMsg) {

@@ -20,7 +20,7 @@ ul {
 
 .area {
     border: solid 1px #d2dfed;
-    padding: 10px;
+    padding: 3px;
     margin: 8px;
     background-color: #e0e8f1;
     border-radius: 3px;
@@ -31,9 +31,10 @@ ul {
     .area .title {
         font-weight: bold;
         color: #555;
-        border-bottom: dashed 1px #c3d5e9;
-        padding: 3px;
+        border-bottom: dashed 1px #c3d5e9; 
         margin-bottom: 8px;
+        height:25px;
+        line-height:25px;
     }
 
 .button {
@@ -118,4 +119,4 @@ input.error {
 
 .loading{position:fixed; width:100px; height:30px; margin-left:-25px; margin-top:-15px; top:50%; left:50%; background-color:#c5ebfa; border:solid 1px #bbb; z-index:100; }
 
-.message{position:fixed; text-align:center; width:300px; height:30px; margin-left:-25px; margin-top:-15px; top:50%; left:50%; background-color:#c5ebfa; border:solid 1px #bbb; z-index:100; }
+.message{position:fixed; display:table; text-align:center; width:500px; height:60px; margin-left:-250px; margin-top:-30px; top:50%; left:50%; background-color:#c5ebfa; border:solid 1px #ccc; z-index:100; }

@@ -14,7 +14,7 @@ namespace DevTool.Business
         {
             using (var db = DbHelper.Create())
             {
-                return db.Query<DevCategory>("SELECT * FROM dbo.DevCategory").ToList();
+                return db.Query<DevCategory>("SELECT * FROM dbo.DevCategory WHERE Deleted<>1").ToList();
             }
         }
          
@@ -37,6 +37,15 @@ namespace DevTool.Business
         public static void UpdateCategoryName(DevCategory category)
         {
             string sql = @"UPDATE [dbo].[DevCategory] SET CategoryName=@CategoryName WHERE CategoryId=@CategoryId";
+            using (var db = DbHelper.Create())
+            {
+                db.Execute(sql, category);
+            }
+        }
+
+        public static void DeleteCategory(DevCategory category)
+        {
+            string sql = @"UPDATE[dbo].[DevCategory] SET Deleted = 1 WHERE CategoryId = @CategoryId";
             using (var db = DbHelper.Create())
             {
                 db.Execute(sql, category);

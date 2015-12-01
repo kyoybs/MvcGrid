@@ -35,22 +35,25 @@
         </ul>
     </div>
 
-    <div id="Category" class="area" style="width:410px;" data-url-update="@Url.Content("~/Home/UpdateCategoryName")"  data-url-add="@Url.Content("~/Home/InsertCategory")" > 
-        <div class="title">Category Info </div>
+    <div id="Category" class="area" style="width:410px;" 
+         data-url-update="@Url.Content("~/Home/UpdateCategoryName")"  
+         data-url-add="@Url.Content("~/Home/InsertCategory")" 
+         data-url-delete="@Url.Content("~/Home/DeleteCategory")" > 
+        <div class="title">Category Info -- {{OriginCategoryName}} <div style="float:right; "><button v-on:click="deleteCtg" class="button" title="Delete Selected Category"  disabled="{{Disabled}}">Delete</button></div></div>
         <div class="row" >
-            <label class="label">Current Category Name:</label>
+            <label class="label">New Category Name:</label>
             <span class="value">
-                <input id="txtCurrentCategoryName" class="textbox" type="text" v-model="CurrentCategoryName" style="width:150px;" placeholder="Selected Category" />
+                <input id="txtCurrentCategoryName" class="textbox" type="text" v-model="CurrentCategoryName" style="width:150px;" placeholder="Selected Category" disabled="{{Disabled}}"/>
             </span>
 
-            <button v-on:click="saveCtgName" class="button" title="Save Selected Category Name">Save</button>
+            <button v-on:click="saveCtgName" class="button" title="Save Selected Category Name" disabled="{{Disabled}}">Save</button>
         </div>
         <div class="row">
             <label class="label"> Add Child Category:</label>
             <span class="value">
-                <input class="textbox" type="text" v-model="ChildCategoryName" placeholder="New Category Name" style="width:150px;" />
+                <input class="textbox" type="text" v-model="ChildCategoryName" placeholder="New Category Name" style="width:150px;" disabled="{{Disabled}}" />
             </span>
-            <button v-on:click="addChildCtg" class="button" title="Add New Child Category to Selected Category">Add</button>
+            <button v-on:click="addChildCtg" class="button" title="Add New Child Category to Selected Category"  disabled="{{Disabled}}">Add</button>
         </div>
 
         <div class="title">Fields Info</div>
@@ -64,5 +67,5 @@
 
 <script>
 
-    window.CategoryTreeData =@Html.Raw(UiHelper.ToJsonString(UiHelper.CategoryTree())); 
+    var CategoryTreeData =@Html.Raw(UiHelper.ToJsonString(UiHelper.CategoryTree())); 
 </script>

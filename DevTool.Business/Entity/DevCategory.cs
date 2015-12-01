@@ -19,5 +19,7 @@ namespace DevTool.Business.Entity
         public string SelectSql { get; set; }
 
         public string Notes { get; set; }
+
+        public bool Deleted { get; set; }
     }
 }
