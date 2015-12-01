@@ -1,8 +1,10 @@
-﻿using DevTool.Models;
+﻿using DevTool.Business;
+using DevTool.Business.Entity;
+using DevTool.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Web; 
 using System.Web.Mvc;
 
 namespace DevTool.Controllers
@@ -15,27 +17,17 @@ namespace DevTool.Controllers
              
             return View();
         }
+        
+        [HttpPost]
+        public void SaveCategory(DevCategory category)
+        { 
+            DevCategoryBusiness.UpdateCategory(category); 
+        }
 
-
-        public JsonResult GetCategories()
+        [HttpPost]
+        public void UpdateCategoryName(DevCategory category)
         {
-            TreeModel tm = new TreeModel();
-            tm.Name = "Categories";
-            TreeModel tm1 = new TreeModel();
-            tm1.Name = "Ctg 1";
-            tm.Children.Add(tm1);
-
-            TreeModel tm2 = new TreeModel();
-            tm2.Name = "Ctg 2";
-            tm.Children.Add(tm2);
-
-            TreeModel tm21 = new TreeModel();
-            tm21.Name = "Ctg 21";
-            tm2.Children.Add(tm21);
-
-            var json = Json( tm);
-            json.JsonRequestBehavior = JsonRequestBehavior.AllowGet;
-            return json;
+            DevCategoryBusiness.UpdateCategoryName(category);
         }
     }
 }

@@ -10,14 +10,29 @@ namespace DevTool.Business
 {
     public class DevCategoryBusiness
     {
-        public async static Task<List<DevCategory>> GetCategories()
+        public  static List<DevCategory> GetCategories()
         {
             using (var db = DbHelper.Create())
             {
-                return (await db.QueryAsync<DevCategory>("SELECT * FROM dbo.DevCategory")).ToList();
+                return db.Query<DevCategory>("SELECT * FROM dbo.DevCategory").ToList();
+            }
+        }
+         
+        public static void UpdateCategory(DevCategory category)
+        {
+            using (var db = DbHelper.Create())
+            {
+                db.UpdateEntity(category);
             }
         }
 
-
+        public static void UpdateCategoryName(DevCategory category)
+        {
+            string sql = @"UPDATE [dbo].[DevCategory] SET CategoryName=@CategoryName WHERE CategoryId=@CategoryId";
+            using (var db = DbHelper.Create())
+            {
+                db.Execute(sql, category);
+            }
+        }
     }
 }

@@ -1,42 +1,45 @@
-﻿using DevTool.Business.Entity;
+﻿using DevTool.Business;
+using DevTool.Business.Entity;
 using DevTool.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace DevTool.Common
 {
     public class UiHelper
     {
-        public static TreeModel CategoryTree()
+        public static TreeModel<DevCategory> CategoryTree()
         {
-            //List<DevCategory> categories = DevCategoryBusiness.
+            TreeModel<DevCategory> tree = new TreeModel<DevCategory>();
+            tree.Name = "Categories";
+            tree.Id = 1;
 
-            TreeModel tm = new TreeModel();
-            tm.Name = "Categories";
-            TreeModel tm1 = new TreeModel();
-            tm1.Name = "Ctg 1";
-            tm.Children.Add(tm1);
+            var categories = DevCategoryBusiness.GetCategories();
 
-            TreeModel tm2 = new TreeModel();
-            tm2.Name = "Ctg 2";
-            tm.Children.Add(tm2);
+            var root = categories.FirstOrDefault(c => c.ParentId == null || c.ParentId == 0);
+            if (root != null)
+            {
+                tree.Name = root.CategoryName;
+                tree.Id = root.CategoryId;
+            }
+             
+            GetChildCategories(tree, categories );
 
-            TreeModel tm21 = new TreeModel();
-            tm21.Name = "Ctg 21";
-            tm2.Children.Add(tm21);
+            return tree;
+        }
 
-            return tm;
-
-            //TreeModel tree = new TreeModel();
-            //tree.Name = "Categories";
-
-            //foreach (var item in categories.Where(c=>c.ParentId == null || c.ParentId == 0 ))
-            //{
-            //    tree.Children.Add(item)
-            //}
+        private static void GetChildCategories(TreeModel<DevCategory> tree, List<DevCategory> categories)
+        {
+            foreach (var item in categories.Where(c => c.ParentId == tree.Id))
+            {
+                var node = new TreeModel<DevCategory> { Id = item.CategoryId, Name = item.CategoryName, Entity = item };
+                tree.Children.Add(node);
+                GetChildCategories(node, categories);
+            }
         }
 
         public static string ToJsonString(object obj)

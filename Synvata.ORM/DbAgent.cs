@@ -28,6 +28,7 @@ namespace Synvata.ORM
                 providerName = "System.Data.SqlClient";
             db._Factory = DbProviderFactories.GetFactory(providerName);
             db._Connection = db._Factory.CreateConnection();
+            db._Connection.ConnectionString = config.ConnectionString;
             return db;
         }
 
@@ -58,9 +59,24 @@ namespace Synvata.ORM
             return list;
         }
 
+        public IEnumerable<T> Query<T>(string sql, object param = null, int? timeout = null, CommandType? commandType = null)
+        {
+            if (param == null)
+                param = _Parameters;
+            var list = _Connection.Query<T>(sql, param, commandTimeout: timeout, commandType: commandType);
+            if (_Parameters != null)
+                _Parameters = null;
+            return list;
+        }
+
         public async Task ExecuteAsync(string sql, object param = null, int? timeout = null, CommandType? commandType = null)
         {
             await _Connection.ExecuteAsync(sql, param, commandTimeout: timeout, commandType: commandType);
+        }
+
+        public void Execute(string sql, object param = null, int? timeout = null, CommandType? commandType = null)
+        {
+            _Connection.Execute(sql, param, commandTimeout: timeout, commandType: commandType);
         }
 
         public async Task UpdateEntityAsync(object entity, int? timeout = null)
@@ -69,10 +85,23 @@ namespace Synvata.ORM
             await ExecuteAsync(sql.GetUpdateSql(), entity, timeout: timeout);
         }
 
+        public void UpdateEntity(object entity, int? timeout = null)
+        {
+            UpdateSql sql = UpdateSql.ParseEntity(entity);
+            Execute(sql.GetUpdateSql(), entity, timeout: timeout);
+        }
+
         public async Task InsertEntityAsync(object entity, int? timeout = null)
         {
             InsertSql sql = InsertSql.ParseEntity(entity);
             await ExecuteAsync(sql.GetInsertSql(), entity, timeout: timeout);
+            sql.RetrieveID();
+        }
+
+        public void InsertEntity(object entity, int? timeout = null)
+        {
+            InsertSql sql = InsertSql.ParseEntity(entity);
+            Execute(sql.GetInsertSql(), entity, timeout: timeout);
             sql.RetrieveID();
         }
     }

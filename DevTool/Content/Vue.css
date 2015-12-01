@@ -15,7 +15,7 @@ ul {
     padding-left: 1em;
     line-height: 1.5em;
     margin-left: 10px;
-    margin-top:0; 
+    margin-top: 0;
 }
 
 .area {
@@ -33,7 +33,7 @@ ul {
         color: #555;
         border-bottom: dashed 1px #c3d5e9;
         padding: 3px;
-        margin-bottom:8px;
+        margin-bottom: 8px;
     }
 
 .button {
@@ -41,17 +41,17 @@ ul {
     margin-top: -1px;
     border: solid 1px #b1c4d1;
     border-radius: 3px;
-    min-width:50px;
+    min-width: 50px;
     padding: 1px 5px 2px 5px;
     background: -webkit-linear-gradient(top,#fff,#edf6fe);
-    background: -moz-linear-gradient(top ,#fff,#edf6fe);
-    background: -ms-linear-gradient(top ,#fff,#edf6fe);
+    background: -moz-linear-gradient(top,#fff,#edf6fe);
+    background: -ms-linear-gradient(top,#fff,#edf6fe);
 }
 
     .button:hover {
         background: -webkit-linear-gradient(top,#c5ebfa,#fff);
         background: -moz-linear-gradient(top,#c5ebfa,#fff);
-         background: -ms-linear-gradient(top,#c5ebfa,#fff);
+        background: -ms-linear-gradient(top,#c5ebfa,#fff);
     }
 
 span.button {
@@ -63,18 +63,59 @@ span.button {
 }
 
 .textbox {
-    border:solid 1px #a2afb7;
+    border: solid 1px #a2afb7;
+    border-radius: 3px;
+    padding: 2px;
+    background: -webkit-linear-gradient(top,#fffef7,#fff);
+    background: -moz-linear-gradient(top,#fffef7,#fff);
+    margin: 0 2px;
+}
+
+    .textbox:hover {
+        background: -webkit-linear-gradient(top,#fcfaeb,#fff);
+        background: -moz-linear-gradient(top,#fcfaeb,#fff);
+    }
+
+.row {
+    height: 26px;
+}
+
+    .row .label {
+        display: inline-block;
+        width: 160px;
+        text-align: right;
+    }
+
+    .row .value {
+        position: relative;
+        display: inline-block;
+    }
+
+input.error {
+    border: solid 1px red;
+}
+
+.error-message {
+    position: absolute;
+    background-color: #f5f3e7;
+    padding: 8px;
+    border: solid 1px #ddd;
+    opacity: 0.8;
+    z-index: 10;
+    border: solid 1px red;
+    border-top:none;
     border-radius:3px;
-    padding:2px;
-    background:-webkit-linear-gradient(top,#fffef7,#fff);
-    background:-moz-linear-gradient(top,#fffef7,#fff);
-    margin:0 2px;
-}
-.textbox:hover{
-     background:-webkit-linear-gradient(top,#fcfaeb,#fff);
-    background:-moz-linear-gradient(top,#fcfaeb,#fff);
 }
 
-.row{ height:26px;}
 
-.row .label{display:inline-block; width:160px; text-align:right;}
+.mask{position:fixed; top:0; left:0; right:0; bottom:0; opacity:0.85; background-color:#ccc; z-index:9990; display:none; font-size:16px; color:#666;font-weight:bold; }
+.mask .title{background:background:-webkit-linear-gradient(top,#edf6fe,#c4bdbd); background:-moz-linear-gradient(top,#edf6fe,#c4bdbd); text-align:center; height:30px; cursor:pointer;}
+.popmsg{position:fixed; top:0; left:0; right:0; bottom:0;  z-index:9999; margin:30px; display:none;}
+.window{position:fixed; top:0; left:0; right:0; bottom:0;  z-index:9999; margin:30px; display:none; border:solid 1px #aaa;border-radius:5px; background-color:#ededed;}
+.window .title{background:background:-webkit-linear-gradient(top,#edf6fe,#c4bdbd); background:-moz-linear-gradient(top,#edf6fe,#c4bdbd); text-align:center;  font-size:14px; padding:5px; color:#495862; position:relative; cursor:default; }
+.window .title .close{position:absolute; top:5px; right:8px;cursor:pointer; color:#ad3939;}
+.window .body{overflow:auto; padding:5px;}
+
+.loading{position:fixed; width:100px; height:30px; margin-left:-25px; margin-top:-15px; top:50%; left:50%; background-color:#c5ebfa; border:solid 1px #bbb; z-index:100; }
+
+.message{position:fixed; text-align:center; width:300px; height:30px; margin-left:-25px; margin-top:-15px; top:50%; left:50%; background-color:#c5ebfa; border:solid 1px #bbb; z-index:100; }

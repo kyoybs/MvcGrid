@@ -20,6 +20,8 @@ Vue.component('treenode', {
     methods: {
         click: function () { 
             CategoryEditorData.CurrentCategoryName = this.model.Name;
+            CategoryEditorData.CurrentCategoryId = this.model.Id;
+            CategoryEditorData.Category = this.model;
         },
         toggle: function () { 
             if (this.isFolder) {
@@ -35,6 +37,7 @@ Vue.component('treenode', {
     }
 })
  
+var VueCategory;
 
 $(function () { 
     // boot up the demo
@@ -45,9 +48,26 @@ $(function () {
         }
     })
 
-    new Vue({
+    VueCategory = new Vue({
         el: '#Category',
-        data: CategoryEditorData
+        data: CategoryEditorData,
+        methods: {            
+            saveCtgName: function () {
+                var pel = $(this.$el).getVueEl("CurrentCategoryName").parent();
+                if (this.CurrentCategoryId == 0) { 
+                    pel.showError("Please selected a category.");
+                    return;
+                } else {
+                    pel.hideError();
+                    var url = $(this.$el).attr("data-url-update");
+                    var model = this;
+                    $.post(url, { CategoryId: this.CurrentCategoryId, CategoryName: this.CurrentCategoryName }, function () {
+                        model.Category.Name = model.CurrentCategoryName;
+                        jq.showMsg("Save successfully.");
+                    })
+                }
+            }
+        }
     })
      
 })

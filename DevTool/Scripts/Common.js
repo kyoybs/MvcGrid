@@ -2,13 +2,16 @@
     $.ajaxSetup({
         cache: false,
         beforeSend: function () {
-            alert("Ajax Start!");
+            jq.loading();
+        },
+        complete: function () {
+            jq.closeLoading();
         }
     })
 })
 
-$(document).ajaxError(function (event, xhr, options, exc) {
-    jq.showMsg(xhr.responseText);
+$(document).ajaxError(function (event, xhr, options, exc) { 
+    jq.popMsg(xhr.responseText); 
 });
 
 var jq = {};
@@ -31,14 +34,25 @@ jq.left = function (str, len, autoEllipsis) {
     return str.toString().substring(0, len) + (autoEllipsis ? "..." : "");
 }
 
-jq.showMsg = function (msg) {
-    $(".mask").click(function () {
-        $(".mask").hide();
-        $(".popmsg").hide();
-    });
-    $(".popmsg").html(msg);
-    $(".mask").show();
-    $(".popmsg").show();
+jq.popMsg = function (msg) {
+    var $mask = $(".mask");
+    var $popmsg = $(".popmsg");
+
+    if ($mask.size() == 0)
+    {
+        $mask = $('<div class="mask"><div class="title"> Click Here to Close this Message</div> </div>');
+        $popmsg = $(' <div class="popmsg"></div>');
+        $("body").append($mask).append($popmsg);
+
+        $mask.find(".title").click(function () {
+            $mask.hide();
+            $popmsg.hide();
+        });
+    }
+         
+    $popmsg.html(msg);
+    $mask.show();
+    $popmsg.show();
 }
 
 
@@ -95,8 +109,56 @@ jq.loading = function () {
     jq.$loading.show();
 }
 
+
 jq.closeLoading = function () {
     if (typeof (jq.$loading) != "undefined") {
         jq.$loading.hide();
     }
 }
+
+jq.showMsg = function (msg) { 
+    if (typeof (jq.$msg) == "undefined") {
+        jq.$msg = $("<div class='message'>" + msg + "</div>");
+        $("body").click(function () {
+            jq.$msg.hide();
+        }).append(jq.$msg);
+    }
+    jq.$msg.html(msg);
+    jq.$msg.show(); 
+}
+
+$.fn.showError = function (errorMsg) {
+    var $valueSpan = $(this);
+    window.setTimeout(function () { 
+        var $input = $valueSpan.find("input").addClass("error").change(function () {
+            $(this).removeClass("error");
+        }).focus();
+        var $errorMsg = $valueSpan.find(".error-message");
+        if ($errorMsg.size() == 0) {
+            $errorMsg = $("<div class='error-message'></div>");
+            $valueSpan.append($errorMsg);
+        }
+        $errorMsg.html(errorMsg);
+        $errorMsg.show();
+    }, 50); 
+}
+
+$.fn.hideError = function () {
+    var $valueSpan = $(this);
+    $valueSpan.find("input").removeClass("error");
+    var $errorMsg = $valueSpan.find(".error-message");
+    if($errorMsg.size()> 0)
+    { 
+        $errorMsg.hide();
+    }
+}
+
+$.fn.getVueEl = function (modelName) {
+    return $(this).find("[vue-model='" + modelName + "']"); 
+}
+
+$(function () {
+    $("body").click(function () {
+        $(".error-message").hide();
+    });
+});

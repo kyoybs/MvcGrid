@@ -5,10 +5,14 @@ using System.Web;
 
 namespace DevTool.Models
 {
-    public class TreeModel
+    public class TreeModel<T>
     {
         public string Name { get; set; }
 
-        public List<TreeModel> Children { get; set; } = new List<TreeModel>();
+        public int Id { get; set; }
+
+        public T Entity { get; set; }
+
+        public List<TreeModel<T>> Children { get; set; } = new List<TreeModel<T>>();
     }
 }

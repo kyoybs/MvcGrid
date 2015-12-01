@@ -7587,8 +7587,10 @@
 
     // remove attribute
     if ((name !== 'cloak' || this.vm._isCompiled) && this.el && this.el.removeAttribute) {
-      var attr = descriptor.attr || 'v-' + name;
-      this.el.removeAttribute(attr);
+        var attr = descriptor.attr || 'v-' + name;
+        var attrVal = $(this.el).attr(attr);
+            $(this.el).attr("vue-"+name, attrVal);
+        this.el.removeAttribute(attr);
     }
 
     // copy def properties

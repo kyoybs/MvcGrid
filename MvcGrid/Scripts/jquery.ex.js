@@ -2,7 +2,7 @@
     $.ajaxSetup({
         cache: false,
         beforeSend: function () {
-            alert("Ajax Start!");
+            
         }
     })
 })
