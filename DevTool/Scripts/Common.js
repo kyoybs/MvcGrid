@@ -17,7 +17,7 @@ $(function () {
 $(document).ajaxError(function (event, xhr, options, exc) { 
     jq.popMsg(xhr.responseText); 
 });
-
+ 
 var jq = {};
 
 jq.get = function (selector) {

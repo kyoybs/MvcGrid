@@ -1,57 +1,89 @@
 ﻿
 
-// define the item component
-Vue.component('treenode', {
-    template: '#treeNode-template',
-    props: {
-        model: Object
-    },
-    data: function () {
-        return {
-            open: true,
-            Selected:false
-        }
-    },
-    computed: {
-        isFolder: function () {
-            return this.model.Children &&
-              this.model.Children.length
-        } 
-    },
-    methods: {
-        click: function () {
-            if (CategoryEditData.TreeNodeModel != null)
-                CategoryEditData.TreeNodeModel.Selected = false;
-            this.Selected = true;
-            CategoryEditData.OriginCategoryName = veTree.ShowCategory(this.model);
-            CategoryEditData.CurrentCategoryId = this.model.Id;
-            CategoryEditData.TreeNodeModel = this;
-            
-        },
-        toggle: function () {
-            if (this.isFolder) {
-                this.open = !this.open
-            }
-            return false;
-        },
-        addChild: function () {
-            this.model.Children.push({
-                Name: 'new stuff'
-            })
-        }
-    }
-})
 
+//category edit date
 var CategoryEditData = {
     CurrentCategoryName: "", CurrentCategoryId: 0
     , ChildCategoryName: "", OriginCategoryName: "Unselected"
     , Category: null, TreeNodeModel: null
 };
+
 var veCategory;
 var veTree;
 
 $(function () {
-    // boot up the demo
+
+
+    // define the tree component
+    Vue.component('treenode', {
+        template: '#treeNode-template',
+        props: {
+            model: Object
+        },
+        data: function () {
+            return {
+                open: true,
+                Selected: false
+            }
+        },
+        computed: {
+            isFolder: function () {
+                return this.model.Children &&
+                  this.model.Children.length
+            }
+        },
+        methods: {
+            click: function () {
+                if (CategoryEditData.TreeNodeModel != null)
+                    CategoryEditData.TreeNodeModel.Selected = false;
+                this.Selected = true;
+                CategoryEditData.OriginCategoryName = veTree.ShowCategory(this.model);
+                CategoryEditData.CurrentCategoryId = this.model.Id;
+                CategoryEditData.TreeNodeModel = this;
+
+            },
+            toggle: function () {
+                if (this.isFolder) {
+                    this.open = !this.open
+                }
+                return false;
+            },
+            addChild: function () {
+                this.model.Children.push({
+                    Name: 'new stuff'
+                })
+            }
+        }
+    })
+
+    // register the grid component
+    Vue.component('demo-grid', {
+        template: '#grid-template',
+        props: {
+            data: Array,
+            columns: Array,
+            filterKey: String
+        },
+        data: function () {
+            var sortOrders = {}
+            $.each(this.columns, function (index, item) {
+                sortOrders[item] = 1;
+            });
+
+            return {
+                sortKey: '',
+                sortOrders: sortOrders
+            }
+        },
+        methods: {
+            sortBy: function (key) {
+                this.sortKey = key
+                this.sortOrders[key] = this.sortOrders[key] * -1
+            }
+        }
+    })
+
+    //boot up category tree.
     veTree = new Vue({
         el: '#CategoriesTree',
         data: {
@@ -78,6 +110,7 @@ $(function () {
         return false;
     }
 
+    //boot up category edit
     veCategory = new Vue({
         el: '#Category',
         data: CategoryEditData,
@@ -153,7 +186,24 @@ $(function () {
         }
     })
 
+
+    //boot up category fields grid
+    var veCategoryFields = new Vue({
+        el: '#CategoryFields',
+        data: {
+            searchQuery: '',
+            gridColumns: ['name', 'power'],
+            gridData: [
+              { name: 'Chuck Norris', power: Infinity },
+              { name: 'Bruce Lee', power: 9000 },
+              { name: 'Jackie Chan', power: 7000 },
+              { name: 'Jet Li', power: 8000 }
+            ]
+        }
     
+    })
+
+    //ready end.
 })
 
 
