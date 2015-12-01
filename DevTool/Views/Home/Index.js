@@ -19,11 +19,11 @@ Vue.component('treenode', {
     },
     methods: {
         click: function () {
-            CategoryEditData.OriginCategoryName = "#"+this.model.Id + " " + this.model.Name;
+            CategoryEditData.OriginCategoryName = "#" + this.model.Id + " " + this.model.Name;
             CategoryEditData.CurrentCategoryId = this.model.Id;
             CategoryEditData.Category = this.model;
         },
-        toggle: function () { 
+        toggle: function () {
             if (this.isFolder) {
                 this.open = !this.open
             }
@@ -36,28 +36,44 @@ Vue.component('treenode', {
         }
     }
 })
-  
-var CategoryEditData = { CurrentCategoryName: "", CurrentCategoryId: 0, ChildCategoryName: "", OriginCategoryName: "Unselected", Category: {} };
 
-$(function () { 
+var CategoryEditData = { CurrentCategoryName: "", CurrentCategoryId: 0, ChildCategoryName: "", OriginCategoryName: "Unselected", Category: {} };
+var veCategory;
+var veTree;
+$(function () {
     // boot up the demo
-    var categories = new Vue({
+    veTree = new Vue({
         el: '#CategoriesTree',
         data: {
             treeData: CategoryTreeData
         }
     })
 
-    new Vue({
+    veTree.removeCategory = function (parentCategory, category) {
+        if (typeof (parentCategory) == "undefined" )
+            return false;
+
+        $.each(parentCategory.Children, function (index, item) { 
+            if (category == item) {
+                parentCategory.Children.splice(index,1);
+                return true;
+            }
+            if (veTree.removeCategory(item, category))
+                return true;
+        })
+        return false;
+    }
+
+    veCategory = new Vue({
         el: '#Category',
         data: CategoryEditData,
-        computed:{
+        computed: {
             Disabled: function () { return this.CurrentCategoryId == 0; }
         },
-        methods: {            
+        methods: {
             saveCtgName: function () {
                 var pel = $(this.$el).getVueEl("CurrentCategoryName").parent();
-                if (this.CurrentCategoryId == 0) { 
+                if (this.CurrentCategoryId == 0) {
                     pel.showError("Please selected a category.");
                     return;
                 } else if (this.CurrentCategoryName == "") {
@@ -83,7 +99,7 @@ $(function () {
                 }
 
                 //check child  category and save.
-                pel = $(this.$el).getVueEl("ChildCategoryName").parent(); 
+                pel = $(this.$el).getVueEl("ChildCategoryName").parent();
                 if (this.ChildCategoryName == "") {
                     pel.showError("Required.");
                     return;
@@ -93,7 +109,8 @@ $(function () {
                     var model = this;
                     $.post(url, { ParentId: this.CurrentCategoryId, CategoryName: this.ChildCategoryName }, function (newTreeNode) {
                         model.Category.Children.push(newTreeNode);
-                        jq.showMsg("Save successfully.");
+                        model.ChildCategoryName = "";
+                        jq.showMsg("Add successfully.");
                     })
                 }
             },
@@ -102,39 +119,28 @@ $(function () {
                     jq.showMsg("Cannot delete root category.");
                     return;
                 }
-                if (this.Category.Children.length >0) {
+                if (this.Category.Children.length > 0) {
                     jq.showMsg("Cannot delete a category with subcategories.");
                     return;
                 }
-                if (!confirm("Confirm to Delete Category "  + this.OriginCategoryName + "?"))
-                    return ;
+                if (!confirm("Confirm to Delete Category " + this.OriginCategoryName + "?"))
+                    return;
                 var url = $(this.$el).attr("data-url-delete");
                 $.post(url, { CategoryId: this.CurrentCategoryId }, function () {
-                    removeCategory(CategoryEditData.Category);
+                    veTree.removeCategory(CategoryTreeData, CategoryEditData.Category);
                     CategoryEditData.CurrentCategoryId = 0;
                     CategoryEditData.CurrentCategoryName = "";
-                    CategoryEditData.OriginCategoryName = "Unselected"; 
+                    CategoryEditData.ChildCategoryName = "";
+                    CategoryEditData.OriginCategoryName = "Unselected";
                     jq.showMsg("Delete successfully.");
                 })
-            },
-            removeTreeModel: function () {
-                alert("Remove Tree");
             }
 
-        }// end methods
+        }
     })
-     
+
+    
 })
 
-function removeCategory(parentCategory, category) {
-    $.each(parentCategory.Children, function (index, item) {
-        if (category == item) {
-            category.Children.pop(item);
-            return true;
-        }
-        if(removeCategory(item, category))
-            return true; 
-    })
-    return false;
-}
+
 

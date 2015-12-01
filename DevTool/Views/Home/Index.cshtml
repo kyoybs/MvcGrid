@@ -1,5 +1,5 @@
 ﻿@using DevTool.Common;
-<script src="~/Views/Home/Index.js"></script>
+
 
 
 
@@ -43,7 +43,7 @@
         <div class="row" >
             <label class="label">New Category Name:</label>
             <span class="value">
-                <input id="txtCurrentCategoryName" class="textbox" type="text" v-model="CurrentCategoryName" style="width:150px;" placeholder="Selected Category" disabled="{{Disabled}}"/>
+                <input id="txtCurrentCategoryName" class="textbox" type="text" v-model="CurrentCategoryName" style="width:150px;" disabled="{{Disabled}}"/>
             </span>
 
             <button v-on:click="saveCtgName" class="button" title="Save Selected Category Name" disabled="{{Disabled}}">Save</button>
@@ -64,6 +64,8 @@
     </div>
 </div>
 
+
+<script src="~/Views/Home/Index.js"></script>
 
 <script>
 
