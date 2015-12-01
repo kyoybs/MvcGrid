@@ -120,3 +120,8 @@ input.error {
 .loading{position:fixed; width:100px; height:30px; margin-left:-25px; margin-top:-15px; top:50%; left:50%; background-color:#c5ebfa; border:solid 1px #bbb; z-index:100; }
 
 .message{position:fixed; display:table; text-align:center; width:500px; height:60px; margin-left:-250px; margin-top:-30px; top:50%; left:50%; background-color:#c5ebfa; border:solid 1px #ccc; z-index:100; }
+
+.selected {
+    color:#b63417;
+    font-weight:bold;
+}

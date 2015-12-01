@@ -8,20 +8,25 @@ Vue.component('treenode', {
     },
     data: function () {
         return {
-            open: true
+            open: true,
+            Selected:false
         }
     },
     computed: {
         isFolder: function () {
             return this.model.Children &&
               this.model.Children.length
-        }
+        } 
     },
     methods: {
         click: function () {
-            CategoryEditData.OriginCategoryName = "#" + this.model.Id + " " + this.model.Name;
+            if (CategoryEditData.TreeNodeModel != null)
+                CategoryEditData.TreeNodeModel.Selected = false;
+            this.Selected = true;
+            CategoryEditData.OriginCategoryName = veTree.ShowCategory(this.model);
             CategoryEditData.CurrentCategoryId = this.model.Id;
-            CategoryEditData.Category = this.model;
+            CategoryEditData.TreeNodeModel = this;
+            
         },
         toggle: function () {
             if (this.isFolder) {
@@ -37,17 +42,26 @@ Vue.component('treenode', {
     }
 })
 
-var CategoryEditData = { CurrentCategoryName: "", CurrentCategoryId: 0, ChildCategoryName: "", OriginCategoryName: "Unselected", Category: {} };
+var CategoryEditData = {
+    CurrentCategoryName: "", CurrentCategoryId: 0
+    , ChildCategoryName: "", OriginCategoryName: "Unselected"
+    , Category: null, TreeNodeModel: null
+};
 var veCategory;
 var veTree;
+
 $(function () {
     // boot up the demo
     veTree = new Vue({
         el: '#CategoriesTree',
         data: {
             treeData: CategoryTreeData
-        }
+        } 
     })
+
+    veTree.ShowCategory = function (category) {
+        return "#" + category.Id + " " + category.Name;
+    };
 
     veTree.removeCategory = function (parentCategory, category) {
         if (typeof (parentCategory) == "undefined" )
@@ -85,7 +99,7 @@ $(function () {
                     var model = this;
                     $.post(url, { CategoryId: this.CurrentCategoryId, CategoryName: this.CurrentCategoryName }, function () {
                         model.Category.Name = model.CurrentCategoryName;
-                        model.OriginCategoryName = "#" + model.Category.Id + " " + model.Category.Name;;
+                        model.OriginCategoryName = veTree.ShowCategory(this.model.Category);
                         jq.showMsg("Save successfully.");
                     })
                 }

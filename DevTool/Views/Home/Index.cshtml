@@ -1,9 +1,6 @@
 ﻿@using DevTool.Common;
 
-
-
-
-
+ 
 <style>
     #categories div:hover {
         color: #ba5911;
@@ -12,9 +9,9 @@
 <!-- item template -->
 <script type="text/x-template" id="treeNode-template">
     <li>
-        <div v-bind:class="{bold: isFolder}"
+        <div v-bind:class="{'bold': isFolder,'selected':Selected}" 
              v-on:click="click">
-            #{{model.Id}} {{model.Name}} 
+            #{{model.Id + " " + model.Name}} 
             <span v-if="isFolder" v-on:click.stop="toggle">[{{open ? '-' : '+'}}]</span>
         </div>
         <ul v-show="open" v-if="isFolder">
