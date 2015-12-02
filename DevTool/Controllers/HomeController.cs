@@ -42,16 +42,29 @@ namespace DevTool.Controllers
             DevCategoryBusiness.DeleteCategory(category);
         }
 
-        public ActionResult SelectFields(int homeMarketingId)
+        public ActionResult SelectFields(int categoryId)
         {
             return View();
         }
 
         [HttpPost]
-        public JsonResult SearchAllFields(DevFieldInfo field)
-        {
-            var fields = DevBusiness.Search(field);
+        public JsonResult SearchAllFields(int excludedCategoryId,DevFieldInfo field)
+        { 
+            var fields = DevBusiness.SearchFields(field , excludedCategoryId);
             return Json(fields); 
+        }
+
+        [HttpPost]
+        public void AddFieldToCategory(int categoryId, DevFieldInfo field)
+        {
+            DevBusiness.AddFieldToCategory(field, categoryId);
+        }
+
+        [HttpPost]
+        public JsonResult GetCategoryFields(int categoryId)
+        {
+            var fields = DevBusiness.GetCategoryFields(categoryId);
+            return Json(fields);
         }
     }
 }

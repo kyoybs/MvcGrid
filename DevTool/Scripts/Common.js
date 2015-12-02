@@ -166,7 +166,14 @@ $.fn.getVueEl = function (modelName) {
 $(function () {
     $("body").click(function () {
         $(".error-message").hide();
-    });
-
-   
+    }); 
 });
+
+jq.removeItem = function (array, item) {
+    $.each(array, function (index, iobj) {
+        if (iobj == item) {
+            array.splice(index, 1);
+            return;
+        }
+    });
+}

@@ -585,7 +585,6 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\vue.js" />
     <Content Include="Views\Home\Index.js" />
-    <Content Include="Views\Home\SelectFields.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

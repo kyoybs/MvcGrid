@@ -38,15 +38,8 @@
         },
         methods: {
             click: function () {
-                this.Selected = true;
-
-                if (CategoryEditData.TreeNodeModel != null)
-                    CategoryEditData.TreeNodeModel.Selected = false;
-                
-                CategoryEditData.OriginCategoryName = veTree.ShowCategory(this.model);
-                CategoryEditData.CurrentCategoryId = this.model.Id;
-                CategoryEditData.TreeNodeModel = this;
-
+                this.$dispatch('select', this);
+                this.Selected = true; 
             },
             toggle: function () {
                 if (this.isFolder) {
@@ -59,6 +52,9 @@
                     Name: 'new stuff'
                 })
             }
+        },
+        events:{
+            select: function (node) { }
         }
     })
 

@@ -15,8 +15,8 @@
 <div style="width:1080px;">
     <div class="area" style="width:300px;">
         <div class="title">Category Tree </div>
-        <ul id="CategoriesTree">
-            <treeNode class="item" v-bind:model="treeData">
+        <ul id="CategoriesTree" data-url-fields="@Url.Content("~/Home/GetCategoryFields")">
+            <treeNode class="item" v-bind:model="treeData" v-on:select="nodeClick">
             </treeNode>
         </ul>
     </div>
@@ -49,7 +49,10 @@
         
         <!-- demo root element -->
         <div id="elCategoryFields" style="margin-top:15px;" data-url-select="@Url.Content("~/Home/SelectFields")">
-            <div class="title">Fields Info <div style="float:right; "><button v-on:click="openAddFields" class="button" title="Add fields to current category." disabled="{{Disabled}}">Add Field</button></div></div>
+            <div class="title">Fields Info <div style="float:right; ">
+                <button v-on:click="openAddFields" class="button" title="Add fields to current category." disabled="{{Disabled}}">Add Field</button>
+                </div>
+            </div>
             <grid v-bind:data="gridData"
                              v-bind:columns="gridColumns"
                              v-bind:filter-key="searchQuery">

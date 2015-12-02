@@ -10,16 +10,32 @@ var CategoryEditData = {
 
 var veCategory;
 var veTree;
+var veCategoryFields;
 
 $(function () {
-
 
     //boot up category tree.
     veTree = new Vue({
         el: '#CategoriesTree',
         data: {
             treeData: CategoryTreeData
-        } 
+        },
+        methods: {
+            nodeClick: function (node) {
+                if (CategoryEditData.TreeNodeModel != null)
+                    CategoryEditData.TreeNodeModel.Selected = false;
+
+                CategoryEditData.OriginCategoryName = veTree.ShowCategory(node.model);
+                CategoryEditData.CurrentCategoryId = node.model.Id;
+                CategoryEditData.TreeNodeModel = node;
+                veCategoryFields.CurrentCategoryId = node.model.Id;
+                var url = $(this.$el).attr("data-url-fields") + "?categoryId=" + node.model.Id;
+                
+                $.post(url, function (datas) {
+                    veCategoryFields.gridData = datas;
+                });
+            }
+        }
     })
 
     veTree.ShowCategory = function (category) {
@@ -118,27 +134,23 @@ $(function () {
     })
 
 
-    //boot up category fields grid
-
-
-    // bootstrap the demo
-    var veCategoryFields = new Vue({
+    //boot up category fields grid 
+    veCategoryFields = new Vue({
         el: '#elCategoryFields',
         data: {
             searchQuery: '',
             gridColumns: [{ FieldName: 'FieldId', FieldLabel: '#' }
                 , { FieldName: 'TableName', FieldLabel: 'Table Name' }
                 , { FieldName: 'FieldName', FieldLabel: 'Field Name' }],
-            gridData: [
-              { FieldName: 'Chuck Norris', power: Infinity },
-              { FieldName: 'Bruce Lee', power: 9000 },
-              { FieldName: 'Jackie Chan', power: 7000 },
-              { FieldName: 'Jet Li', power: 8000 }
-            ]
+            gridData: [],
+            CurrentCategoryId:0                     
+        },
+        computed: {
+            Disabled: function () { return this.CurrentCategoryId == 0; }
         },
         methods: {
             openAddFields: function () {
-                var url = $(this.$el).attr("data-url-select") + "?homeMarketingId=" + CategoryEditData.CurrentCategoryId;
+                var url = $(this.$el).attr("data-url-select") + "?CategoryId=" + CategoryEditData.CurrentCategoryId;
                 jq.popWindow("Select Fields", url, CategoryEditData.CurrentCategoryId);
             }
         }

@@ -112,7 +112,7 @@ input.error {
 
 .mask{position:fixed; top:0; left:0; right:0; bottom:0; opacity:0.85; background-color:#ccc; z-index:90; display:none; font-size:16px; color:#666;font-weight:bold; }
 .mask .title{background:background:-webkit-linear-gradient(top,#edf6fe,#c4bdbd); background:-moz-linear-gradient(top,#edf6fe,#c4bdbd); text-align:center; height:30px; cursor:pointer;}
-.popmsg{position:fixed; top:0; left:0; right:0; bottom:0;  z-index:99; margin:30px; display:none;}
+.popmsg{position:fixed; top:0; left:0; right:0; bottom:0;  z-index:99; margin:30px; display:none; overflow:auto;}
 .window{position:fixed; top:0; left:0; right:0; bottom:0;  z-index:95; margin:30px; display:none; border:solid 1px #aaa;border-radius:5px; background-color:#ededed; overflow:auto; padding-top:30px;}
 .window .title{position:fixed; top:31px; left:31px; right:31px; z-index:95; background:background:-webkit-linear-gradient(top,#edf6fe,#c4bdbd); background:-moz-linear-gradient(top,#edf6fe,#c4bdbd); text-align:center;  font-size:14px;height:30px; line-height:30px; color:#495862;cursor:default; border-radius:5px;}
 .window .title .close{position:absolute; top:0px; right:8px;cursor:pointer; color:#ad3939; width:30px;}

@@ -6,7 +6,7 @@
 
 
 <!-- demo root element -->
-<div id="AllFields" data-url-search="@Url.Content("~/Home/SearchAllFields")">
+<div id="AllFields" data-url-search="@Url.Content("~/Home/SearchAllFields")" data-url-add="@Url.Content("~/Home/AddFieldToCategory")">
     <div class="row">
         <label class="label">Search</label> <input name="query" v-model="searchQuery" class="textbox"> <button class="button" v-on:click="Search">Submit</button>
     </div>
@@ -16,4 +16,31 @@
 </div>
  
  
-<script src="~/Views/Home/SelectFields.js"></script>
+<script >
+    var vmAllFields = [];
+
+    // bootstrap the demo
+    var veAllFields = new Vue({
+        el: '#AllFields',
+        data: {
+            searchQuery: '',
+            gridColumns: [{ FieldName: 'FieldId', FieldLabel: '#' }, { FieldName: 'TableName', FieldLabel: 'Table Name' }, { FieldName: 'FieldName', FieldLabel: 'Field Name' }],
+            gridData: vmAllFields
+        },
+        methods: {
+            Search: function () {
+                var url = $(this.$el).attr("data-url-search") + "?excludedCategoryId=@Request["CategoryId"]";
+                $.post(url, { TableName: this.searchQuery, FieldName: this.searchQuery, FieldLabel: this.searchQuery }, function (datas) {
+                    veAllFields.gridData = datas;  // work
+                });
+            },
+            select: function (index, entity) {
+                var url = $(this.$el).attr("data-url-add")+"?categoryId=@Request["CategoryId"]";
+                $.post(url, entity, function (data) {
+                    jq.showMsg("Add Successfully.");
+                });
+                jq.removeItem(veAllFields.gridData, entity);
+            }
+        }
+    })
+</script>

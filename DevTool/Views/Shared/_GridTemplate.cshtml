@@ -23,7 +23,7 @@
                 <td v-for="key in columns">
                     {{entry[key.FieldName]}}
                 </td>
-                <td><a href="javascript:void(0);" v-on:click="addField(entry)">Add</a></td>
+                <td><a href="javascript:void(0);" v-on:click="selectClick($index,entry)">Select</a></td>
             </tr>
         </tbody>
     </table>
@@ -51,11 +51,8 @@
             }
         },
         methods: {
-            addField: function (entry) {
-                    //debugger;
-                    //var keyField = this._props.keyName.raw;
-                    //alert(entry[keyField]);
-                this.$dispatch('select', entry);
+            selectClick: function (index, entry) { 
+                this.$dispatch('select', index, entry);
                 },
             sortBy: function (key) {
                 this.sortKey = key;
@@ -63,7 +60,7 @@
             }
         },
         events:{
-            select: function (entry) {
+            select: function (index, entity) {
 
             }
         }
