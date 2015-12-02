@@ -2836,7 +2836,7 @@
    */
 
   function parseExpression(exp, needSet) {
-    exp = exp.trim();
+      exp = exp.trim?exp.trim():exp.FieldName.trim();
     // try cache
     var hit = expressionCache.get(exp);
     if (hit) {

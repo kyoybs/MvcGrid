@@ -1,0 +1,66 @@
+﻿<!-- Category Tree template -->
+<script type="text/x-template" id="treeNode-template">
+    <li>
+        <div v-bind:class="{'bold': isFolder,'selected':Selected}"
+             v-on:click="click">
+            #{{model.Id + " " + model.Name}}
+            <span v-if="isFolder" v-on:click.stop="toggle">[{{open ? '-' : '+'}}]</span>
+        </div>
+        <ul v-show="open" v-if="isFolder">
+            <treeNode v-bind:class="item"
+                      v-for="model in model.Children"
+                      v-bind:model="model">
+            </treeNode>
+        </ul>
+    </li>
+</script>
+
+<script>
+
+
+    // define the tree component
+    Vue.component('treenode', {
+        template: '#treeNode-template',
+        props: {
+            model: Object
+        },
+        data: function () {
+            return {
+                open: true,
+                Selected: false
+            }
+        },
+        computed: {
+            isFolder: function () {
+                return this.model.Children &&
+                  this.model.Children.length
+            }
+        },
+        methods: {
+            click: function () {
+                this.Selected = true;
+
+                if (CategoryEditData.TreeNodeModel != null)
+                    CategoryEditData.TreeNodeModel.Selected = false;
+                
+                CategoryEditData.OriginCategoryName = veTree.ShowCategory(this.model);
+                CategoryEditData.CurrentCategoryId = this.model.Id;
+                CategoryEditData.TreeNodeModel = this;
+
+            },
+            toggle: function () {
+                if (this.isFolder) {
+                    this.open = !this.open
+                }
+                return false;
+            },
+            addChild: function () {
+                this.model.Children.push({
+                    Name: 'new stuff'
+                })
+            }
+        }
+    })
+
+
+</script>

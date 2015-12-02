@@ -14,7 +14,7 @@ $(function () {
     })
 })
 
-$(document).ajaxError(function (event, xhr, options, exc) { 
+$(document).ajaxError(function (event, xhr, options, exc) {
     jq.popMsg(xhr.responseText); 
 });
  
@@ -39,12 +39,12 @@ jq.left = function (str, len, autoEllipsis) {
 }
 
 jq.popMsg = function (msg) {
-    var $mask = $(".mask");
+    var $mask = $("#msgmask");
     var $popmsg = $(".popmsg");
-
+     
     if ($mask.size() == 0)
     {
-        $mask = $('<div class="mask"><div class="title"> Click Here to Close this Message</div> </div>');
+        $mask = $('<div id="msgmask" class="mask" style="z-index:98;"><div class="title"> Click Here to Close this Message</div> </div>');
         $popmsg = $(' <div class="popmsg"></div>');
         $("body").append($mask).append($popmsg);
 

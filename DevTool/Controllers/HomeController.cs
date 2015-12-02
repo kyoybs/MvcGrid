@@ -41,5 +41,17 @@ namespace DevTool.Controllers
             category.Deleted = true;
             DevCategoryBusiness.DeleteCategory(category);
         }
+
+        public ActionResult SelectFields(int homeMarketingId)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult SearchAllFields(DevFieldInfo field)
+        {
+            var fields = DevBusiness.Search(field);
+            return Json(fields); 
+        }
     }
 }

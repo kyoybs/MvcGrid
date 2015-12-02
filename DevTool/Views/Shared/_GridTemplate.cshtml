@@ -1,0 +1,57 @@
+﻿
+<!-- grid  template -->
+<script type="text/x-template" id="grid-template">
+    <table class="grid">
+        <thead>
+            <tr>
+                <td v-for="key in columns"
+                    v-on:click="sortBy(key)"
+                    v-bind:class="{active: sortKey == key}">
+                    {{key.FieldLabel | capitalize}}
+                    <span class="arrow"
+                          v-bind:class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
+                    </span>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="
+                entry in data
+                | filterBy filterKey
+                | orderBy sortKey sortOrders[sortKey]">
+                <td v-for="key in columns">
+                    {{entry[key.FieldName]}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</script>
+
+<script>
+    // register the grid component
+    Vue.component('category-fields', {
+        template: '#grid-template',
+        props: {
+            data: Array,
+            columns: Array,
+            filterKey: String
+        },
+        data: function () {
+            var sortOrders = {}
+            $.each(this.columns, function (index, item) {
+                sortOrders[item] = 1;
+            });
+
+            return {
+                sortKey: '',
+                sortOrders: sortOrders
+            }
+        },
+        methods: {
+            sortBy: function (key) {
+                this.sortKey = key
+                this.sortOrders[key] = this.sortOrders[key] * -1
+            }
+        }
+    })
+</script>

@@ -6,52 +6,11 @@
         color: #ba5911;
     }
 </style>
-<!-- Category Tree template -->
-<script type="text/x-template" id="treeNode-template">
-    <li>
-        <div v-bind:class="{'bold': isFolder,'selected':Selected}"
-             v-on:click="click">
-            #{{model.Id + " " + model.Name}}
-            <span v-if="isFolder" v-on:click.stop="toggle">[{{open ? '-' : '+'}}]</span>
-        </div>
-        <ul v-show="open" v-if="isFolder">
-            <treeNode v-bind:class="item"
-                      v-for="model in model.Children"
-                      v-bind:model="model">
-            </treeNode>
-        </ul>
-    </li>
-</script>
 
-@* Category Fields *@
-<script type="text/x-template" id="grid-template">
-    <table>
-        <thead>
-            <tr>
-                <th v-for="key in columns"
-                    v-on:click="sortBy(key)"
-                    v-bind:class="{active: sortKey == key}">
-                    {{key | capitalize}}
-                    <span class="arrow"
-                          v-bind:class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
-                    </span>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="
-        entry in data
-        | filterBy filterKey
-        | orderBy sortKey sortOrders[sortKey]">
-                <td v-for="key in columns">
-                    {{entry[key]}}
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</script>
+@Html.Partial("_GridTemplate")
+@Html.Partial("_TreeTemplate")
 
-
+  
 @* Category Edit *@
 <div style="width:1080px;">
     <div class="area" style="width:300px;">
@@ -61,49 +20,52 @@
             </treeNode>
         </ul>
     </div>
+     
+    <div class="area" style="width:410px;">
+        <div id="Category"
+             data-url-update="@Url.Content("~/Home/UpdateCategoryName")"
+             data-url-add="@Url.Content("~/Home/InsertCategory")"
+             data-url-delete="@Url.Content("~/Home/DeleteCategory")">
+            <div class="title">Category Info -- {{OriginCategoryName}} <div style="float:right; "><button v-on:click="deleteCtg" class="button" title="Delete Selected Category" disabled="{{Disabled}}">Delete</button></div></div>
 
-    <div id="Category" class="area" style="width:410px;"
-         data-url-update="@Url.Content("~/Home/UpdateCategoryName")"
-         data-url-add="@Url.Content("~/Home/InsertCategory")"
-         data-url-delete="@Url.Content("~/Home/DeleteCategory")">
-        <div class="title">Category Info -- {{OriginCategoryName}} <div style="float:right; "><button v-on:click="deleteCtg" class="button" title="Delete Selected Category" disabled="{{Disabled}}">Delete</button></div></div>
-        <div class="row">
-            <label class="label">New Category Name:</label>
-            <span class="value">
-                <input id="txtCurrentCategoryName" class="textbox" type="text" v-model="CurrentCategoryName" style="width:150px;" disabled="{{Disabled}}" />
-            </span>
+            <div class="row">
+                <label class="label">New Category Name:</label>
+                <span class="value">
+                    <input id="txtCurrentCategoryName" class="textbox" type="text" v-model="CurrentCategoryName" style="width:150px;" disabled="{{Disabled}}" />
+                </span>
 
-            <button v-on:click="saveCtgName" class="button" title="Save Selected Category Name" disabled="{{Disabled}}">Save</button>
+                <button v-on:click="saveCtgName" class="button" title="Save Selected Category Name" disabled="{{Disabled}}">Save</button>
+            </div>
+
+            <div class="row">
+                <label class="label"> Add Child Category:</label>
+                <span class="value">
+                    <input class="textbox" type="text" v-model="ChildCategoryName" placeholder="New Category Name" style="width:150px;" disabled="{{Disabled}}" />
+                </span>
+                <button v-on:click="addChildCtg" class="button" title="Add New Child Category to Selected Category" disabled="{{Disabled}}">Add</button>
+            </div>
         </div>
-        <div class="row">
-            <label class="label"> Add Child Category:</label>
-            <span class="value">
-                <input class="textbox" type="text" v-model="ChildCategoryName" placeholder="New Category Name" style="width:150px;" disabled="{{Disabled}}" />
-            </span>
-            <button v-on:click="addChildCtg" class="button" title="Add New Child Category to Selected Category" disabled="{{Disabled}}">Add</button>
-        </div>
 
-        <div class="title">Fields Info</div>
+        
+        <!-- demo root element -->
+        <div id="elCategoryFields" style="margin-top:15px;" data-url-select="@Url.Content("~/Home/SelectFields")">
+            <div class="title">Fields Info <div style="float:right; "><button v-on:click="openAddFields" class="button" title="Add fields to current category." disabled="{{Disabled}}">Add Field</button></div></div>
+            <grid v-bind:data="gridData"
+                             v-bind:columns="gridColumns"
+                             v-bind:filter-key="searchQuery">
+            </grid>
+        </div>
     </div>
-
-    <div id="FieldInfoArea" class="area" style="width:230px;">
-        <div class="title">Field Info </div>
-
-        <div id="CategoryFields">
-            <demo-grid data="gridData"
-                       columns="gridColumns"
-                       filter-key="searchQuery">
-            </demo-grid>
-        </div>
-    </div>
+     
+    <div id="FieldInfoArea" class="area" style="width:230px; margint-top:10px;">
+        <div class="title">Field Info  </div>
+         
+     </div>
 </div>
 
-
-
-
+ 
 <script src="~/Views/Home/Index.js"></script>
 
-<script>
-
+<script> 
     var CategoryTreeData =@Html.Raw(UiHelper.ToJsonString(UiHelper.CategoryTree()));
 </script>

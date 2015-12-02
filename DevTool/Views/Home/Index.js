@@ -14,75 +14,6 @@ var veTree;
 $(function () {
 
 
-    // define the tree component
-    Vue.component('treenode', {
-        template: '#treeNode-template',
-        props: {
-            model: Object
-        },
-        data: function () {
-            return {
-                open: true,
-                Selected: false
-            }
-        },
-        computed: {
-            isFolder: function () {
-                return this.model.Children &&
-                  this.model.Children.length
-            }
-        },
-        methods: {
-            click: function () {
-                if (CategoryEditData.TreeNodeModel != null)
-                    CategoryEditData.TreeNodeModel.Selected = false;
-                this.Selected = true;
-                CategoryEditData.OriginCategoryName = veTree.ShowCategory(this.model);
-                CategoryEditData.CurrentCategoryId = this.model.Id;
-                CategoryEditData.TreeNodeModel = this;
-
-            },
-            toggle: function () {
-                if (this.isFolder) {
-                    this.open = !this.open
-                }
-                return false;
-            },
-            addChild: function () {
-                this.model.Children.push({
-                    Name: 'new stuff'
-                })
-            }
-        }
-    })
-
-    // register the grid component
-    Vue.component('demo-grid', {
-        template: '#grid-template',
-        props: {
-            data: Array,
-            columns: Array,
-            filterKey: String
-        },
-        data: function () {
-            var sortOrders = {}
-            $.each(this.columns, function (index, item) {
-                sortOrders[item] = 1;
-            });
-
-            return {
-                sortKey: '',
-                sortOrders: sortOrders
-            }
-        },
-        methods: {
-            sortBy: function (key) {
-                this.sortKey = key
-                this.sortOrders[key] = this.sortOrders[key] * -1
-            }
-        }
-    })
-
     //boot up category tree.
     veTree = new Vue({
         el: '#CategoriesTree',
@@ -131,8 +62,8 @@ $(function () {
                     var url = $(this.$el).attr("data-url-update");
                     var model = this;
                     $.post(url, { CategoryId: this.CurrentCategoryId, CategoryName: this.CurrentCategoryName }, function () {
-                        model.Category.Name = model.CurrentCategoryName;
-                        model.OriginCategoryName = veTree.ShowCategory(this.model.Category);
+                        model.TreeNodeModel.model.Name = model.CurrentCategoryName; 
+                        model.OriginCategoryName = veTree.ShowCategory(model.TreeNodeModel.model);
                         jq.showMsg("Save successfully.");
                     })
                 }
@@ -188,22 +119,56 @@ $(function () {
 
 
     //boot up category fields grid
-    var veCategoryFields = new Vue({
-        el: '#CategoryFields',
-        data: {
-            searchQuery: '',
-            gridColumns: ['name', 'power'],
-            gridData: [
-              { name: 'Chuck Norris', power: Infinity },
-              { name: 'Bruce Lee', power: 9000 },
-              { name: 'Jackie Chan', power: 7000 },
-              { name: 'Jet Li', power: 8000 }
-            ]
+
+    // register the grid component
+    Vue.component('grid', {
+        template: '#grid-template',
+        props: {
+            data: Array,
+            columns: Array,
+            filterKey: String
+        },
+        data: function () {
+            var sortOrders = {}
+            this.columns.forEach(function (key) {
+                sortOrders[key] = 1
+            })
+            return {
+                sortKey: '',
+                sortOrders: sortOrders
+            }
+        },
+        methods: {
+            sortBy: function (key) {
+                this.sortKey = key
+                this.sortOrders[key] = this.sortOrders[key] * -1
+            }
         }
-    
     })
 
-    //ready end.
+    // bootstrap the demo
+    var veCategoryFields = new Vue({
+        el: '#elCategoryFields',
+        data: {
+            searchQuery: '',
+            gridColumns: [{ FieldName: 'FieldId', FieldLabel: '#' }
+                , { FieldName: 'TableName', FieldLabel: 'Table Name' }
+                , { FieldName: 'FieldName', FieldLabel: 'Field Name' }],
+            gridData: [
+              { FieldName: 'Chuck Norris', power: Infinity },
+              { FieldName: 'Bruce Lee', power: 9000 },
+              { FieldName: 'Jackie Chan', power: 7000 },
+              { FieldName: 'Jet Li', power: 8000 }
+            ]
+        },
+        methods: {
+            openAddFields: function () {
+                var url = $(this.$el).attr("data-url-select") + "?homeMarketingId=" + CategoryEditData.CurrentCategoryId;
+                jq.popWindow("Select Fields", url, CategoryEditData.CurrentCategoryId);
+            }
+        }
+    })
+
 })
 
 
