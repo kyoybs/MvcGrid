@@ -21,6 +21,9 @@ var veAllFields = new Vue({
             $.post(url, { TableName: this.searchQuery, FieldName: this.searchQuery, FieldLabel: this.searchQuery }, function (datas) {
                 veAllFields.gridData = datas;  // work
             });
+        },
+        select: function (entity) {
+            alert(entity);
         }
     }
 })

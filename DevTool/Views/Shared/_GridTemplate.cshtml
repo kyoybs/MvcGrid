@@ -12,6 +12,7 @@
                           v-bind:class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
                     </span>
                 </td>
+                <td></td>
             </tr>
         </thead>
         <tbody>
@@ -22,6 +23,7 @@
                 <td v-for="key in columns">
                     {{entry[key.FieldName]}}
                 </td>
+                <td><a href="javascript:void(0);" v-on:click="addField(entry)">Add</a></td>
             </tr>
         </tbody>
     </table>
@@ -29,12 +31,13 @@
 
 <script>
     // register the grid component
-    Vue.component('category-fields', {
+    Vue.component('grid', {
         template: '#grid-template',
         props: {
             data: Array,
             columns: Array,
-            filterKey: String
+            filterKey: String,
+            keyName:String,
         },
         data: function () {
             var sortOrders = {}
@@ -48,9 +51,20 @@
             }
         },
         methods: {
+            addField: function (entry) {
+                    //debugger;
+                    //var keyField = this._props.keyName.raw;
+                    //alert(entry[keyField]);
+                this.$dispatch('select', entry);
+                },
             sortBy: function (key) {
-                this.sortKey = key
+                this.sortKey = key;
                 this.sortOrders[key] = this.sortOrders[key] * -1
+            }
+        },
+        events:{
+            select: function (entry) {
+
             }
         }
     })

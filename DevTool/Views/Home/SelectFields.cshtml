@@ -10,7 +10,7 @@
     <div class="row">
         <label class="label">Search</label> <input name="query" v-model="searchQuery" class="textbox"> <button class="button" v-on:click="Search">Submit</button>
     </div>
-    <grid v-bind:data="gridData"
+    <grid v-bind:data="gridData" v-bind:key-name="FieldId"  v-on:select="select"
                v-bind:columns="gridColumns" >
     </grid>
 </div>
