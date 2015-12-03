@@ -8,29 +8,35 @@
 <!-- demo root element -->
 <div id="AllFields" data-url-search="@Url.Content("~/Home/SearchAllFields")" data-url-add="@Url.Content("~/Home/AddFieldToCategory")">
     <div class="row">
-        <label class="label">Search</label> <input name="query" v-model="searchQuery" class="textbox"> <button class="button" v-on:click="Search">Submit</button>
+        <label class="label" style="width:80px;">Table Name:</label> 
+        <input name="query" v-model="TableName" class="textbox"> 
+        <label class="label" style="width:80px;">Field Name:</label>
+        <input name="query" v-model="FieldName" class="textbox"> 
+        <label class="label" style="width:90px;">Field Label:</label>
+        <input name="query" v-model="FieldName" class="textbox"> 
+        <button class="button" v-on:click="Search">Search</button>
     </div>
+    <div style="height:20px;"></div>
     <grid v-bind:data="gridData" v-bind:key-name="FieldId"  v-on:select="select"
                v-bind:columns="gridColumns" >
     </grid>
 </div>
  
  
-<script >
-    var vmAllFields = [];
-
+<script > 
     // bootstrap the demo
     var veAllFields = new Vue({
         el: '#AllFields',
         data: {
-            searchQuery: '',
+            TableName: '',
+            FieldName: '',
             gridColumns: [{ FieldName: 'FieldId', FieldLabel: '#' }, { FieldName: 'TableName', FieldLabel: 'Table Name' }, { FieldName: 'FieldName', FieldLabel: 'Field Name' }],
-            gridData: vmAllFields
+            gridData: []
         },
         methods: {
             Search: function () {
                 var url = $(this.$el).attr("data-url-search") + "?excludedCategoryId=@Request["CategoryId"]";
-                $.post(url, { TableName: this.searchQuery, FieldName: this.searchQuery, FieldLabel: this.searchQuery }, function (datas) {
+                $.post(url, { TableName: this.TableName, FieldName: this.FieldName, FieldLabel: this.FieldLabel }, function (datas) {
                     veAllFields.gridData = datas;  // work
                 });
             },

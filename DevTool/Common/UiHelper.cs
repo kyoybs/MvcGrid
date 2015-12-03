@@ -25,6 +25,7 @@ namespace DevTool.Common
             {
                 tree.Name = root.CategoryName;
                 tree.Id = root.CategoryId;
+                tree.Entity = root;
             }
              
             GetChildCategories(tree, categories );

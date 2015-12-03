@@ -13,7 +13,7 @@ var veTree;
 var veCategoryFields;
 
 $(function () {
-
+     
     //boot up category tree.
     veTree = new Vue({
         el: '#CategoriesTree',
@@ -22,14 +22,12 @@ $(function () {
         },
         methods: {
             nodeClick: function (node) {
-                if (CategoryEditData.TreeNodeModel != null)
-                    CategoryEditData.TreeNodeModel.Selected = false;
-
-                CategoryEditData.OriginCategoryName = veTree.ShowCategory(node.model);
-                CategoryEditData.CurrentCategoryId = node.model.Id;
-                CategoryEditData.TreeNodeModel = node;
-                veCategoryFields.CurrentCategoryId = node.model.Id;
-                var url = $(this.$el).attr("data-url-fields") + "?categoryId=" + node.model.Id;
+                
+                veCategory.OriginCategoryName = veTree.ShowCategory(node);
+                veCategory.CurrentCategoryId = node.Id;
+                veCategory.TreeNodeModel = node;
+                veCategoryFields.CurrentCategoryId = node.Id;
+                var url = $(this.$el).attr("data-url-fields") + "?categoryId=" + node.Id;
                 
                 $.post(url, function (datas) {
                     veCategoryFields.gridData = datas;
@@ -38,8 +36,8 @@ $(function () {
         }
     })
 
-    veTree.ShowCategory = function (category) {
-        return "#" + category.Id + " " + category.Name;
+    veTree.ShowCategory = function (node) {
+        return "#" + node.Id + " " + node.Name;
     };
 
     veTree.removeCategory = function (parentCategory, category) {
@@ -151,7 +149,9 @@ $(function () {
         methods: {
             openAddFields: function () {
                 var url = $(this.$el).attr("data-url-select") + "?CategoryId=" + CategoryEditData.CurrentCategoryId;
-                jq.popWindow("Select Fields", url, CategoryEditData.CurrentCategoryId);
+                jq.popWindow("Select Fields", url, {}, function (action,data) {
+                    veCategoryFields.gridData.push(data);
+                });
             }
         }
     })

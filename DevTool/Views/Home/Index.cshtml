@@ -15,10 +15,10 @@
 <div style="width:1080px;">
     <div class="area" style="width:300px;">
         <div class="title">Category Tree </div>
-        <ul id="CategoriesTree" data-url-fields="@Url.Content("~/Home/GetCategoryFields")">
-            <treeNode class="item" v-bind:model="treeData" v-on:select="nodeClick">
-            </treeNode>
-        </ul>
+        <div  id="CategoriesTree" data-url-fields="@Url.Content("~/Home/GetCategoryFields")" >
+            <tree v-bind:model="treeData" v-on:select="nodeClick">
+            </tree>
+        </div>
     </div>
      
     <div class="area" style="width:410px;">
@@ -61,8 +61,7 @@
     </div>
      
     <div id="FieldInfoArea" class="area" style="width:230px; margint-top:10px;">
-        <div class="title">Field Info  </div>
-         
+        <div class="title">Field Info  </div> 
      </div>
 </div>
 

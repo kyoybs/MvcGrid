@@ -11,6 +11,8 @@ namespace DevTool.Models
 
         public int Id { get; set; }
 
+        public bool Selected { get; set; }
+
         public T Entity { get; set; }
 
         public List<TreeModel<T>> Children { get; set; } = new List<TreeModel<T>>();
