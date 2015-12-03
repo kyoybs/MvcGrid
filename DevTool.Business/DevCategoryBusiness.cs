@@ -36,7 +36,7 @@ namespace DevTool.Business
 
         public static void UpdateCategoryName(DevCategory category)
         {
-            string sql = @"UPDATE [dbo].[DevCategory] SET CategoryName=@CategoryName WHERE CategoryId=@CategoryId";
+            string sql = @"UPDATE [dbo].[DevCategory] SET CategoryName=@CategoryName, MainTable=@MainTable WHERE CategoryId=@CategoryId";
             using (var db = DbHelper.Create())
             {
                 db.Execute(sql, category);

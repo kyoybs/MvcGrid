@@ -5,6 +5,12 @@
     #categories div:hover {
         color: #ba5911;
     }
+
+    #FieldInfoArea .data {padding:3px;}
+
+    #FieldInfoArea .data .label {
+        display:block; width:100%; text-align:left;
+    }
 </style>
 
 @Html.Partial("_GridTemplate")
@@ -29,9 +35,16 @@
             <div class="title">Category Info -- {{OriginCategoryName}} <div style="float:right; "><button v-on:click="deleteCtg" class="button" title="Delete Selected Category" disabled="{{Disabled}}">Delete</button></div></div>
 
             <div class="row">
-                <label class="label">New Category Name:</label>
+                <label class="label"> Category Name:</label>
                 <span class="value">
                     <input id="txtCurrentCategoryName" class="textbox" type="text" v-model="CurrentCategoryName" style="width:150px;" disabled="{{Disabled}}" />
+                </span>
+                 
+            </div>
+            <div class="row">
+                <label class="label"> Related Table Name:</label>
+                <span class="value">
+                    <input class="textbox" type="text" v-model="MainTable" style="width:150px;" disabled="{{Disabled}}" />
                 </span>
 
                 <button v-on:click="saveCtgName" class="button" title="Save Selected Category Name" disabled="{{Disabled}}">Save</button>
@@ -48,20 +61,27 @@
 
         
         <!-- demo root element -->
-        <div id="elCategoryFields" style="margin-top:15px;" data-url-select="@Url.Content("~/Home/SelectFields")">
+        <div id="elCategoryFields" style="margin-top:15px;" data-url-select="@Url.Content("~/Home/SelectFields")" data-url-field="@Url.Content("~/Home/GetField")">
             <div class="title">Fields Info <div style="float:right; ">
                 <button v-on:click="openAddFields" class="button" title="Add fields to current category." disabled="{{Disabled}}">Add Field</button>
                 </div>
             </div>
-            <grid v-bind:data="gridData"
-                             v-bind:columns="gridColumns"
-                             v-bind:filter-key="searchQuery">
+            <grid v-bind:data="gridData" v-bind:columns="gridColumns" v-on:select="select"  >
             </grid>
         </div>
     </div>
      
-    <div id="FieldInfoArea" class="area" style="width:230px; margint-top:10px;">
+     
+
+    <div id="FieldInfoArea" class="area" style="width:230px; margin-top:10px;"  >
         <div class="title">Field Info  </div> 
+
+        <div class="data" v-if="Field != null">
+            <label class="label">Field Name:</label>
+            <span class="value">
+                <input class="textbox" type="text" v-model="Field.FieldName" placeholder="New Category Name" style="width:150px;"  />
+            </span>
+        </div>
      </div>
 </div>
 
@@ -69,5 +89,5 @@
 <script src="~/Views/Home/Index.js"></script>
 
 <script> 
-    var CategoryTreeData =@Html.Raw(UiHelper.ToJsonString(UiHelper.CategoryTree()));
+    var CategoryTreeData =@Html.Raw( UiHelper.CategoryTree().ToJson());
 </script>

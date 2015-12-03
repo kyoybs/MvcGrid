@@ -30,27 +30,33 @@ namespace DevTool.Controllers
         }
 
         [HttpPost]
-        public void UpdateCategoryName(DevCategory category)
+        public string UpdateCategoryName(DevCategory category)
         {
             DevCategoryBusiness.UpdateCategoryName(category);
+            return "";
         }
 
         [HttpPost]
-        public void DeleteCategory(DevCategory category)
+        public string DeleteCategory(DevCategory category)
         {
             category.Deleted = true;
             DevCategoryBusiness.DeleteCategory(category);
+            return "";
         }
 
-        public ActionResult SelectFields(int categoryId)
-        {
-            return View();
+        public ActionResult SelectFields(int categoryId, string mainTable)
+        {  
+            SelectFieldsModel model = new SelectFieldsModel { CategoryId = categoryId, MainTable = mainTable };
+            DevFieldInfo field = new DevFieldInfo { TableName = mainTable };
+            model.Fields = DevBusiness.SearchFields(field, categoryId, false);
+
+            return View(model);
         }
 
         [HttpPost]
-        public JsonResult SearchAllFields(int excludedCategoryId,DevFieldInfo field)
+        public JsonResult SearchAllFields(int excludedCategoryId, bool fuzzy, DevFieldInfo field)
         { 
-            var fields = DevBusiness.SearchFields(field , excludedCategoryId);
+            var fields = DevBusiness.SearchFields(field , excludedCategoryId, fuzzy);
             return Json(fields); 
         }
 

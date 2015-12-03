@@ -21,5 +21,7 @@ namespace DevTool.Business.Entity
         public string Notes { get; set; }
 
         public bool Deleted { get; set; }
+
+        public string MainTable { get; set; }
     }
 }

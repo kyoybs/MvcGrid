@@ -1,19 +1,21 @@
-﻿
+﻿@using DevTool.Common
+
+@model DevTool.Models.SelectFieldsModel
 @{
     Layout = null;
 }
-
-
-
+ 
 <!-- demo root element -->
 <div id="AllFields" data-url-search="@Url.Content("~/Home/SearchAllFields")" data-url-add="@Url.Content("~/Home/AddFieldToCategory")">
     <div class="row">
         <label class="label" style="width:80px;">Table Name:</label> 
-        <input name="query" v-model="TableName" class="textbox"> 
+        <input name="query" v-model="TableName" class="textbox" value="@Model.MainTable"/> 
         <label class="label" style="width:80px;">Field Name:</label>
-        <input name="query" v-model="FieldName" class="textbox"> 
+        <input name="query" v-model="FieldName" class="textbox"/> 
         <label class="label" style="width:90px;">Field Label:</label>
-        <input name="query" v-model="FieldName" class="textbox"> 
+        <input name="query" v-model="FieldName" class="textbox"/> 
+
+        <label class="label"><input type="checkbox" v-model="Fuzzy" /> Fuzzy Search</label>
         <button class="button" v-on:click="Search">Search</button>
     </div>
     <div style="height:20px;"></div>
@@ -30,22 +32,24 @@
         data: {
             TableName: '',
             FieldName: '',
+            Fuzzy:false,
             gridColumns: [{ FieldName: 'FieldId', FieldLabel: '#' }, { FieldName: 'TableName', FieldLabel: 'Table Name' }, { FieldName: 'FieldName', FieldLabel: 'Field Name' }],
-            gridData: []
+            gridData: @Html.Raw(Model.Fields.ToJson())
         },
         methods: {
             Search: function () {
+                alert(this.Fuzzy);
                 var url = $(this.$el).attr("data-url-search") + "?excludedCategoryId=@Request["CategoryId"]";
-                $.post(url, { TableName: this.TableName, FieldName: this.FieldName, FieldLabel: this.FieldLabel }, function (datas) {
+                $.post(url, { TableName: this.TableName, FieldName: this.FieldName, FieldLabel: this.FieldLabel,fuzzy:this.Fuzzy}, function (datas) {
                     veAllFields.gridData = datas;  // work
                 });
             },
             select: function (index, entity) {
                 var url = $(this.$el).attr("data-url-add")+"?categoryId=@Request["CategoryId"]";
                 $.post(url, entity, function (data) {
+                    jq.removeItem(veAllFields.gridData, entity);
                     jq.showMsg("Add Successfully.");
-                });
-                jq.removeItem(veAllFields.gridData, entity);
+                }); 
             }
         }
     })

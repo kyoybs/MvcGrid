@@ -10,7 +10,7 @@ using System.Web;
 
 namespace DevTool.Common
 {
-    public class UiHelper
+    public static class UiHelper
     {
         public static TreeModel<DevCategory> CategoryTree()
         {
@@ -43,7 +43,7 @@ namespace DevTool.Common
             }
         }
 
-        public static string ToJsonString(object obj)
+        public static string ToJson(this object obj)
         {
             return JsonConvert.SerializeObject(obj );
         }

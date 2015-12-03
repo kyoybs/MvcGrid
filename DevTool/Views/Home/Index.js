@@ -5,7 +5,7 @@
 var CategoryEditData = {
     CurrentCategoryName: "", CurrentCategoryId: 0
     , ChildCategoryName: "", OriginCategoryName: "Unselected"
-    , Category: null, TreeNodeModel: null
+    , Category: null, TreeNodeModel: null, MainTable:""
 };
 
 var veCategory;
@@ -22,11 +22,16 @@ $(function () {
         },
         methods: {
             nodeClick: function (node) {
-                
+                //init edit info
                 veCategory.OriginCategoryName = veTree.ShowCategory(node);
+                veCategory.CurrentCategoryName = node.Name;
                 veCategory.CurrentCategoryId = node.Id;
+                veCategory.MainTable = node.Entity.MainTable;
                 veCategory.TreeNodeModel = node;
+
+                //init category fields
                 veCategoryFields.CurrentCategoryId = node.Id;
+                veCategoryFields.MainTable = node.Entity.MainTable;
                 var url = $(this.$el).attr("data-url-fields") + "?categoryId=" + node.Id;
                 
                 $.post(url, function (datas) {
@@ -73,11 +78,13 @@ $(function () {
                     return;
                 } else {
                     pel.hideError();
-                    var url = $(this.$el).attr("data-url-update");
-                    var model = this;
-                    $.post(url, { CategoryId: this.CurrentCategoryId, CategoryName: this.CurrentCategoryName }, function () {
-                        model.TreeNodeModel.model.Name = model.CurrentCategoryName; 
-                        model.OriginCategoryName = veTree.ShowCategory(model.TreeNodeModel.model);
+                    var url = $(this.$el).attr("data-url-update"); 
+                    $.post(url, { CategoryId: this.CurrentCategoryId, CategoryName: this.CurrentCategoryName, MainTable: this.MainTable }, function (data) { 
+                        veCategory.TreeNodeModel.Name = veCategory.CurrentCategoryName;
+                        veCategory.TreeNodeModel.Entity.CategoryName = veCategory.CurrentCategoryName;
+                        veCategory.TreeNodeModel.Entity.MainTable = veCategory.MainTable;
+                        veCategory.OriginCategoryName = veTree.ShowCategory(veCategory.TreeNodeModel);
+                        
                         jq.showMsg("Save successfully.");
                     })
                 }
@@ -141,20 +148,34 @@ $(function () {
                 , { FieldName: 'TableName', FieldLabel: 'Table Name' }
                 , { FieldName: 'FieldName', FieldLabel: 'Field Name' }],
             gridData: [],
-            CurrentCategoryId:0                     
+            CurrentCategoryId: 0,
+            MainTable:""
         },
         computed: {
             Disabled: function () { return this.CurrentCategoryId == 0; }
         },
         methods: {
             openAddFields: function () {
-                var url = $(this.$el).attr("data-url-select") + "?CategoryId=" + CategoryEditData.CurrentCategoryId;
-                jq.popWindow("Select Fields", url, {}, function (action,data) {
+                var url = $(this.$el).attr("data-url-select") ;
+                jq.popWindow("Select Fields", url, { CategoryId: this.CurrentCategoryId,MainTable:this.MainTable }, function (action, data) {
                     veCategoryFields.gridData.push(data);
                 });
+            },
+            select: function (index, entity) {
+                veField.Field = entity;
+                //var url = $(this.$el).attr("data-url-field") + "?fieldId=" + entity.FieldId;
+                //$.get(url , function (data) {
+                //    veField.Field = data;
+                //}); 
             }
         }
-    })
+    }) // End CategoryFields
+
+    veField = new Vue({
+        el: '#FieldInfoArea',
+        data: { Field: null},
+        methods: {}
+    }); // end Field
 
 })
 

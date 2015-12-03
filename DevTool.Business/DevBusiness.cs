@@ -10,7 +10,7 @@ namespace DevTool.Business
 {
     public class DevBusiness
     {
-        public static List<DevFieldInfo> SearchFields(DevFieldInfo model , int excludedCategoryId=0)
+        public static List<DevFieldInfo> SearchFields(DevFieldInfo model , int excludedCategoryId=0, bool like = true)
         {
             StringBuilder sb = new StringBuilder( @"SELECT top 100 * FROM DevFieldInfo WHERE Deleted<>1 ");
             List<string> filters = new List<string>();
@@ -18,19 +18,22 @@ namespace DevTool.Business
             if (!string.IsNullOrEmpty(model.TableName))
             {
                 filters.Add(  "TableName like @TableName");
-                model.TableName = "%" + model.TableName + "%";
+                if(like)
+                    model.TableName = "%" + model.TableName + "%";
             }
 
             if (!string.IsNullOrEmpty(model.FieldName))
             {
                 filters.Add( "FieldName like @FieldName");
-                model.FieldName = "%" + model.FieldName + "%";
+                if (like)
+                    model.FieldName = "%" + model.FieldName + "%";
             }
 
             if (!string.IsNullOrEmpty(model.FieldLabel))
             {
                 filters.Add(  "FieldLabel like @FieldLabel");
-                model.FieldLabel = "%" + model.FieldLabel + "%";
+                if (like)
+                    model.FieldLabel = "%" + model.FieldLabel + "%";
             }
 
             DynamicParameters dps = new DynamicParameters();
