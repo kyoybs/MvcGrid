@@ -31,38 +31,46 @@
 
 <script>
     // register the grid component
-    Vue.component('grid', {
-        template: '#grid-template',
-        props: {
-            data: Array,
-            columns: Array,
-            filterKey: String,
-            keyName:String,
-        },
-        data: function () {
-            var sortOrders = {}
-            $.each(this.columns, function (index, item) {
-                sortOrders[item] = 1;
-            });
+    $(function () {
+        Vue.component('grid', {
+            template: '#grid-template',
+            props: {
+                data: Array,
+                columns: Array,
+                filterKey: String,
+                keyName: String,
+            },
+            data: function () {
+                var sortOrders = {}
+                $.each(this.columns, function (index, item) {
+                    sortOrders[item] = 1;
+                });
 
-            return {
-                sortKey: '',
-                sortOrders: sortOrders
-            }
-        },
-        methods: {
-            selectClick: function (index, entry) { 
-                this.$dispatch('select', index, entry);
+                return {
+                    sortKey: '',
+                    sortOrders: sortOrders
+                }
+            },
+            methods: {
+                selectClick: function (index, entity) {
+                    this.$dispatch('select', index, entity);
+
+                    var $win = $(this.$el).closest(".js-window");
+                    if ($win.size() > 0) {
+                        var callback = $(this.$el).closest(".js-window")[0]._popCallback;
+                        callback("select", entity);
+                    } 
                 },
-            sortBy: function (key) {
-                this.sortKey = key;
-                this.sortOrders[key] = this.sortOrders[key] * -1
+                sortBy: function (key) {
+                    this.sortKey = key;
+                    this.sortOrders[key] = this.sortOrders[key] * -1
+                }
+            },
+            events: {
+                select: function (index, entity) {
+                }
             }
-        },
-        events:{
-            select: function (index, entity) {
-
-            }
-        }
-    })
+        })
+    });
+    
 </script>

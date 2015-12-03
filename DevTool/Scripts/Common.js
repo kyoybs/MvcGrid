@@ -1,6 +1,8 @@
 ﻿window.onerror = function (data, url, line) {
     alert(data + "\r\n Error File: " + url + " -- Line: " + line);
 }
+
+
  
 $(function () {
     $.ajaxSetup({
@@ -12,6 +14,8 @@ $(function () {
             jq.closeLoading();
         }
     })
+
+    Vue.config.debug = true
 })
 
 $(document).ajaxError(function (event, xhr, options, exc) {
@@ -74,18 +78,14 @@ jq.updateField = function (url, dataId, fieldName, fieldValue) {
     });
 }
 
-jq.popWindow = function (title, url, id) {
-    jq.log("------SHOW ROW DETAIL  -------------");
-    jq.log(url);
-    jq.log(id);
-    jq.log("------SHOW ROW DETAIL END-------------");
-    $.post(url, { dataId: id }, function (data) {
+jq.popWindow = function (title, url, postData, callback) { 
+    $.post(url, postData, function (data) {
         var windowIndex = $("_window_mask").size();
         var maskId = '_window_mask_' + windowIndex;
         var windowId = '_window_' + windowIndex;
         var mask = $("<div id='" + maskId + "' class='mask'></div>");
         $("body").append(mask);
-        var pop = $("<div id='" + windowId + "'  class='window'></div>");
+        var pop = $("<div id='" + windowId + "'  class='window js-window'></div>");
         $("body").append(pop);
         var poptitle = $("<div id='_grid_title'  class='title'></div>");
         var popclose = $("<div class='close'>&Chi;</div>");
@@ -99,7 +99,10 @@ jq.popWindow = function (title, url, id) {
 
         var popbody = $("<div class='body'></div>");
         pop.append(popbody);
-        popbody.html(data);
+
+        pop[0]._popCallback = callback;
+
+        popbody.html(data); 
         mask.show();
         pop.show();
     });
