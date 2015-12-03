@@ -1,18 +1,27 @@
 ﻿<!-- Category Tree template -->
 <script type="text/x-template" id="treeNode-template">
     <li>
-        <div v-bind:class="{'bold': isFolder,'selected':Selected}"
+        <div v-bind:class="{'bold': isFolder,'selected':nodemodel.Selected}"
              v-on:click="click">
-            #{{model.Id + " " + model.Name}}
+            #{{nodemodel.Id + " " + nodemodel.Name}}
             <span v-if="isFolder" v-on:click.stop="toggle">[{{open ? '-' : '+'}}]</span>
         </div>
         <ul v-show="open" v-if="isFolder">
             <treeNode v-bind:class="item"
-                      v-for="model in model.Children"
-                      v-bind:model="model">
+                      v-for="model1 in nodemodel.Children"
+                      v-bind:nodemodel="model1">
             </treeNode>
         </ul>
     </li>
+</script>
+
+
+
+<script type="text/x-template" id="tree-template">
+    <ul>
+        <treenode class="item" v-bind:nodemodel="model" >
+        </treenode>
+    </ul>
 </script>
 
 <script>
@@ -22,24 +31,22 @@
     Vue.component('treenode', {
         template: '#treeNode-template',
         props: {
-            model: Object
+            nodemodel: Object 
         },
         data: function () {
             return {
-                open: true,
-                Selected: false
+                open: true
             }
         },
         computed: {
             isFolder: function () {
-                return this.model.Children &&
-                  this.model.Children.length
+                return this.nodemodel.Children &&
+                  this.nodemodel.Children.length
             }
         },
         methods: {
-            click: function () {
-                this.$dispatch('select', this);
-                this.Selected = true; 
+            click: function () { 
+                this.$dispatch('select', this.nodemodel); 
             },
             toggle: function () {
                 if (this.isFolder) {
@@ -48,15 +55,28 @@
                 return false;
             },
             addChild: function () {
-                this.model.Children.push({
+                this.nodemodel.Children.push({
                     Name: 'new stuff'
                 })
             }
-        },
-        events:{
-            select: function (node) { }
         }
     })
 
-
+    Vue.component('tree', {
+        template: "#tree-template",
+        props: {
+            model: Object 
+        },
+        data:function(){
+            SelectedNode:null
+        },
+        events: {
+            select: function (node) {
+                if (this.SelectedNode != null)
+                    this.SelectedNode.Selected = false;
+                node.Selected = true;
+                this.SelectedNode = node;                
+            }
+        }
+    })
 </script>
