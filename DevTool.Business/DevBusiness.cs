@@ -59,7 +59,7 @@ namespace DevTool.Business
 
         public static void AddFieldToCategory(DevFieldInfo fieldInfo, int categoryId)
         {
-            DevFieldCategory fc = new DevFieldCategory { CategoryId = categoryId, FieldId = fieldInfo.FieldId };
+            DevFieldCategory fc = new DevFieldCategory { CategoryId = categoryId, FieldId = fieldInfo.FieldId  };
             using (var db = DbHelper.Create())
             {
                 db.InsertEntity(fc);
@@ -69,11 +69,22 @@ namespace DevTool.Business
        
         public static List<DevFieldInfo> GetCategoryFields(int categoryId)
         {
-            string sql = @"SELECT F.* FROM DevFieldInfo f 
-JOIN DevFieldCategory fc ON f.FieldId = fc.FieldId WHERE fc.CategoryId=@CategoryId";
+            string sql = @"SELECT F.*, fc.ControlIndex FROM DevFieldInfo f 
+JOIN DevFieldCategory fc ON f.FieldId = fc.FieldId WHERE fc.CategoryId=@CategoryId ORDER BY fc.ControlIndex ";
             using (var db = DbHelper.Create())
             {
                 return db.Query<DevFieldInfo>(sql, new { CategoryId = categoryId }).ToList();
+            }
+        }
+
+        public static void SaveCategoryField(int categoryId, DevFieldInfo field)
+        {
+            string sql = @"UPDATE DevFieldInfo SET FieldLabel=@FieldLabel WHERE FieldId=@FieldId ; 
+UPDATE DevFieldCategory SET ControlIndex=@ControlIndex WHERE  FieldId=@FieldId AND CategoryId=@CategoryId";
+            using (var db = DbHelper.Create())
+            {
+                db.Execute(sql, new { CategoryId = categoryId, FieldId=field.FieldId
+                    , FieldLabel=field.FieldLabel,ControlIndex=field.ControlIndex }) ;
             }
         }
     }

@@ -1,12 +1,7 @@
 ﻿
 
 
-//category edit date
-var CategoryEditData = {
-    CurrentCategoryName: "", CurrentCategoryId: 0
-    , ChildCategoryName: "", OriginCategoryName: "Unselected"
-    , Category: null, TreeNodeModel: null, MainTable:""
-};
+//category edit date 
 
 var veCategory;
 var veTree;
@@ -50,7 +45,7 @@ $(function () {
             return false;
 
         $.each(parentCategory.Children, function (index, item) { 
-            if (category == item) {
+            if (category == item) { 
                 parentCategory.Children.splice(index,1);
                 return true;
             }
@@ -63,7 +58,10 @@ $(function () {
     //boot up category edit
     veCategory = new Vue({
         el: '#Category',
-        data: CategoryEditData,
+        data: {  CurrentCategoryName: "", CurrentCategoryId: 0
+    , ChildCategoryName: "", OriginCategoryName: "Unselected"
+    , Category: null, TreeNodeModel: null, MainTable:""
+        },
         computed: {
             Disabled: function () { return this.CurrentCategoryId == 0; }
         },
@@ -104,33 +102,32 @@ $(function () {
                     return;
                 } else {
                     pel.hideError();
-                    var url = $(this.$el).attr("data-url-add");
-                    var model = this;
+                    var url = $(this.$el).attr("data-url-add"); 
                     $.post(url, { ParentId: this.CurrentCategoryId, CategoryName: this.ChildCategoryName }, function (newTreeNode) {
-                        model.Category.Children.push(newTreeNode);
-                        model.ChildCategoryName = "";
+                        veCategory.TreeNodeModel.Children.push(newTreeNode);
+                        veCategory.ChildCategoryName = "";
                         jq.showMsg("Add successfully.");
                     })
                 }
             },
             deleteCtg: function () {
-                if (CategoryTreeData == this.Category) {
+                if (veTree.treeData == this.Category) {
                     jq.showMsg("Cannot delete root category.");
                     return;
                 }
-                if (this.Category.Children.length > 0) {
+                if (this.TreeNodeModel.Children.length > 0) {
                     jq.showMsg("Cannot delete a category with subcategories.");
                     return;
                 }
                 if (!confirm("Confirm to Delete Category " + this.OriginCategoryName + "?"))
                     return;
                 var url = $(this.$el).attr("data-url-delete");
-                $.post(url, { CategoryId: this.CurrentCategoryId }, function () {
-                    veTree.removeCategory(CategoryTreeData, CategoryEditData.Category);
-                    CategoryEditData.CurrentCategoryId = 0;
-                    CategoryEditData.CurrentCategoryName = "";
-                    CategoryEditData.ChildCategoryName = "";
-                    CategoryEditData.OriginCategoryName = "Unselected";
+                $.post(url, { CategoryId: this.CurrentCategoryId }, function () { 
+                    veTree.removeCategory(veTree.treeData, veCategory.TreeNodeModel);
+                    veCategory.CurrentCategoryId = 0;
+                    veCategory.CurrentCategoryName = "";
+                    veCategory.ChildCategoryName = "";
+                    veCategory.OriginCategoryName = "Unselected";
                     jq.showMsg("Delete successfully.");
                 })
             }
@@ -146,7 +143,9 @@ $(function () {
             searchQuery: '',
             gridColumns: [{ FieldName: 'FieldId', FieldLabel: '#' }
                 , { FieldName: 'TableName', FieldLabel: 'Table Name' }
-                , { FieldName: 'FieldName', FieldLabel: 'Field Name' }],
+                , { FieldName: 'FieldName', FieldLabel: 'Field Name' }
+                , { FieldName: 'ControlIndex', FieldLabel: 'Order' }
+            ],
             gridData: [],
             CurrentCategoryId: 0,
             MainTable:""
@@ -163,18 +162,30 @@ $(function () {
             },
             select: function (index, entity) {
                 veField.Field = entity;
-                //var url = $(this.$el).attr("data-url-field") + "?fieldId=" + entity.FieldId;
-                //$.get(url , function (data) {
-                //    veField.Field = data;
-                //}); 
+                veField.CategoryId = veCategoryFields.CurrentCategoryId;
+                veField.FieldLabel = entity.FieldLabel;
+                veField.ControlIndex = entity.ControlIndex;
+                veField.EntityProperty = entity.EntityProperty;
             }
         }
     }) // End CategoryFields
 
     veField = new Vue({
         el: '#FieldInfoArea',
-        data: { Field: null},
-        methods: {}
+        data: { Field: null, CategoryId: 0, FieldLabel: "", ControlIndex: "", EntityProperty:""},
+        methods: {
+            save: function () {
+                var url = $(this.$el).attr("data-url-save");
+                var field = veField.Field;
+                field.CategoryId = this.CategoryId;
+                $.post(url, field, function (data) {
+                    veField.Field.FieldLabel = veField.FieldLabel;
+                    veField.Field.ControlIndex = veField.ControlIndex;
+                    veField.Field.EntityProperty = veField.EntityProperty;
+                    jq.showMsg("Field save successfully.");
+                })
+            }
+        }
     }); // end Field
 
 })

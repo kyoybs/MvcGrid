@@ -55,6 +55,11 @@ ul {
         background: -ms-linear-gradient(top,#c5ebfa,#fff);
     }
 
+    .readonly{
+        background:none !important;
+        background-color:#ddd !important;
+    }
+
 span.button {
     height: 23px;
     line-height: 23px;

@@ -72,5 +72,11 @@ namespace DevTool.Controllers
             var fields = DevBusiness.GetCategoryFields(categoryId);
             return Json(fields);
         }
+
+        [HttpPost]
+        public void SaveCategoryField(int categoryId, DevFieldInfo field)
+        {
+            DevBusiness.SaveCategoryField(categoryId, field);
+        }
     }
 }

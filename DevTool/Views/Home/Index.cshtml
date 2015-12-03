@@ -6,10 +6,10 @@
         color: #ba5911;
     }
 
-    #FieldInfoArea .data {padding:3px;}
+    #FieldInfoArea .data {padding:3px; }
 
     #FieldInfoArea .data .label {
-        display:block; width:100%; text-align:left;
+        display:block; width:100%; text-align:left; margin:10px 0 3px 3px;
     }
 </style>
 
@@ -73,15 +73,40 @@
      
      
 
-    <div id="FieldInfoArea" class="area" style="width:230px; margin-top:10px;"  >
+    <div id="FieldInfoArea" class="area" style="width:230px; margin-top:10px;" data-url-save="@Url.Content("~/Home/SaveCategoryField")"  >
         <div class="title">Field Info  </div> 
 
         <div class="data" v-if="Field != null">
             <label class="label">Field Name:</label>
             <span class="value">
-                <input class="textbox" type="text" v-model="Field.FieldName" placeholder="New Category Name" style="width:150px;"  />
+                <input readonly class="textbox readonly" type="text" v-model="Field.FieldName" style="width:150px;"  />
             </span>
+
+            <label class="label">Table Name:</label>
+            <span class="value">
+                <input readonly class="textbox readonly" type="text" v-model="Field.TableName" style="width:150px;" />
+            </span>
+
+            <label class="label">Field Label:</label>
+            <span class="value">
+                <input class="textbox" type="text" v-model="FieldLabel"  style="width:150px;" />
+            </span>
+
+            <label class="label">Entity Property Name:</label>
+            <span class="value">
+                <input class="textbox" type="text" v-model="EntityProperty" style="width:150px;" />
+            </span>
+
+            <label class="label">Order Index:</label>
+            <span class="value">
+                <input class="textbox" type="text" v-model="ControlIndex"  style="width:150px;" />
+            </span>
+
+
         </div>
+         <div style="text-align:center; padding:5px;">
+             <button class="button" v-on:click="save">Save</button>
+         </div>
      </div>
 </div>
 

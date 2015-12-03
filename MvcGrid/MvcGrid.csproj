@@ -207,10 +207,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\DevData.mdf" />
-    <Content Include="App_Data\DevData_log.ldf">
-      <DependentUpon>DevData.mdf</DependentUpon>
-    </Content>
     <Content Include="App_Data\DevDB.sql" />
     <None Include="Content\bootstrap.css.bak" />
     <Content Include="Content\bootstrap.min.css" />
