@@ -1,5 +1,6 @@
 ﻿@using DevTool.Common;
 
+@model DevTool.Models.HomeIndexModel
 
 <style>
     #categories div:hover {
@@ -60,19 +61,33 @@
 
         
         <!-- demo root element -->
-        <div id="elCategoryFields" style="margin-top:15px;" data-url-select="@Url.Content("~/Home/SelectFields")" data-url-field="@Url.Content("~/Home/GetField")">
+        <div id="elCategoryFields" style="margin-top:15px;" data-url-select="@Url.Content("~/Home/SelectFields")" 
+             data-url-field="@Url.Content("~/Home/GetField")" data-url-genereate="@Url.Content("~/Home/Generate")" >
             <div class="title">Fields Info <div style="float:right; ">
                 <button v-on:click="openAddFields" class="button" title="Add fields to current category." disabled="{{Disabled}}">Add Field</button>
                 </div>
             </div>
             <grid v-bind:data="gridData" v-bind:columns="gridColumns" v-on:select="select"  >
             </grid>
+
+            <div style="text-align:right; padding:5px; line-height:30px;">
+                <button class="button" v-on:click="generateView">Generate View</button>
+                <button class="button" v-on:click="generateEntity">Generate Entity</button>
+                <button class="button" v-on:click="generateSql">Generate SQL</button>
+                <button class="button" v-on:click="generateKiml">Generate KIML</button>
+                <button class="button" v-on:click="generateHtml">Generate HTML</button>
+            </div>
+
+            <div v-if="GeneratedText!=''">
+                <textarea  style="width:95%; height:200px;">{{GeneratedText}}</textarea>
+            </div>
         </div>
     </div>
      
      
 
-    <div id="FieldInfoArea" class="area" style="width:230px; margin-top:10px;" data-url-save="@Url.Content("~/Home/SaveCategoryField")"  >
+    <div id="FieldInfoArea" class="area" style="width:230px; margin-top:10px;" 
+         data-url-save="@Url.Content("~/Home/SaveCategoryField")"  >
         <div class="title">Field Info  </div> 
 
         <div class="data" v-if="Field != null">
@@ -101,17 +116,27 @@
                 <input class="textbox" type="text" v-model="ControlIndex"  style="width:150px;" />
             </span>
 
+            <label class="label">Control Type:</label>
+            <span class="value">
+                <select class="textbox" type="text" v-model="Field.ControlTypeId" style="width:150px;">
+                    <option v-for="ctlType in ControlTypes" v-bind:value="ctlType.ControlTypeId">{{ctlType.ControlTypeName}}</option>
+                </select>
+            </span>
 
-        </div>
-         <div style="text-align:center; padding:5px;">
-             <button class="button" v-on:click="save">Save</button>
-         </div>
+            <div style="text-align:center; padding:5px;">
+                <button class="button" v-on:click="save">Save</button>
+            </div>
+           
      </div>
 </div>
 
- 
+ <div style="clear:both;"></div>
 <script src="~/Views/Home/Index.js"></script>
 
 <script> 
-    var CategoryTreeData =@Html.Raw( UiHelper.CategoryTree().ToJson());
+    $(function(){
+        veTree.treeData = @Html.Raw( UiHelper.CategoryTree().ToJson());
+        veField.ControlTypes = @Html.Raw(Model.DevControlTypes.ToJson());
+    })
+    
 </script>

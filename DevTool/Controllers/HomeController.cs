@@ -13,9 +13,10 @@ namespace DevTool.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
-             
-            return View();
+            HomeIndexModel model = new HomeIndexModel();
+            model.DevControlTypes = DevBusiness.GetControlTypes();
+            ViewBag.Title = "Home Page"; 
+            return View(model);
         }
         
         [HttpPost]
@@ -74,5 +75,13 @@ namespace DevTool.Controllers
         {
             DevBusiness.SaveCategoryField(categoryId, field);
         }
+
+        [HttpPost]
+        public string Generate(int categoryId, string type)
+        { 
+            string code = DevBusiness.Generate(categoryId, type);
+            return code;
+        }
+
     }
 }

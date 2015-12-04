@@ -23,9 +23,14 @@ namespace DevTool.Business.Entity
 
         public bool Deleted { get; set; }
 
+        public int ControlTypeId { get; set; }
+
         [NotMapped]
         public int ControlIndex { get; set; }
 
+        public string DataType { get; set; }
+
+        public bool CanNull { get; set; }
 
     }
 }

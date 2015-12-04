@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbAgent.cs" />
+    <Compile Include="DynamicEntity.cs" />
     <Compile Include="FieldInfo.cs" />
     <Compile Include="InsertSql.cs" />
     <Compile Include="OrmDataType.cs" />

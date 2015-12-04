@@ -6,6 +6,7 @@
 var veCategory;
 var veTree;
 var veCategoryFields;
+var veField;
 
 commands = {
     CategorySelected: "CategorySelected",
@@ -20,7 +21,7 @@ $(function () {
     veTree = new Vue({
         el: '#CategoriesTree',
         data: {
-            treeData: CategoryTreeData,
+            treeData: {},
             SelectedNode: null
         },
         methods: {
@@ -63,9 +64,9 @@ $(function () {
         }
     })
     
-    veTree.listening(function (command, category) {
+    veTree.listening(function (command, category) { 
         switch (command) {
-            case commands.CategoryUpdated:
+            case commands.CategoryUpdated: 
                 veTree.SelectedNode.Name = category.CategoryName;
                 veTree.SelectedNode.Entity = category;
                 break;
@@ -108,7 +109,7 @@ $(function () {
                     var url = $(this.$el).attr("data-url-update"); 
                     $.post(url, { CategoryId: this.CurrentCategoryId, CategoryName: this.CurrentCategoryName, MainTable: this.MainTable }, function (data) { 
                         veCategory.Category.CategoryName = veCategory.CurrentCategoryName;
-                        veTree.broadcast(commands.CategoryUpdated, veCategory.Category);
+                        veCategory.broadcast(commands.CategoryUpdated, veCategory.Category);
                         jq.showMsg("Save successfully.");
                     })
                 }
@@ -195,7 +196,7 @@ $(function () {
             ],
             gridData: [],
             CurrentCategoryId: 0,
-            MainTable:""
+            MainTable: "", GeneratedText: ""
         },
         computed: {
             Disabled: function () { return this.CurrentCategoryId == 0; }
@@ -216,18 +217,59 @@ $(function () {
                 veField.FieldLabel = entity.FieldLabel;
                 veField.ControlIndex = entity.ControlIndex;
                 veField.EntityProperty = entity.EntityProperty;
+            },
+            generateView: function () { 
+                var url = $(this.$el).attr("data-url-genereate");
+                $.post(url, { categoryId: this.CurrentCategoryId, type: "View" }, function (data) {
+                    alert(data);
+                    veCategoryFields.GeneratedText = data;
+                })
+            }
+            ,
+            generateEntity: function () {
+                var url = $(this.$el).attr("data-url-genereate");
+                $.post(url, { categoryId: this.CurrentCategoryId, type: "Entity" }, function (data) {
+                    veCategoryFields.GeneratedText = data;
+                })
+            }
+            ,
+            generateSql: function () {
+                var url = $(this.$el).attr("data-url-genereate");
+                $.post(url, { categoryId: this.CurrentCategoryId, type: "sql" }, function (data) {
+                    veCategoryFields.GeneratedText = data;
+                })
+            }
+            ,
+            generateKiml: function () {
+                var url = $(this.$el).attr("data-url-genereate");
+                $.post(url, { categoryId: this.CurrentCategoryId, type: "Kiml" }, function (data) {
+                    veCategoryFields.GeneratedText = data;
+                })
+            }
+            ,
+            generateHtml: function () {
+                var url = $(this.$el).attr("data-url-genereate");
+                $.post(url, { categoryId: this.CurrentCategoryId, type: "Html" }, function (data) {
+                    veCategoryFields.GeneratedText = data;
+                })
             }
         }
     }) // End CategoryFields
 
     veField = new Vue({
         el: '#FieldInfoArea',
-        data: { Field: null, CategoryId: 0, FieldLabel: "", ControlIndex: "", EntityProperty:""},
+        data: {
+            Field: null, CategoryId: 0, FieldLabel: "", ControlIndex: "", EntityProperty: "",
+            ControlTypeId:0, ControlTypes:[]
+        },
         methods: {
             save: function () {
                 var url = $(this.$el).attr("data-url-save");
                 var field = veField.Field;
                 field.CategoryId = this.CategoryId;
+                field.FieldLabel = this.FieldLabel;
+                field.EntityProperty = this.EntityProperty;
+                field.ControlIndex = this.ControlIndex;
                 $.post(url, field, function (data) {
                     veField.Field.FieldLabel = veField.FieldLabel;
                     veField.Field.ControlIndex = veField.ControlIndex;

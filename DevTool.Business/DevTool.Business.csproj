@@ -50,6 +50,7 @@
     <Compile Include="Class1.cs" />
     <Compile Include="DbHelper.cs" />
     <Compile Include="Entity\DevCategory.cs" />
+    <Compile Include="Entity\DevControlType.cs" />
     <Compile Include="Entity\DevField.cs" />
     <Compile Include="Entity\DevFieldCategory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
