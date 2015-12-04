@@ -109,7 +109,9 @@ $(function () {
                     var url = $(this.$el).attr("data-url-update"); 
                     $.post(url, { CategoryId: this.CurrentCategoryId, CategoryName: this.CurrentCategoryName, MainTable: this.MainTable }, function (data) { 
                         veCategory.Category.CategoryName = veCategory.CurrentCategoryName;
+                        veCategory.Category.MainTable = veCategory.MainTable;
                         veCategory.broadcast(commands.CategoryUpdated, veCategory.Category);
+                        veCategoryFields.MainTable = veCategory.MainTable;
                         jq.showMsg("Save successfully.");
                     })
                 }
@@ -161,6 +163,7 @@ $(function () {
                 //init category fields
                 veCategoryFields.CurrentCategoryId = category.CategoryId;
                 veCategoryFields.MainTable = category.MainTable;
+                veCategoryFields.GeneratedText = "";
                 var url = $(this.$el).attr("data-url-fields") + "?categoryId=" + category.CategoryId;;
 
                 $.post(url, function (datas) {
@@ -189,9 +192,9 @@ $(function () {
         el: '#elCategoryFields',
         data: {
             searchQuery: '',
-            gridColumns: [{ FieldName: 'FieldId', FieldLabel: '#' }
-                , { FieldName: 'TableName', FieldLabel: 'Table Name' }
-                , { FieldName: 'FieldName', FieldLabel: 'Field Name' }
+            gridColumns: [{ FieldName: 'FieldId', FieldLabel: '#', Align: 'right' }
+                , { FieldName: 'FieldName', FieldLabel: 'Field Name', Align: 'left' } 
+                , { FieldName: 'FieldLabel', FieldLabel: 'FieldLabel', Align: 'left' }
                 , { FieldName: 'ControlIndex', FieldLabel: 'Order' }
             ],
             gridData: [],
@@ -221,7 +224,6 @@ $(function () {
             generateView: function () { 
                 var url = $(this.$el).attr("data-url-genereate");
                 $.post(url, { categoryId: this.CurrentCategoryId, type: "View" }, function (data) {
-                    alert(data);
                     veCategoryFields.GeneratedText = data;
                 })
             }

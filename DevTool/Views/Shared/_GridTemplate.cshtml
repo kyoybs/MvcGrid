@@ -20,8 +20,8 @@
                 entry in data
                 | filterBy filterKey
                 | orderBy sortKey sortOrders[sortKey]">
-                <td v-for="key in columns">
-                    {{entry[key.FieldName]}}
+                <td v-for="key in columns" v-bind:style="{'text-align':key.Align?key.Align:'center'}">
+                    {{entry[key.FieldName]}}  
                 </td>
                 <td><a href="javascript:void(0);" v-on:click="selectClick($index,entry)">Select</a></td>
             </tr>
@@ -59,7 +59,7 @@
                     if ($win.size() > 0) {
                         var callback = $(this.$el).closest(".js-window")[0]._popCallback;
                         callback("select", entity);
-                    } 
+                    }
                 },
                 sortBy: function (key) {
                     this.sortKey = key;
@@ -72,5 +72,5 @@
             }
         })
     });
-    
+
 </script>
