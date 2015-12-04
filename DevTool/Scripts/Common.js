@@ -180,3 +180,20 @@ jq.removeItem = function (array, item) {
         }
     });
 }
+
+jq.__listeners = [];
+
+Vue.prototype.listening = function (callback) { 
+    jq.__listeners.push({ _listener: this, callback: callback });
+}
+
+Vue.prototype.broadcast = function (command, data) {
+    var _ve = this;
+    $.each(jq.__listeners, function (index, listener) { 
+        if (_ve != listener._listener) {
+            listener.callback(command, data);
+        } 
+    }) 
+}
+
+

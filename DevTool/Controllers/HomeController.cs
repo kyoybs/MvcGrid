@@ -22,11 +22,7 @@ namespace DevTool.Controllers
         public JsonResult InsertCategory(DevCategory category)
         { 
             DevCategoryBusiness.InsertCategory(category);
-            TreeModel<DevCategory> tm = new TreeModel<DevCategory>();
-            tm.Id = category.CategoryId;
-            tm.Name = category.CategoryName;
-            tm.Entity = category;
-            return Json(tm);
+            return Json(category);
         }
 
         [HttpPost]

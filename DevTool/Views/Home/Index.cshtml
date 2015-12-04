@@ -21,17 +21,16 @@
 <div style="width:1080px;">
     <div class="area" style="width:300px;">
         <div class="title">Category Tree </div>
-        <div  id="CategoriesTree" data-url-fields="@Url.Content("~/Home/GetCategoryFields")" >
+        <div  id="CategoriesTree" data-url-delete="@Url.Content("~/Home/DeleteCategory")">
             <tree v-bind:model="treeData" v-on:select="nodeClick">
             </tree>
         </div>
     </div>
      
     <div class="area" style="width:410px;">
-        <div id="Category"
+        <div id="Category" data-url-fields="@Url.Content("~/Home/GetCategoryFields")" 
              data-url-update="@Url.Content("~/Home/UpdateCategoryName")"
-             data-url-add="@Url.Content("~/Home/InsertCategory")"
-             data-url-delete="@Url.Content("~/Home/DeleteCategory")">
+             data-url-add="@Url.Content("~/Home/InsertCategory")" >
             <div class="title">Category Info -- {{OriginCategoryName}} <div style="float:right; "><button v-on:click="deleteCtg" class="button" title="Delete Selected Category" disabled="{{Disabled}}">Delete</button></div></div>
 
             <div class="row">
