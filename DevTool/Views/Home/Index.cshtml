@@ -23,13 +23,13 @@
     <div class="area" style="width:300px;">
         <div class="title">Category Tree </div>
         <div  id="CategoriesTree" data-url-delete="@Url.Content("~/Home/DeleteCategory")">
-            <tree v-bind:model="treeData" v-on:select="nodeClick">
+            <tree v-bind:model="treeData" v-on:select="nodeClick" v-ref:tree>
             </tree>
         </div>
     </div>
      
     <div class="area" style="width:600px;">
-        <div id="Category" data-url-fields="@Url.Content("~/Home/GetCategoryFields")" 
+        <div id="Category"  
              data-url-update="@Url.Content("~/Home/UpdateCategoryName")"
              data-url-add="@Url.Content("~/Home/InsertCategory")" >
             <div class="title">Category Info -- {{OriginCategoryName}} <div style="float:right; "><button v-on:click="deleteCtg" class="button" title="Delete Selected Category" disabled="{{Disabled}}">Delete</button></div></div>
@@ -37,14 +37,14 @@
             <div class="row">
                 <label class="label"> Category Name:</label>
                 <span class="value">
-                    <input id="txtCurrentCategoryName" class="textbox" type="text" v-model="CurrentCategoryName" style="width:150px;" disabled="{{Disabled}}" />
+                    <input id="txtCurrentCategoryName" class="textbox" type="text" v-model="Category.CategoryName" style="width:150px;" disabled="{{Disabled}}" />
                 </span>
                  
             </div>
             <div class="row">
                 <label class="label"> Related Table Name:</label>
                 <span class="value">
-                    <input class="textbox" type="text" v-model="MainTable" style="width:150px;" disabled="{{Disabled}}" />
+                    <input class="textbox" type="text" v-model="Category.MainTable" style="width:150px;" disabled="{{Disabled}}" />
                 </span>
 
                 <button v-on:click="saveCtgName" class="button" title="Save Selected Category Name" disabled="{{Disabled}}">Save</button>
@@ -61,8 +61,11 @@
 
         
         <!-- demo root element -->
-        <div id="elCategoryFields" style="margin-top:15px;" data-url-select="@Url.Content("~/Home/SelectFields")" 
-             data-url-field="@Url.Content("~/Home/GetField")" data-url-genereate="@Url.Content("~/Home/Generate")" >
+        <div id="elCategoryFields" style="margin-top:15px;" 
+             data-url-fields="@Url.Content("~/Home/GetCategoryFields")"
+             data-url-select="@Url.Content("~/Home/SelectFields")" 
+             data-url-field="@Url.Content("~/Home/GetField")" 
+             data-url-genereate="@Url.Content("~/Home/Generate")" >
             <div class="title">Fields Info <div style="float:right; ">
                 <button v-on:click="openAddFields" class="button" title="Add fields to current category." disabled="{{Disabled}}">Add Field</button>
                 </div>
@@ -87,9 +90,7 @@
             
         </div>
     </div>
-     
-     
-
+      
     <div id="FieldInfoArea" class="area" style="width:230px; margin-top:10px;" 
          data-url-save="@Url.Content("~/Home/SaveCategoryField")"  >
         <div class="title">Field Info  </div> 

@@ -3,7 +3,7 @@
     <li>
         <div v-bind:class="{'bold': isFolder,'selected':nodemodel.Selected}"
              v-on:click="click">
-            #{{nodemodel.Id + " " + nodemodel.Name}}
+            #{{nodemodel.Id + " " + nodemodel.Name }}
             <span v-if="isFolder" v-on:click.stop="toggle">[{{open ? '-' : '+'}}]</span>
         </div>
         <ul v-show="open" v-if="isFolder">
@@ -14,9 +14,7 @@
         </ul>
     </li>
 </script>
-
-
-
+ 
 <script type="text/x-template" id="tree-template">
     <ul>
         <treenode class="item" v-bind:nodemodel="model" >
@@ -53,12 +51,7 @@
                     this.open = !this.open
                 }
                 return false;
-            },
-            addChild: function () {
-                this.nodemodel.Children.push({
-                    Name: 'new stuff'
-                })
-            }
+            } 
         }
     })
 
@@ -70,12 +63,23 @@
         data:function(){
             SelectedNode:null
         },
+        methods: { 
+            addChild: function (id,name,entity) {
+                var childNode = {
+                    Id: id,
+                    Name: name,
+                    Entity: entity,
+                    Selected:false
+                };
+                this.SelectedNode.Children.push(childNode);
+            }
+        },
         events: {
             select: function (node) {
                 if (this.SelectedNode != null)
                     this.SelectedNode.Selected = false;
                 node.Selected = true;
-                this.SelectedNode = node;                
+                this.SelectedNode = node; 
             }
         }
     })
