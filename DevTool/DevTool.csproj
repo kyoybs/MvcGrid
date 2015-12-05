@@ -621,6 +621,10 @@
       <Project>{afce8cff-ea26-4e17-a91d-828ea7ad0ae7}</Project>
       <Name>DevTool.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Synvata.ORM\Synvata.ORM.csproj">
+      <Project>{4c6a02e9-1d1e-4a6f-8506-30c2c600bb0a}</Project>
+      <Name>Synvata.ORM</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

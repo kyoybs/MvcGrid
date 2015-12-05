@@ -52,6 +52,7 @@
     <Compile Include="InsertSql.cs" />
     <Compile Include="OrmDataType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SavableException.cs" />
     <Compile Include="UpdateSql.cs" />
   </ItemGroup>
   <ItemGroup>

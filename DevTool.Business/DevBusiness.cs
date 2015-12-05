@@ -122,7 +122,7 @@ UPDATE DevFieldCategory SET ControlIndex=@ControlIndex WHERE  FieldId=@FieldId A
                 var ctlType = types.FirstOrDefault( t=>t.Entity.ControlTypeId == field.ControlTypeId);
                 if(ctlType == null)
                 {
-                    throw new ApplicationException("Field: " + field.FieldName + " need control type. ");
+                    throw new SavableException("Field: " + field.FieldName + " need control type. ");
                 } 
                 string str = ctlType.GetProperty<string>(generateType + "Pattern")?.Replace("[PropertyName]", field.EntityProperty );
                 string type = GetCsTypeName(field.DataType);
