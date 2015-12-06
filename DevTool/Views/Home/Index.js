@@ -84,12 +84,12 @@ $(function () {
     veCategory = new Vue({
         el: '#Category',
         data: {
-            Category0: {},
-            Category: {},
+            Category0: jq.empty,
+            Category: jq.empty,
             ChildCategoryName:""
         },
         computed: {
-            Disabled: function () { return this.Category0 == null; },
+            Disabled: function () { return this.Category0 == jq.empty; },
             OriginCategoryName: function () {
                 return this.Category0 == null || typeof (this.Category0.CategoryId) == "undefined"
                     ? "Unselect"
@@ -174,11 +174,13 @@ $(function () {
                 , { FieldName: 'ControlIndex', FieldLabel: 'Order' }
             ],
             gridData: [],
-            Category0: {},
+            Category0: jq.empty,
             GeneratedText: ""
         },
         computed: {
-            Disabled: function () { return this.Category0.CategoryId == 0; }
+            Disabled: function () {
+                return this.Category0 == jq.empty;
+            }
         },
         methods: {
             initData: function (category) {
@@ -199,12 +201,16 @@ $(function () {
                     }
                 });
             },
-            select: function (index, entity) {
+            selectField: function (index, entity) {
                 veField.Field = entity;
                 veField.CategoryId = veCategoryFields.Category0.CategoryId;
                 veField.FieldLabel = entity.FieldLabel;
                 veField.ControlIndex = entity.ControlIndex;
                 veField.EntityProperty = entity.EntityProperty;
+                jq.popDiv("Field Info", $("#FieldInfoArea"));
+            },
+            deleteField:function(index, field){
+                alert('Delete ' + field.FieldName);
             },
             generateView: function () { 
                 var url = $(this.$el).attr("data-url-genereate");
@@ -256,7 +262,7 @@ $(function () {
         el: '#FieldInfoArea',
         data: {
             Field: null, CategoryId: 0, FieldLabel: "", ControlIndex: "", EntityProperty: "",
-            ControlTypeId:0, ControlTypes:[]
+            ControlTypeId: 0, ControlTypes: []
         },
         methods: {
             save: function () {

@@ -605,6 +605,7 @@
     <Content Include="Views\Home\SelectFields.cshtml" />
     <Content Include="Views\Shared\_GridTemplate.cshtml" />
     <Content Include="Views\Shared\_TreeTemplate.cshtml" />
+    <Content Include="Views\Home\FieldInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />

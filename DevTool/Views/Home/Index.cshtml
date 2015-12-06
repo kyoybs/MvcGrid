@@ -7,31 +7,36 @@
         color: #ba5911;
     }
 
-    #FieldInfoArea .data {padding:3px; }
-
-    #FieldInfoArea .data .label {
-        display:block; width:100%; text-align:left; margin:10px 0 3px 3px;
+    #FieldInfoArea .data {
+        padding: 3px;
     }
+
+        #FieldInfoArea .data .label {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin: 10px 0 3px 3px;
+        }
 </style>
 
 @Html.Partial("_GridTemplate")
 @Html.Partial("_TreeTemplate")
 
-  
+
 @* Category Edit *@
 <div style="min-width:1160px;">
     <div class="area" style="width:300px;">
         <div class="title">Category Tree </div>
-        <div  id="CategoriesTree" data-url-delete="@Url.Content("~/Home/DeleteCategory")">
+        <div id="CategoriesTree" data-url-delete="@Url.Content("~/Home/DeleteCategory")">
             <tree v-bind:model="treeData" v-on:select="nodeClick" v-ref:tree>
             </tree>
         </div>
     </div>
-     
+
     <div class="area" style="width:600px;">
-        <div id="Category"  
+        <div id="Category"
              data-url-update="@Url.Content("~/Home/UpdateCategoryName")"
-             data-url-add="@Url.Content("~/Home/InsertCategory")" >
+             data-url-add="@Url.Content("~/Home/InsertCategory")">
             <div class="title">Category Info -- {{OriginCategoryName}} <div style="float:right; "><button v-on:click="deleteCtg" class="button" title="Delete Selected Category" disabled="{{Disabled}}">Delete</button></div></div>
 
             <div class="row">
@@ -39,7 +44,7 @@
                 <span class="value">
                     <input id="txtCurrentCategoryName" class="textbox" type="text" v-model="Category.CategoryName" style="width:150px;" disabled="{{Disabled}}" />
                 </span>
-                 
+
             </div>
             <div class="row">
                 <label class="label"> Related Table Name:</label>
@@ -59,18 +64,22 @@
             </div>
         </div>
 
-        
+
         <!-- demo root element -->
-        <div id="elCategoryFields" style="margin-top:15px;" 
+        <div id="elCategoryFields" style="margin-top:15px;"
              data-url-fields="@Url.Content("~/Home/GetCategoryFields")"
-             data-url-select="@Url.Content("~/Home/SelectFields")" 
-             data-url-field="@Url.Content("~/Home/GetField")" 
-             data-url-genereate="@Url.Content("~/Home/Generate")" >
-            <div class="title">Fields Info <div style="float:right; ">
-                <button v-on:click="openAddFields" class="button" title="Add fields to current category." disabled="{{Disabled}}">Add Field</button>
+             data-url-select="@Url.Content("~/Home/SelectFields")"
+             data-url-field="@Url.Content("~/Home/GetField")"
+             data-url-genereate="@Url.Content("~/Home/Generate")">
+            <div class="title">
+                Fields Info
+                <div style="float:right; ">
+                    <button v-on:click="openAddFields" class="button" title="Select fields to add to current category." disabled="{{Disabled}}">Select Field</button>
+                    <button v-on:click="addComputedField" class="button" title="Add Computed Field." disabled="{{Disabled}}">Add Computed Field</button>
                 </div>
             </div>
-            <grid v-bind:data="gridData" v-bind:columns="gridColumns" v-on:select="select"  >
+            <grid v-bind:data="gridData" v-bind:columns="gridColumns" 
+                  v-on:onselect="selectField" v-on:ondelete="deleteField">
             </grid>
 
             <div v-if="gridData!=null && gridData.length>0">
@@ -87,18 +96,17 @@
                 </div>
 
             </div>
-            
+
         </div>
     </div>
-      
-    <div id="FieldInfoArea" class="area" style="width:230px; margin-top:10px;" 
-         data-url-save="@Url.Content("~/Home/SaveCategoryField")"  >
-        <div class="title">Field Info  </div> 
 
+    <div id="FieldInfoArea" class="area" style="width:230px; margin-top:10px; display:none;"
+         data-url-save="@Url.Content("~/Home/SaveCategoryField")" >
+        
         <div class="data" v-if="Field != null">
             <label class="label">Field Name:</label>
             <span class="value">
-                <input readonly class="textbox readonly" type="text" v-model="Field.FieldName" style="width:150px;"  />
+                <input readonly class="textbox readonly" type="text" v-model="Field.FieldName" style="width:150px;" />
             </span>
 
             <label class="label">Table Name:</label>
@@ -108,7 +116,7 @@
 
             <label class="label">Field Label:</label>
             <span class="value">
-                <input class="textbox" type="text" v-model="FieldLabel"  style="width:150px;" />
+                <input class="textbox" type="text" v-model="FieldLabel" style="width:150px;" />
             </span>
 
             <label class="label">Entity Property Name:</label>
@@ -118,7 +126,7 @@
 
             <label class="label">Order Index:</label>
             <span class="value">
-                <input class="textbox" type="text" v-model="ControlIndex"  style="width:150px;" />
+                <input class="textbox" type="text" v-model="ControlIndex" style="width:150px;" />
             </span>
 
             <label class="label">Control Type:</label>
@@ -131,17 +139,19 @@
             <div style="text-align:center; padding:5px;">
                 <button class="button" v-on:click="save">Save</button>
             </div>
-           
-     </div>
+
+        </div>
+    </div>
 </div>
 
- <div style="clear:both;"></div>
+<div style="clear:both;"></div>
 <script src="~/Views/Home/Index.js"></script>
 
-<script> 
+<script>
+
     $(function(){
         veTree.treeData = @Html.Raw( UiHelper.CategoryTree().ToJson());
         veField.ControlTypes = @Html.Raw(Model.DevControlTypes.ToJson());
     })
-    
+
 </script>

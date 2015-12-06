@@ -23,7 +23,10 @@
                 <td v-for="key in columns" v-bind:style="{'text-align':key.Align?key.Align:'center'}">
                     {{entry[key.FieldName]}}  
                 </td>
-                <td><a href="javascript:void(0);" v-on:click="selectClick($index,entry)">Select</a></td>
+                <td>
+                    <a v-if="showSelect" href="javascript:void(0);" v-on:click="selectClick($index,entry)">Select</a>
+                    <a v-if="showDelete" href="javascript:void(0);" v-on:click="deleteClick($index,entry)">Delete</a>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -38,7 +41,15 @@
                 data: Array,
                 columns: Array,
                 filterKey: String,
-                keyName: String,
+                keyName: String
+            },
+            computed: {
+                showDelete: function () { 
+                    return this._events.ondelete && true;
+                },
+                showSelect: function () {
+                    return this._events.onselect && true;
+                }
             },
             data: function () {
                 var sortOrders = {}
@@ -53,7 +64,7 @@
             },
             methods: {
                 selectClick: function (index, entity) {
-                    this.$dispatch('select', index, entity);
+                    this.$dispatch('onselect', index, entity);
 
                     var $win = $(this.$el).closest(".js-window");
                     if ($win.size() > 0) {
@@ -61,14 +72,21 @@
                         callback("select", entity);
                     }
                 },
+                deleteClick: function (index, entity) {
+                    this.$dispatch('ondelete', index, entity);
+
+                    var $win = $(this.$el).closest(".js-window");
+                    if ($win.size() > 0) {
+                        var callback = $(this.$el).closest(".js-window")[0]._popCallback;
+                        callback("delete", entity);
+                    }
+                },
                 sortBy: function (key) {
                     this.sortKey = key;
                     this.sortOrders[key] = this.sortOrders[key] * -1
                 }
             },
-            events: {
-                select: function (index, entity) {
-                }
+            events: { 
             }
         })
     });

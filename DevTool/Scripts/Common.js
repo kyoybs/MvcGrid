@@ -1,8 +1,6 @@
 ﻿window.onerror = function (data, url, line) {
     alert(data + "\r\n Error File: " + url + " -- Line: " + line);
 }
-
-
  
 $(function () {
     $.ajaxSetup({
@@ -21,9 +19,7 @@ $(function () {
 $(document).ajaxError(function (event, xhr, options, exc) {
     jq.popMsg(xhr.responseText); 
 });
-
-
-
+ 
 Date.prototype.format = function (format) {
     /* 
      * eg:format="yyyy-MM-dd hh:mm:ss"; 
@@ -70,6 +66,8 @@ var jq = {};
 jq.cloneEntity = function (obj) {
     return JSON.parse(JSON.stringify(obj));
 }
+
+jq.empty = {};
 
 jq.get = function (selector) {
     var $ctl = $(selector);
@@ -126,33 +124,45 @@ jq.updateField = function (url, dataId, fieldName, fieldValue) {
 }
 
 jq.popWindow = function (title, url, postData, callback) { 
-    $.post(url, postData, function (data) {
-        var windowIndex = $("_window_mask").size();
-        var maskId = '_window_mask_' + windowIndex;
-        var windowId = '_window_' + windowIndex;
-        var mask = $("<div id='" + maskId + "' class='mask'></div>");
-        $("body").append(mask);
-        var pop = $("<div id='" + windowId + "'  class='window js-window'></div>");
-        $("body").append(pop);
-        var poptitle = $("<div id='_grid_title'  class='title'></div>");
-        var popclose = $("<div class='close'>&Chi;</div>");
-        popclose.click(function () {
-            mask.remove();
-            pop.remove();
-        });
-        pop.append(poptitle);
-        poptitle.html(title);
-        poptitle.append(popclose);
+    $.post(url, postData, function (html) {
+        var $html = $(html);
+        jq.popDiv(title, $html, callback);
+    });
+}
 
-        var popbody = $("<div class='body'></div>");
-        pop.append(popbody);
+jq.popDiv = function (title, $html, callback) {
+    var $parent = $html.parent();
+    var windowIndex = $("_window_mask").size();
+    var maskId = '_window_mask_' + windowIndex;
+    var windowId = '_window_' + windowIndex;
+    var mask = $("<div id='" + maskId + "' class='mask'></div>");
+    $("body").append(mask);
+    var pop = $("<div id='" + windowId + "'  class='window js-window'></div>");
+    $("body").append(pop);
+    var poptitle = $("<div id='_grid_title'  class='title-bar'></div>");
+    var popclose = $("<div class='close'>&Chi;</div>");
+    popclose.click(function () {
+        if ($parent.size() > 0) {
+            $html.hide();
+            $parent.append($html);
+        }
+        mask.remove();
+        pop.remove();
+    });
+    pop.append(poptitle);
+    poptitle.html(title);
+    poptitle.append(popclose);
 
+    var popbody = $("<div class='body'></div>");
+    pop.append(popbody);
+
+    if (typeof (callback) != "undefined")
         pop[0]._popCallback = callback;
 
-        popbody.html(data); 
-        mask.show();
-        pop.show();
-    });
+    popbody.append($html);
+    $html.show();
+    mask.show();
+    pop.show();
 }
 
 jq.loading = function () {

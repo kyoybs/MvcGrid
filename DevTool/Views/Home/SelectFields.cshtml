@@ -19,8 +19,8 @@
         <button class="button" v-on:click="Search">Search</button>
     </div>
     <div style="height:20px;"></div>
-    <grid v-bind:data="gridData" v-bind:key-name="FieldId"  v-on:select="select"
-               v-bind:columns="gridColumns" >
+    <grid v-bind:data="gridData" v-bind:key-name="FieldId"  v-on:onselect="select"
+          v-bind:columns="gridColumns" >
     </grid>
 </div>
  
@@ -31,14 +31,13 @@
         el: '#AllFields',
         data: {
             TableName: '',
-            FieldName: '',
-            Fuzzy:false,
+            FieldName: '', 
             gridColumns: [{ FieldName: 'FieldId', FieldLabel: '#' }, { FieldName: 'TableName', FieldLabel: 'Table Name' }, { FieldName: 'FieldName', FieldLabel: 'Field Name' }],
-            gridData: @Html.Raw(Model.Fields.ToJson())
+            gridData: @Html.Raw(Model.Fields.ToJson()),
+            Fuzzy:false
         },
         methods: {
-            Search: function () {
-                alert(this.Fuzzy);
+            Search: function () { 
                 var url = $(this.$el).attr("data-url-search") + "?excludedCategoryId=@Request["CategoryId"]";
                 $.post(url, { TableName: this.TableName, FieldName: this.FieldName, FieldLabel: this.FieldLabel,fuzzy:this.Fuzzy}, function (datas) {
                     veAllFields.gridData = datas;  // work

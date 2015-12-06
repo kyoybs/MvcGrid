@@ -119,13 +119,13 @@ input.error {
 .mask .title{background:background:-webkit-linear-gradient(top,#edf6fe,#c4bdbd); background:-moz-linear-gradient(top,#edf6fe,#c4bdbd); text-align:center; height:30px; cursor:pointer;}
 .popmsg{position:fixed; top:0; left:0; right:0; bottom:0;  z-index:99; margin:30px; display:none; overflow:auto;}
 .window{position:fixed; top:0; left:0; right:0; bottom:0;  z-index:95; margin:30px; display:none; border:solid 1px #aaa;border-radius:5px; background-color:#ededed; overflow:auto; padding-top:30px;}
-.window .title{position:fixed; top:31px; left:31px; right:31px; z-index:95; background:background:-webkit-linear-gradient(top,#edf6fe,#c4bdbd); background:-moz-linear-gradient(top,#edf6fe,#c4bdbd); text-align:center;  font-size:14px;height:30px; line-height:30px; color:#495862;cursor:default; border-radius:5px;}
-.window .title .close{position:absolute; top:0px; right:8px;cursor:pointer; color:#ad3939; width:30px;}
+.window .title-bar{position:fixed; top:31px; left:31px; right:31px; z-index:95; background:background:-webkit-linear-gradient(top,#edf6fe,#c4bdbd); background:-moz-linear-gradient(top,#edf6fe,#c4bdbd); text-align:center;  font-size:14px;height:30px; line-height:30px; color:#495862;cursor:default; border-radius:5px;}
+.window .title-bar .close{position:absolute; top:0px; right:8px;cursor:pointer; color:#ad3939; width:30px;}
 .window .body{overflow:auto; padding:5px; overflow:auto;}
 
 .loading{position:fixed; width:100px; height:30px; margin-left:-25px; margin-top:-15px; top:50%; left:50%; background-color:#c5ebfa; border:solid 1px #bbb; z-index:100; }
 
-.message{position:fixed; display:table; text-align:center; width:500px; height:60px; margin-left:-250px; margin-top:-30px; top:50%; left:50%; background-color:#c5ebfa; border:solid 1px #ccc; z-index:100; }
+.message{position:fixed; display:table; text-align:center; width:500px; height:60px; margin-left:-250px; margin-top:-30px; top:50%; left:50%; background-color:#c5ebfa; border:solid 1px #ccc; z-index:190; }
 
 .selected {
     color:#b63417;
