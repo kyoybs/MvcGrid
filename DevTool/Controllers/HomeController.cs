@@ -71,9 +71,10 @@ namespace DevTool.Controllers
         }
 
         [HttpPost]
-        public void SaveCategoryField(int categoryId, DevFieldInfo field)
+        public JsonResult SaveCategoryField(int categoryId, DevFieldInfo field)
         {
-            DevBusiness.SaveCategoryField(categoryId, field);
+            DevBusiness.SaveCategoryField(categoryId, field); 
+            return Json(field);
         }
 
         [HttpPost]
@@ -81,6 +82,12 @@ namespace DevTool.Controllers
         { 
             string code = DevBusiness.Generate(categoryId, type);
             return code;
+        }
+
+        [HttpPost]
+        public void RemoveField(int categoryId , int fieldId)
+        {
+            DevBusiness.RemoveField(categoryId, fieldId);
         }
 
     }

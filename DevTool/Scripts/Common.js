@@ -63,8 +63,13 @@ if (typeof Object.create != "function") {
  
 var jq = {};
 
-jq.cloneEntity = function (obj) {
-    return JSON.parse(JSON.stringify(obj));
+jq.copyEntity = function (objFrom, objTo) {
+    if (typeof (objTo) == "undefined")
+        return JSON.parse(JSON.stringify(objFrom));
+    for (var key in objFrom) {
+        objTo[key] = objFrom[key];
+    }
+    return objTo;
 }
 
 jq.empty = {};
@@ -140,7 +145,7 @@ jq.popDiv = function (title, $html, callback) {
     var pop = $("<div id='" + windowId + "'  class='window js-window'></div>");
     $("body").append(pop);
     var poptitle = $("<div id='_grid_title'  class='title-bar'></div>");
-    var popclose = $("<div class='close'>&Chi;</div>");
+    var popclose = $("<div class='close js-close-window'>&Chi;</div>");
     popclose.click(function () {
         if ($parent.size() > 0) {
             $html.hide();
@@ -164,6 +169,7 @@ jq.popDiv = function (title, $html, callback) {
     mask.show();
     pop.show();
 }
+ 
 
 jq.loading = function () {
     if (typeof (jq.$loading) == "undefined") {
@@ -207,6 +213,10 @@ $.fn.showError = function (errorMsg) {
         $errorMsg.html(errorMsg);
         $errorMsg.show();
     }, 50); 
+}
+
+$.fn.closeDiv = function () {
+    $(this).closest(".js-window").find(".js-close-window").click();
 }
 
 $.fn.hideError = function () {

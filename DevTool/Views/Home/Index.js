@@ -10,7 +10,8 @@ commands = {
     CategorySelected: "CategorySelected",
     CategoryUpdated: "CategoryUpdated",
     CategoryAdded: "CategoryAdded",
-    CategoryDeleted:"CategoryDeleted"
+    CategoryDeleted: "CategoryDeleted",
+    FieldAdded:"FieldAdded"
 };
 
 $(function () {
@@ -99,7 +100,7 @@ $(function () {
         methods: {
             initData:function(category){
                 this.Category0 = category;
-                this.Category = jq.cloneEntity(category);
+                this.Category = jq.copyEntity(category);
             },
 
             saveCtgName: function () {
@@ -112,7 +113,7 @@ $(function () {
 
                 var url = $(this.$el).attr("data-url-update"); 
                 $.post(url, this.Category , function (data) { 
-                    veCategory.Category0 =jq.cloneEntity( veCategory.Category );
+                    veCategory.Category0 =jq.copyEntity( veCategory.Category );
                     veCategory.broadcast(commands.CategoryUpdated, veCategory.Category);
                     jq.showMsg("Save successfully.");
                 })
@@ -201,16 +202,26 @@ $(function () {
                     }
                 });
             },
-            selectField: function (index, entity) {
-                veField.Field = entity;
-                veField.CategoryId = veCategoryFields.Category0.CategoryId;
-                veField.FieldLabel = entity.FieldLabel;
-                veField.ControlIndex = entity.ControlIndex;
-                veField.EntityProperty = entity.EntityProperty;
+             
+            selectField: function (index, field) {
+                veField.initData(field, veCategoryFields.Category0.CategoryId);
                 jq.popDiv("Field Info", $("#FieldInfoArea"));
             },
+            
+            addComputedField: function () {
+                var field = {};
+                veField.initData(field, veCategoryFields.Category0.CategoryId);
+                jq.popDiv("Add Computed Field ", $("#FieldInfoArea"));
+            },
+
             deleteField:function(index, field){
-                alert('Delete ' + field.FieldName);
+                if (!confirm('Confirm to remove field "' + field.FieldName + '" from category "' + this.Category0.CategoryName + '"'))
+                    return;
+                var url = $(this.$el).attr("data-url-delete") ;
+                $.post(url, { categoryId: this.Category0.CategoryId, fieldId: field.FieldId}, function (datas) {
+                    jq.removeItem(veCategoryFields.gridData, field);
+                    jq.showMsg("Remove successfully.");
+                });
             },
             generateView: function () { 
                 var url = $(this.$el).attr("data-url-genereate");
@@ -254,6 +265,9 @@ $(function () {
             case commands.CategorySelected:
                 veCategoryFields.initData(data);
                 break;
+            case commands.FieldAdded:
+                veCategoryFields.gridData.push(data);
+                break;
             default:
         }
     })
@@ -261,22 +275,30 @@ $(function () {
     veField = new Vue({
         el: '#FieldInfoArea',
         data: {
-            Field: null, CategoryId: 0, FieldLabel: "", ControlIndex: "", EntityProperty: "",
-            ControlTypeId: 0, ControlTypes: []
+            Field0: jq.empty,
+            Field: jq.empty,
+            CategoryId:0,
+            ControlTypes: []
         },
         methods: {
+            initData:function(field ,categoryId){
+                this.Field0 = field;
+                this.Field = jq.copyEntity(field);
+                this.CategoryId = categoryId;
+            },
             save: function () {
+                var $el = $(this.$el);
                 var url = $(this.$el).attr("data-url-save");
-                var field = veField.Field;
+                var field = jq.copyEntity(veField.Field);
                 field.CategoryId = this.CategoryId;
-                field.FieldLabel = this.FieldLabel;
-                field.EntityProperty = this.EntityProperty;
-                field.ControlIndex = this.ControlIndex;
-                $.post(url, field, function (data) {
-                    veField.Field.FieldLabel = veField.FieldLabel;
-                    veField.Field.ControlIndex = veField.ControlIndex;
-                    veField.Field.EntityProperty = veField.EntityProperty;
-                    jq.showMsg("Field save successfully.");
+                $.post(url, field, function (newField) {
+                    if (field.FieldId > 0) {
+                        jq.copyEntity(veField.Field, veField.Field0);
+                        jq.showMsg("Field save successfully.");
+                    } else {
+                        veField.broadcast(commands.FieldAdded, newField);
+                    } 
+                    $el.closeDiv();
                 })
             }
         }

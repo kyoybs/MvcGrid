@@ -32,5 +32,9 @@ namespace DevTool.Business.Entity
 
         public bool CanNull { get; set; }
 
+        public int FieldIndex { get; set; }
+
+        public bool IsPk { get; set; }
+
     }
 }

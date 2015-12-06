@@ -16,5 +16,7 @@ namespace DevTool.Business.Entity
 
         public int CategoryId { get; set; }
 
+        public int ControlIndex { get; set; }
+
     }
 }

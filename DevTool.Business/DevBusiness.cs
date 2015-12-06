@@ -13,7 +13,7 @@ namespace DevTool.Business
     {
         public static List<DevFieldInfo> SearchFields(DevFieldInfo model, int excludedCategoryId = 0, bool like = true)
         {
-            StringBuilder sb = new StringBuilder(@"SELECT top 100 * FROM DevFieldInfo WHERE Deleted<>1 ");
+            StringBuilder sb = new StringBuilder(@"SELECT top 200 * FROM DevFieldInfo WHERE Deleted<>1 ");
             List<string> filters = new List<string>();
 
             if (!string.IsNullOrEmpty(model.TableName))
@@ -42,7 +42,7 @@ namespace DevTool.Business
 
             if (excludedCategoryId > 0)
             {
-                filters.Add("FieldId NOT IN (SELECT FieldId FROM DevFieldCategory WHERE CategoryId=@ExCategoryId) ");
+                filters.Add("FieldId NOT IN (SELECT FieldId FROM DevFieldCategory WHERE CategoryId=@ExCategoryId AND Deleted<>1) ");
                 dps.Add("ExCategoryId", excludedCategoryId);
             }
 
@@ -60,7 +60,9 @@ namespace DevTool.Business
 
         public static void AddFieldToCategory(DevFieldInfo fieldInfo, int categoryId)
         {
-            DevFieldCategory fc = new DevFieldCategory { CategoryId = categoryId, FieldId = fieldInfo.FieldId };
+            DevFieldCategory fc = new DevFieldCategory { CategoryId = categoryId,
+                FieldId = fieldInfo.FieldId,
+                ControlIndex =fieldInfo.ControlIndex  };
             using (var db = DbHelper.Create())
             {
                 db.InsertEntity(fc);
@@ -71,29 +73,54 @@ namespace DevTool.Business
         public static List<DevFieldInfo> GetCategoryFields(int categoryId)
         {
             string sql = @"SELECT F.*, fc.ControlIndex FROM DevFieldInfo f 
-JOIN DevFieldCategory fc ON f.FieldId = fc.FieldId WHERE fc.CategoryId=@CategoryId ORDER BY fc.ControlIndex ";
+JOIN DevFieldCategory fc ON f.FieldId = fc.FieldId 
+WHERE fc.CategoryId=@CategoryId AND fc.Deleted<>1 
+ORDER BY fc.ControlIndex ";
             using (var db = DbHelper.Create())
             {
                 return db.Query<DevFieldInfo>(sql, new { CategoryId = categoryId }).ToList();
             }
         }
 
-        public static void SaveCategoryField(int categoryId, DevFieldInfo field)
+        public static DevFieldInfo SaveCategoryField(int categoryId, DevFieldInfo field)
         {
-            string sql = @"UPDATE DevFieldInfo SET FieldLabel=@FieldLabel, EntityProperty=@EntityProperty, ControlTypeId=@ControlTypeId WHERE FieldId=@FieldId ; 
-UPDATE DevFieldCategory SET ControlIndex=@ControlIndex WHERE  FieldId=@FieldId AND CategoryId=@CategoryId";
-            using (var db = DbHelper.Create())
+            if (field.FieldId > 0)
             {
-                db.Execute(sql, new
+                string sql = @"UPDATE DevFieldInfo SET FieldLabel=@FieldLabel, EntityProperty=@EntityProperty, ControlTypeId=@ControlTypeId WHERE FieldId=@FieldId ; 
+UPDATE DevFieldCategory SET ControlIndex=@ControlIndex WHERE  FieldId=@FieldId AND CategoryId=@CategoryId";
+                using (var db = DbHelper.Create())
                 {
-                    CategoryId = categoryId,
-                    FieldId = field.FieldId,
-                    EntityProperty = field.EntityProperty,
-                    ControlTypeId = field.ControlTypeId,
-                    FieldLabel = field.FieldLabel,
-                    ControlIndex = field.ControlIndex
-                });
+                    db.Execute(sql, new
+                    {
+                        CategoryId = categoryId,
+                        FieldId = field.FieldId,
+                        EntityProperty = field.EntityProperty,
+                        ControlTypeId = field.ControlTypeId,
+                        FieldLabel = field.FieldLabel,
+                        ControlIndex = field.ControlIndex
+                    });
+                }
             }
+            else
+            {
+                string sql = @"SELECT * FROM DevFieldInfo 
+WHERE EntityProperty=@EntityProperty AND FieldLabel=@FieldLabel";
+                using (var db = DbHelper.Create())
+                {
+                    var fld = db.Query<DevFieldInfo>(sql, field).FirstOrDefault();
+                    if (fld != null)
+                    {
+                        field = fld;
+                    }
+                    else
+                    {
+                        db.InsertEntity(field);
+                    }
+
+                    AddFieldToCategory(field, categoryId);
+                }
+            }
+            return field;
         }
 
         public static List<DevControlType> GetControlTypes()
@@ -102,6 +129,16 @@ UPDATE DevFieldCategory SET ControlIndex=@ControlIndex WHERE  FieldId=@FieldId A
             using (var db = DbHelper.Create())
             {
                 return db.Query<DevControlType>(sql).ToList();
+            }
+        }
+
+        public static void RemoveField(int categoryId , int fieldId)
+        {
+            string sql = @"UPDATE DevFieldCategory SET Deleted = 1 
+WHERE CategoryId=@CategoryId AND FieldId = @FieldId ";
+            using (var db = DbHelper.Create())
+            {
+                db.Execute(sql,new {categoryId=categoryId , FieldId = fieldId}) ;
             }
         }
 
