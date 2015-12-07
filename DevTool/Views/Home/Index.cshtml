@@ -38,30 +38,33 @@
              data-url-update="@Url.Content("~/Home/UpdateCategoryName")"
              data-url-add="@Url.Content("~/Home/InsertCategory")">
             <div class="title">Category Info -- {{OriginCategoryName}} <div style="float:right; "><button v-on:click="deleteCtg" class="button" title="Delete Selected Category" disabled="{{Disabled}}">Delete</button></div></div>
+            <form id="formCategory">
+                <div class="row">
+                    <label class="label"> Category Name:</label>
+                    <span class="value">
+                        <input id="txtCurrentCategoryName" class="textbox" type="text" v-model="Category.CategoryName" style="width:150px;" disabled="{{Disabled}}" required />
+                    </span>
 
-            <div class="row">
-                <label class="label"> Category Name:</label>
-                <span class="value">
-                    <input id="txtCurrentCategoryName" class="textbox" type="text" v-model="Category.CategoryName" style="width:150px;" disabled="{{Disabled}}" />
-                </span>
+                </div>
+                <div class="row">
+                    <label class="label"> Related Table Name:</label>
+                    <span class="value">
+                        <input class="textbox" type="text" v-model="Category.MainTable" style="width:150px;" disabled="{{Disabled}}" />
+                    </span>
 
-            </div>
-            <div class="row">
-                <label class="label"> Related Table Name:</label>
-                <span class="value">
-                    <input class="textbox" type="text" v-model="Category.MainTable" style="width:150px;" disabled="{{Disabled}}" />
-                </span>
-
-                <button v-on:click="saveCtgName" class="button" title="Save Selected Category Name" disabled="{{Disabled}}">Save</button>
-            </div>
-
-            <div class="row">
-                <label class="label"> Add Child Category:</label>
-                <span class="value">
-                    <input class="textbox" type="text" v-model="ChildCategoryName" placeholder="New Category Name" style="width:150px;" disabled="{{Disabled}}" />
-                </span>
-                <button v-on:click="addChildCtg" class="button" title="Add New Child Category to Selected Category" disabled="{{Disabled}}">Add</button>
-            </div>
+                    <button v-on:click="saveCtgName" class="button" title="Save Selected Category Name" disabled="{{Disabled}}">Save</button>
+                </div>
+            </form>
+            <form id="formChildCategory">
+                <div class="row">
+                    <label class="label"> Add Child Category:</label>
+                    <span class="value">
+                        <input id="txtChildCtgName" class="textbox" type="text" v-model="ChildCategoryName" style="width:150px;" disabled="{{Disabled}}" required /> 
+                    </span>
+                    <button v-on:click="addChildCtg" class="button" title="Add New Child Category to Selected Category" disabled="{{Disabled}}">Add</button>
+                </div>
+            </form>
+            
         </div>
 
 
@@ -104,7 +107,7 @@
     <div id="FieldInfoArea" class="area" style="width:230px; margin-top:10px; display:none;"
          data-url-save="@Url.Content("~/Home/SaveCategoryField")" >
         
-        <div class="data" v-if="Field != null">
+        <div id="formFieldInfo" class="data" v-if="Field != null">
             <label class="label">Field Name:</label>
             <span class="value">
                 <input readonly class="textbox readonly" type="text" v-model="Field.FieldName" style="width:150px;" />
@@ -117,7 +120,7 @@
 
             <label class="label">Field Label:</label>
             <span class="value">
-                <input class="textbox" type="text" v-model="Field.FieldLabel" style="width:150px;" />
+                <input class="textbox" type="text" v-model="Field.FieldLabel" style="width:150px;" required />
             </span>
 
             <label class="label">Entity Property Name:</label>
@@ -132,7 +135,7 @@
 
             <label class="label">Control Type:</label>
             <span class="value">
-                <select class="textbox" type="text" v-model="Field.ControlTypeId" style="width:150px;">
+                <select class="textbox" type="text" v-model="Field.ControlTypeId" style="width:150px;" required>
                     <option v-for="ctlType in ControlTypes" v-bind:value="ctlType.ControlTypeId">{{ctlType.ControlTypeName}}</option>
                 </select>
             </span>

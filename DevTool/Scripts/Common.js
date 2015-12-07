@@ -9,11 +9,16 @@ $(function () {
             jq.loading();
         },
         complete: function () {
+            $("label.error").hide();
             jq.closeLoading();
         }
     })
 
-    Vue.config.debug = true
+    Vue.config.debug = true;
+
+    $("body").on("click", "label.error", function () {
+        $(this).hide();
+    })
 })
 
 $(document).ajaxError(function (event, xhr, options, exc) {
@@ -233,11 +238,21 @@ $.fn.getVueEl = function (modelName) {
     return $(this).find("[vue-model='" + modelName + "']"); 
 }
 
-$(function () {
-    $("body").click(function () {
-        $(".error-message").hide();
-    }); 
-});
+$.fn.invalid = function () {
+    
+    var $this = $(this); 
+    if ($this.prop("tagName") != "FORM") {
+        var $parent = $this.parent();
+        if ($parent.prop("tagName") == "FORM")
+            $this = $parent;
+        else
+             $this = $this.wrap("<form></form>").parent();
+    }
+    $this.submit(function () { return false;});
+    $this.validate();
+    return !$this.valid();
+}
+ 
 
 jq.removeItem = function (array, item) {
     $.each(array, function (index, iobj) {
