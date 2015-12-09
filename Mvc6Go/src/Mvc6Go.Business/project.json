@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0-*",
+  "description": "Mvc6Go.Business Class Library",
+  "authors": [ "byang" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "frameworks": {
+    "net451": { }
+  },
+  "dependencies": {
+    "Mvc6Go.System": "1.0.0-*"
+  }
+}

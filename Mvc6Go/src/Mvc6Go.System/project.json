@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0-*",
+  "description": "Mvc6Go.System Class Library",
+  "authors": [ "byang" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "frameworks": {
+    "net451": {
+      "dependencies": {
+        "Microsoft.AspNet.Http.Abstractions": "1.0.0-*"
+      }
+    }
+  },
+  "dependencies": {
+    "Microsoft.AspNet.Mvc": "5.2.3"
+  }
+}
