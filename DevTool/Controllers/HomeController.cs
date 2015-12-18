@@ -15,6 +15,7 @@ namespace DevTool.Controllers
         {
             HomeIndexModel model = new HomeIndexModel();
             model.DevControlTypes = DevBusiness.GetControlTypes();
+            model.DataTypes = DevBusiness.GetDataTypes();
             ViewBag.Title = "Home Page"; 
             return View(model);
         }

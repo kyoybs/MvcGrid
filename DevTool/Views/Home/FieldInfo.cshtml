@@ -29,6 +29,8 @@
             <input class="textbox" type="text" v-model="ControlIndex" style="width:150px;" />
         </span>
 
+
+
         <label class="label">Control Type:</label>
         <span class="value">
             <select class="textbox" type="text" v-model="Field.ControlTypeId" style="width:150px;">
@@ -49,7 +51,7 @@
         el: '#FieldInfoArea',
         data: {
             Field: null, CategoryId: 0, FieldLabel: "", ControlIndex: "", EntityProperty: "",
-            ControlTypeId: 0, ControlTypes: []
+            ControlTypeId: 0, ControlTypes: [], DataTypes:[]
         },
         methods: {
             save: function () {

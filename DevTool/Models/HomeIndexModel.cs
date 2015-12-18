@@ -9,5 +9,7 @@ namespace DevTool.Models
     public class HomeIndexModel
     {
         public List<DevControlType> DevControlTypes { get; set; }
+
+        public List<KeyValuePair<int,string>> DataTypes { get; set; }
     }
 }

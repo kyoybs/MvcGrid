@@ -163,6 +163,9 @@ $(function () {
             searchQuery: '',
             gridColumns: [{ FieldName: 'FieldId', FieldLabel: '#', Align: 'right' }
                 , { FieldName: 'FieldName', FieldLabel: 'Field Name', Align: 'left' }
+                , { FieldName: 'FieldLabel', FieldLabel: 'Field Label', Align: 'left' }
+                , { FieldName: 'DataType', FieldLabel: 'Data Type', Align: 'left' }
+                , { FieldName: 'ControlTypeName', FieldLabel: 'Control Type', Align: 'left' }
                 , { FieldName: 'FieldLabel', FieldLabel: 'FieldLabel', Align: 'left' }
                 , { FieldName: 'ControlIndex', FieldLabel: 'Order' }
             ],
@@ -270,7 +273,8 @@ $(function () {
             Field0: jq.empty,
             Field: jq.empty,
             CategoryId: 0,
-            ControlTypes: []
+            ControlTypes: [],
+            DataTypes:[]
         },
         methods: {
             initData: function (field, categoryId) {

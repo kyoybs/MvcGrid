@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <div class="area" style="width:600px;">
+    <div class="area" style="min-width:800px;">
         <div id="Category"
              data-url-update="@Url.Content("~/Home/UpdateCategoryName")"
              data-url-add="@Url.Content("~/Home/InsertCategory")">
@@ -133,6 +133,13 @@
                 <input class="textbox" type="text" v-model="Field.ControlIndex" style="width:150px;" />
             </span>
 
+            <label class="label">Data Type:</label>
+            <span class="value">
+                <select class="textbox" type="text" v-model="Field.DataType" style="width:150px;">
+                    <option v-for="dataType in DataTypes" v-bind:value="dataType.Value">{{dataType.Value}}</option>
+                </select>
+            </span>
+
             <label class="label">Control Type:</label>
             <span class="value">
                 <select class="textbox" type="text" v-model="Field.ControlTypeId" style="width:150px;" required>
@@ -156,6 +163,7 @@
     $(function(){
         veTree.treeData = @Html.Raw( UiHelper.CategoryTree().ToJson());
         veField.ControlTypes = @Html.Raw(Model.DevControlTypes.ToJson());
+        veField.DataTypes =  @Html.Raw(Model.DataTypes.ToJson());
     })
 
 </script>
