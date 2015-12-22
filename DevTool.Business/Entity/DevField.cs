@@ -36,5 +36,8 @@ namespace DevTool.Business.Entity
 
         public bool IsPk { get; set; }
 
+        [NotMapped]
+        public string ControlTypeName { get; set; }
+
     }
 }

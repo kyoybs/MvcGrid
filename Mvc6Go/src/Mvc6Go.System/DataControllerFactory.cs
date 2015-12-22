@@ -8,15 +8,15 @@ namespace Mvc6Go.System
 {
     public class DataControllerFactory
     {
-        //private IServiceProvider _serviceProvider;
+        private IServiceProvider _serviceProvider;
 
         public HttpContext HttpContext {get;set;}
 
         public string UserName { get; set; }
 
-        public DataControllerFactory()
+        public DataControllerFactory(IServiceProvider serviceProvider)
         {
-            //_serviceProvider = serviceProvider;
+            _serviceProvider = serviceProvider;
         }
 
         public T Create<T>() where T : AbstractDataController

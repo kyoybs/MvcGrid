@@ -60,9 +60,12 @@ namespace DevTool.Business
 
         public static void AddFieldToCategory(DevFieldInfo fieldInfo, int categoryId)
         {
-            DevFieldCategory fc = new DevFieldCategory { CategoryId = categoryId,
+            DevFieldCategory fc = new DevFieldCategory
+            {
+                CategoryId = categoryId,
                 FieldId = fieldInfo.FieldId,
-                ControlIndex =fieldInfo.ControlIndex  };
+                ControlIndex = fieldInfo.ControlIndex
+            };
             using (var db = DbHelper.Create())
             {
                 db.InsertEntity(fc);
@@ -72,8 +75,10 @@ namespace DevTool.Business
 
         public static List<DevFieldInfo> GetCategoryFields(int categoryId)
         {
-            string sql = @"SELECT F.*, fc.ControlIndex FROM DevFieldInfo f 
+            string sql = @"
+SELECT F.*, fc.ControlIndex , ct.ControlTypeName FROM DevFieldInfo f 
 JOIN DevFieldCategory fc ON f.FieldId = fc.FieldId 
+LEFT JOIN [dbo].[DevControlType] ct ON f.ControlTypeId=ct.ControlTypeId
 WHERE fc.CategoryId=@CategoryId AND fc.Deleted<>1 
 ORDER BY fc.ControlIndex ";
             using (var db = DbHelper.Create())
@@ -132,13 +137,13 @@ WHERE EntityProperty=@EntityProperty AND FieldLabel=@FieldLabel";
             }
         }
 
-        public static void RemoveField(int categoryId , int fieldId)
+        public static void RemoveField(int categoryId, int fieldId)
         {
             string sql = @"UPDATE DevFieldCategory SET Deleted = 1 
 WHERE CategoryId=@CategoryId AND FieldId = @FieldId ";
             using (var db = DbHelper.Create())
             {
-                db.Execute(sql,new {categoryId=categoryId , FieldId = fieldId}) ;
+                db.Execute(sql, new { categoryId = categoryId, FieldId = fieldId });
             }
         }
 
@@ -146,22 +151,22 @@ WHERE CategoryId=@CategoryId AND FieldId = @FieldId ";
         {
             var fields = GetCategoryFields(categoryId);
 
-            if ("sql".Equals(generateType , StringComparison.CurrentCultureIgnoreCase) )
+            if ("sql".Equals(generateType, StringComparison.CurrentCultureIgnoreCase))
             {
                 return GenerateSql(fields);
             }
-             
+
             List<DynamicEntity<DevControlType>> types = GetControlTypes().Select(t => new DynamicEntity<DevControlType>(t)).ToList();
 
             StringBuilder sb = new StringBuilder();
             foreach (var field in fields)
             {
-                var ctlType = types.FirstOrDefault( t=>t.Entity.ControlTypeId == field.ControlTypeId);
-                if(ctlType == null)
+                var ctlType = types.FirstOrDefault(t => t.Entity.ControlTypeId == field.ControlTypeId);
+                if (ctlType == null)
                 {
                     throw new SavableException("Field: " + field.FieldName + " need control type. ");
-                } 
-                string str = ctlType.GetProperty<string>(generateType + "Pattern")?.Replace("[PropertyName]", field.EntityProperty );
+                }
+                string str = ctlType.GetProperty<string>(generateType + "Pattern")?.Replace("[PropertyName]", field.EntityProperty);
                 string type = GetCsTypeName(field.DataType);
                 str = str?.Replace("[Type]", type);
                 str = str?.Replace("[FieldLabel]", field.FieldLabel);
@@ -169,12 +174,12 @@ WHERE CategoryId=@CategoryId AND FieldId = @FieldId ";
                 if (Convert.ToBoolean(field.CanNull) && !"string".Equals(type, StringComparison.CurrentCultureIgnoreCase))
                     nullable = "?";
                 str = str?.Replace("[Nullable]", nullable);
-                str = str?.Replace("[FieldName]", field.FieldName );
+                str = str?.Replace("[FieldName]", field.FieldName);
                 sb.AppendLine(str);
                 sb.AppendLine();
             }
             return sb.ToString();
-              
+
         }
 
         private static string GenerateSql(List<DevFieldInfo> fields)
@@ -190,7 +195,7 @@ WHERE CategoryId=@CategoryId AND FieldId = @FieldId ";
 
         public static string GetCsTypeName(string sqlTypeName)
         {
-            if (sqlTypeName.IndexOf("char") >= 0)
+            if (string.IsNullOrEmpty(sqlTypeName) || sqlTypeName.IndexOf("char") >= 0)
                 return "string";
             if (sqlTypeName.IndexOf("date") >= 0)
                 return "DateTime";
@@ -201,6 +206,15 @@ WHERE CategoryId=@CategoryId AND FieldId = @FieldId ";
             if (sqlTypeName.IndexOf("bit") >= 0)
                 return "bool";
             return "float";
+        }
+
+        public static List<KeyValuePair<int, string>> GetDataTypes()
+        {
+            string sql = "SELECT system_type_id AS [Key], name AS [Value]  FROM sys.types";
+            using (var db = DbHelper.Create())
+            {
+                return db.Query<KeyValuePair<int, string>>(sql).ToList();
+            }
         }
     }
 }

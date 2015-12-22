@@ -28,13 +28,19 @@ namespace Mvc6Go.Controllers
             return "OK";
         }
 
-        [Authorize]
-        public IActionResult TestAjax(DataControllerFactory dcFactory)
+        public T GetRequestService<T>() where T :class
         {
-            //TestDataController testDc = dcFactory.Create<TestDataController>();
+            return this.HttpContext.RequestServices.GetService(typeof(T)) as T;
+        }
+
+        [Authorize]
+        public IActionResult TestAjax()
+        {
+            var factory = GetRequestService<DataControllerFactory>();
+            //TestDataController testDc = factory.c
             //ViewBag.UserName = testDc.GetUserName(); 
 
-            ViewBag.UserName = dcFactory.UserName;
+            ViewBag.UserName = factory.UserName;
             return View();
         }
 
