@@ -92,3 +92,5 @@ span.button{ height:23px; line-height:23px; padding:0 8px; display:inline-block;
 .window .body{overflow:auto; padding:5px;}
 
 .loading{position:fixed; width:50px; height:30px; margin-left:-25px; margin-top:-15px; top:50%; left:50%; background-color:#c5ebfa; border:solid 1px #bbb; }
+
+
